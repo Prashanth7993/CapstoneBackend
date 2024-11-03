@@ -1,0 +1,5 @@
+package com.capstone.bus_service.models;
+
+public class BusPojo {
+
+}
