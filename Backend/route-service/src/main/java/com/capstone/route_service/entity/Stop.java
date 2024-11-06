@@ -27,9 +27,9 @@ public class Stop {
 	private double latitude;
 	private double longitude;
 
-	    @ManyToOne(cascade=CascadeType.ALL)
-	    @JoinColumn(name = "route_id", nullable = false)
-	    @JsonBackReference
-	    private Route route;
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "route_id", nullable = false)
+	@JsonBackReference
+	private Route route;
 
 }

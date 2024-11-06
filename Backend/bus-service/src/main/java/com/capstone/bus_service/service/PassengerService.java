@@ -2,11 +2,13 @@ package com.capstone.bus_service.service;
 
 import java.time.LocalDateTime;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capstone.bus_service.entity.BoardingDeboardingLog;
-import com.capstone.bus_service.entity.Passenger;
+import com.capstone.bus_service.entity.Passenger; // Assuming this is the original entity
+import com.capstone.bus_service.models.PassengerPojo;
 import com.capstone.bus_service.repository.BoardingDeboardingLogRepository;
 import com.capstone.bus_service.repository.PassengerRepository;
 
@@ -19,15 +21,15 @@ public class PassengerService {
     @Autowired
     private BoardingDeboardingLogRepository logRepository;
 
-    
-    public Passenger boardPassenger(long busId, long userId, long boardingStopId) {
+    public PassengerPojo boardPassenger(long busId, long userId, long boardingStopId) {
         Passenger passenger = new Passenger();
         passenger.setBusId(busId);
         passenger.setUserId(userId);
         passenger.setBoardingStopId(boardingStopId);
         passenger.setBoardingTime(LocalDateTime.now());
 
-        return passengerRepository.save(passenger);
+        Passenger savedPassenger = passengerRepository.save(passenger);
+        return convertToPojo(savedPassenger);
     }
 
     public BoardingDeboardingLog deboardPassenger(long userId, long busId) {
@@ -44,9 +46,14 @@ public class PassengerService {
 
         logRepository.save(log);
 
- 
         passengerRepository.delete(passenger);
 
         return log;
+    }
+
+    private PassengerPojo convertToPojo(Passenger passenger) {
+        PassengerPojo passengerPojo = new PassengerPojo();
+        BeanUtils.copyProperties(passenger, passengerPojo);
+        return passengerPojo;
     }
 }

@@ -1,86 +1,61 @@
 package com.capstone.carpool_service.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.capstone.carpool_service.entity.CarPool;
-import com.capstone.carpool_service.entity.CarPoolUser;
+import com.capstone.carpool_service.models.CarPoolPojo;
 import com.capstone.carpool_service.service.CarPoolService;
 
 @RestController
-@RequestMapping("/car-pool")
+@RequestMapping("/carpools")
 public class CarPoolController {
-	
-	@Autowired
-	private CarPoolService carService;
-	
-	@GetMapping
-	public ResponseEntity<?> getAllCarPoolsAvailable(){
-		return new ResponseEntity<>(carService.getAllCarPool(),HttpStatus.OK);
+	private final CarPoolService carpoolService;
+
+	public CarPoolController(CarPoolService carpoolService) {
+		this.carpoolService = carpoolService;
 	}
-	
+
+	@GetMapping
+	public ResponseEntity<?> getAllCarPools() {
+		return new ResponseEntity<>(carpoolService.getAllCarpools(), HttpStatus.OK);
+	}
+
 	@GetMapping("/{id}")
-	public ResponseEntity<?> getCarPoolById(long id){
-		CarPool car=carService.getCarPoolById(id);
-		if(car!=null) {
-			return new ResponseEntity<>(car,HttpStatus.OK);
-		}
+	public ResponseEntity<?> getCarPoolById(@PathVariable long id) {
+		return new ResponseEntity<>(carpoolService.getCarpool(id), HttpStatus.OK);
+	}
+
+	@PostMapping
+	public ResponseEntity<?> createCarpool(@RequestBody CarPoolPojo carpool) {
+		return ResponseEntity.ok(carpoolService.createCarpool(carpool));
+	}
+
+	@PostMapping("/{carpoolId}/users/{userId}")
+	public ResponseEntity<?> addUserToCarpool(@PathVariable Long carpoolId, @PathVariable Long userId) {
+		CarPoolPojo pojoCar=carpoolService.addUserToCarpool(carpoolId, userId);
+		return new ResponseEntity<>(pojoCar	, HttpStatus.OK);
+	}
+
+	@DeleteMapping("/{carpoolId}/users/{userId}")
+	public ResponseEntity<?> removeUserFromCarpool(@PathVariable Long carpoolId, @PathVariable Long userId) {
+		carpoolService.removeUserFromCarpool(carpoolId, userId);
 		return ResponseEntity.noContent().build();
 	}
-	
-	@PostMapping
-	public ResponseEntity<?> addCarPool(CarPool carPool){
-		return new ResponseEntity<>(carService.addNewCarPool(carPool),HttpStatus.OK);
-	}
-	
-	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deleteCarPool(long id){
-		boolean deleted=carService.deleteCar(id);
-		if(deleted) {
-			return new ResponseEntity<>(deleted,HttpStatus.OK);
-		}
-		return new ResponseEntity<>(deleted,HttpStatus.BAD_REQUEST);
-	}
-	
-	
-	@PostMapping("/reserve-seat/{carPoolId}")
-	public ResponseEntity<?> reserveCarPoolSeat(long carPoolId,CarPoolUser carPoolUser){
-		CarPool carPool=carService.addCarPoolUser(carPoolId, carPoolUser);
-		if(carPool!=null) {
-			return new ResponseEntity<>(carPool,HttpStatus.OK);
-		}
-		return ResponseEntity.badRequest().build();
-	}
-	
-	@DeleteMapping("/cancel-seat/{carPoolId}/user/{userId}")
-	public ResponseEntity<?> removeUserFromCarPool(
-            @PathVariable long carPoolId,
-            @PathVariable long userId) {
-        try {
-            CarPool carPool=carService.cancelCarPoolUserSeat(carPoolId, userId);
-            return new ResponseEntity<>(carPool,HttpStatus.OK);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(404).body(e.getMessage());
-        }
-    }
-	
-	
-	@DeleteMapping("/end-service/{id}")
-	public ResponseEntity<?> endJourney(long id){
-		boolean ended=carService.endJourney(id);
-		if(ended) {
-			return new ResponseEntity<>(ended,HttpStatus.OK);
-		}
-		return new ResponseEntity<>(ended,HttpStatus.BAD_REQUEST);	
-	}
-	
-	
 
+	@GetMapping("/{carpoolId}/users")
+	public ResponseEntity<?> getCarpoolUsers(@PathVariable Long carpoolId) {
+		return ResponseEntity.ok(carpoolService.findCarpoolUsers(carpoolId));
+	}
+	
+	@GetMapping("/route/{routeId}")
+	public ResponseEntity<?> getCarPoolsByRouteId(@PathVariable long routeId){
+		return new ResponseEntity<>(carpoolService.getCarPoolsByRoute(routeId),HttpStatus.OK);
+	}
 }

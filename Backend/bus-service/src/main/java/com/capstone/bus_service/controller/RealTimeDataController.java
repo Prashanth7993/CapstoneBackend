@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.capstone.bus_service.entity.RealTimeData;
+import com.capstone.bus_service.models.RealTimeDataPojo;
 import com.capstone.bus_service.service.RealTimeDataService;
 
 @RestController
@@ -22,9 +22,9 @@ public class RealTimeDataController {
     private RealTimeDataService realTimeDataService;
 
     @PostMapping("/{busId}")
-    public ResponseEntity<RealTimeData> reportRealTimeData(@PathVariable int busId, @RequestBody RealTimeData data) {
+    public ResponseEntity<RealTimeDataPojo> reportRealTimeData(@PathVariable int busId, @RequestBody RealTimeDataPojo data) {
         try {
-            RealTimeData reportedData = realTimeDataService.reportRealTimeData(busId, data);
+            RealTimeDataPojo reportedData = realTimeDataService.reportRealTimeData(busId, data);
             return ResponseEntity.ok(reportedData);
         } catch (IllegalStateException e) {
             return ResponseEntity.badRequest().body(null);
@@ -32,8 +32,8 @@ public class RealTimeDataController {
     }
 
     @GetMapping("/bus/{busId}")
-    public ResponseEntity<List<RealTimeData>> getBusRealTimeData(@PathVariable Integer busId) {
-        List<RealTimeData> realTimeDataList = realTimeDataService.getBusRealTimeData(busId);
+    public ResponseEntity<List<RealTimeDataPojo>> getBusRealTimeData(@PathVariable Integer busId) {
+        List<RealTimeDataPojo> realTimeDataList = realTimeDataService.getBusRealTimeData(busId);
         if (realTimeDataList.isEmpty()) {
             return ResponseEntity.noContent().build(); 
         }

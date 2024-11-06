@@ -34,5 +34,8 @@ public class Route {
     @JsonManagedReference
     private List<Stop> stops = new ArrayList<>();
 
+    @OneToMany(mappedBy = "route", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JsonManagedReference
+    private List<RailwayStation> stations=new ArrayList<>();
     
 }

@@ -1,6 +1,5 @@
 package com.capstone.bus_service.controller;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -8,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.capstone.bus_service.models.PassengerPojo;
 import com.capstone.bus_service.entity.BoardingDeboardingLog;
-import com.capstone.bus_service.entity.Passenger;
 import com.capstone.bus_service.service.PassengerService;
 
 @RestController
@@ -20,16 +19,16 @@ public class PassengerController {
     private PassengerService passengerService;
 
     @PostMapping("/board")
-    public ResponseEntity<Passenger> boardPassenger(
+    public ResponseEntity<?> boardPassenger(
             @RequestParam long busId,
             @RequestParam long userId,
             @RequestParam long boardingStopId) {
-        Passenger passenger = passengerService.boardPassenger(busId, userId, boardingStopId);
+        PassengerPojo passenger = passengerService.boardPassenger(busId, userId, boardingStopId);
         return ResponseEntity.ok(passenger);
     }
 
     @PostMapping("/deboard")
-    public ResponseEntity<BoardingDeboardingLog> deboardPassenger(
+    public ResponseEntity<?> deboardPassenger(
             @RequestParam long userId,
             @RequestParam long busId) {
         BoardingDeboardingLog log = passengerService.deboardPassenger(userId, busId);

@@ -1,45 +1,72 @@
 package com.capstone.user_service.service;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
-import com.capstone.user_service.entity.Ticket;
-import com.capstone.user_service.repository.TicketRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import com.capstone.user_service.entity.Ticket;
+import com.capstone.user_service.entity.Users;
+import com.capstone.user_service.models.TicketPojo;
+import com.capstone.user_service.repository.TicketRepository;
+import com.capstone.user_service.repository.UserRepository;
 
 @Service
 public class TicketService {
 
     @Autowired
     private TicketRepository ticketRepository;
+    
+    @Autowired
+    private UserRepository userRepository;
 
-    public Ticket bookTicket(Ticket ticket) {
-        return ticketRepository.save(ticket);
+    // Method to book a ticket
+    public TicketPojo bookTicket(long userId,TicketPojo ticketPojo) {
+    	Ticket ticket = new Ticket();
+        BeanUtils.copyProperties(ticketPojo, ticket);
+    	Users userFound=userRepository.findById(userId).get();
+    	if(userFound!=null) {
+    		ticket.setUser(userFound);
+    	}
+        Ticket savedTicket = ticketRepository.save(ticket);
+        return convertToPojo(savedTicket);
     }
 
-    public List<Ticket> getAllTickets() {
-        return ticketRepository.findAll();
+    // Method to get all tickets
+    public List<TicketPojo> getAllTickets() {
+        List<Ticket> tickets = ticketRepository.findAll();
+        return tickets.stream()
+                      .map(this::convertToPojo)
+                      .collect(Collectors.toList());
     }
 
-    public Optional<Ticket> getTicketById(long id) {
-        return ticketRepository.findById(id);
+    // Method to get a ticket by ID
+    public Optional<TicketPojo> getTicketById(long id) {
+        return ticketRepository.findById(id)
+                               .map(this::convertToPojo);
     }
 
-    public Ticket updateTicket(long id, Ticket ticketDetails) {
+    // Method to update ticket details
+    public TicketPojo updateTicket(long id, TicketPojo ticketDetails) {
         Ticket ticket = ticketRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Ticket not found"));
-        ticket.setBusId(ticketDetails.getBusId());
-        ticket.setRouteId(ticketDetails.getRouteId());
-        ticket.setDateOfJourney(ticketDetails.getDateOfJourney());
-        ticket.setSeatNumber(ticketDetails.getSeatNumber());
-        ticket.setPrice(ticketDetails.getPrice());
-        ticket.setStatus(ticketDetails.getStatus());
-        return ticketRepository.save(ticket);
+        BeanUtils.copyProperties(ticketDetails, ticket, "id"); // Ignore id while copying
+        Ticket updatedTicket = ticketRepository.save(ticket);
+        return convertToPojo(updatedTicket);
     }
 
+    // Method to cancel a ticket
     public void cancelTicket(long id) {
         ticketRepository.deleteById(id);
+    }
+
+    // Helper method to convert Ticket to TicketPojo
+    private TicketPojo convertToPojo(Ticket ticket) {
+        TicketPojo ticketPojo = new TicketPojo();
+        BeanUtils.copyProperties(ticket, ticketPojo);
+        return ticketPojo;
     }
 }
