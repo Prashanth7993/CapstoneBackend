@@ -16,7 +16,7 @@ public class LocationController {
     }
 
     @GetMapping("/api/location/latest")
-    public RealTimeData getLatestLocation() {
+    public String getLatestLocation() {
         return locationConsumer.getLatestLocation();
     }
 }

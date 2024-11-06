@@ -8,14 +8,14 @@ import com.capstone.bus_service.entity.RealTimeData;
 @Service
 public class LocationConsumer {
 
-    private RealTimeData latestLocation;
+    private String latestLocation;
 
     @KafkaListener(topics = "bus-location-updates", groupId = "location-group")
-    public void consumeLocation(RealTimeData location) {
+    public void consumeLocation(String location) {
         latestLocation = location;
     }
 
-    public RealTimeData getLatestLocation() {
+    public String getLatestLocation() {
         return latestLocation;
     }
 }

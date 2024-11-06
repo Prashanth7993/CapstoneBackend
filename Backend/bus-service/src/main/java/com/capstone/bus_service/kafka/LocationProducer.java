@@ -8,13 +8,13 @@ import com.capstone.bus_service.entity.RealTimeData;
 @Service
 public class LocationProducer {
 
-	private final KafkaTemplate<String, RealTimeData> kafkaTemplate;
+	private final KafkaTemplate<String, String> kafkaTemplate;
 
-    public LocationProducer(KafkaTemplate<String, RealTimeData> kafkaTemplate) {
+    public LocationProducer(KafkaTemplate<String, String> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 
     public void sendLocationUpdate(RealTimeData location) {
-        kafkaTemplate.send("bus-location-updates", location);
+        kafkaTemplate.send("bus-location-updates", String.valueOf(location.getBus().getId()));
     }
 }
