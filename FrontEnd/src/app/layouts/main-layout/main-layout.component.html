@@ -1,0 +1,117 @@
+<!-- sidebar.component.html -->
+<div class="w-full h-screen bg-gray-200">
+    <button
+      (click)="toggleSidebar()"
+      class="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+    >
+      <span class="sr-only">Open sidebar</span>
+      <svg
+        class="w-6 h-6"
+        aria-hidden="true"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          clip-rule="evenodd"
+          fill-rule="evenodd"
+          d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"
+        ></path>
+      </svg>
+    </button>
+  
+    <aside
+      id="sidebar-multi-level-sidebar"
+      class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0 bg-gray-200"
+      aria-label="Sidebar"
+    >
+      <div class="h-full px-3 py-4 overflow-y-auto bg-gray-500 dark:bg-gray-800">
+        <ul class="space-y-2 font-medium">
+          <li>
+            <a
+              routerLink="/admin/dashboard"
+              [ngClass]="{
+                'flex items-center p-2 rounded-lg dark:text-white group': true,
+                'bg-gray-700 text-white hover:bg-gray-700': currentPath === '/admin/dashboard',
+                'text-gray-900 hover:bg-gray-200 dark:hover:bg-gray-700': currentPath !== '/admin/dashboard'
+              }"
+            >
+              <i class="lucide-layout-dashboard"></i>
+              <span class="ms-3 text-white">Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a
+              routerLink="/admin/users"
+              [ngClass]="{
+                'flex items-center p-2 rounded-lg dark:text-white group': true,
+                'bg-gray-700 text-white hover:bg-gray-700': currentPath === '/admin/users',
+                'text-gray-900 hover:bg-gray-200 dark:hover:bg-gray-700': currentPath !== '/admin/users'
+              }"
+            >
+              <i class="lucide-user-cog"></i>
+              <span class="flex-1 ms-3 whitespace-nowrap text-white">Users</span>
+            </a>
+          </li>
+          <li>
+            <a
+              routerLink="/admin/car-pool"
+              [ngClass]="{
+                'flex items-center p-2 rounded-lg dark:text-white group': true,
+                'bg-gray-700 text-white hover:bg-gray-700': currentPath === '/admin/car-pool',
+                'text-gray-900 hover:bg-gray-200 dark:hover:bg-gray-700': currentPath !== '/admin/car-pool'
+              }"
+            >
+              <i class="lucide-chart-no-axes-column-decreasing"></i>
+              <span class="flex-1 ms-3 whitespace-nowrap text-white">CarPool Services</span>
+            </a>
+          </li>
+  
+          <li>
+            <a
+              routerLink="/admin/bookings"
+              [ngClass]="{
+                'flex items-center p-2 rounded-lg dark:text-white group': true,
+                'bg-gray-700 text-white hover:bg-gray-700': currentPath === '/admin/bookings',
+                'text-gray-900 hover:bg-gray-200  dark:hover:bg-gray-700': currentPath !== '/admin/bookings'
+              }"
+            >
+              <i class="lucide-users"></i>
+              <span class="flex-1 ms-3 whitespace-nowrap text-white hover:text-black">CarPool Bookings  </span>
+            </a>
+          </li>
+          
+        </ul>
+        
+      </div>
+      
+    </aside>
+  
+    <div class="p-1 sm:ml-64 h-screen bg-gray-200 overflow-auto">
+        <div class="flex items-center justify-between h-12 bg-white border-b border-gray-200 rounded-md">
+            <div class="flex items-center px-4 w-[40%]">
+                <!-- <button class="text-gray-500 focus:outline-none focus:text-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button> -->
+                <input class="mx-4 w-full border rounded-md px-4 py-2" type="text" placeholder="Search">
+            </div>
+            <div class="flex items-center pr-4">
+
+                <button
+                    class="flex items-center text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-700">
+                    <!-- <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 19l-7-7 7-7m5 14l7-7-7-7" />
+                    </svg> -->
+                    <img src="/user.png" alt="user-icon" class="h-10 w-10">
+                </button>
+            </div>
+        </div>
+      <router-outlet></router-outlet>
+    </div>
+  </div>
