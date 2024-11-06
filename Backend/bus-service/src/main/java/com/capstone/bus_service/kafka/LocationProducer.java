@@ -15,6 +15,6 @@ public class LocationProducer {
     }
 
     public void sendLocationUpdate(RealTimeData location) {
-        kafkaTemplate.send("bus-location-updates",String.valueOf(location.getBus().getId()), location);
+        kafkaTemplate.send("bus-location-updates", location);
     }
 }

@@ -18,6 +18,8 @@ public class OperatorLocationController {
 
 	@PostMapping("/api/location/update")
 	public void updateLocation(@RequestBody RealTimeData location) {
+		System.out.println("producing location");
+		System.out.println(location);
 		locationProducer.sendLocationUpdate(location);
 	}
 }
