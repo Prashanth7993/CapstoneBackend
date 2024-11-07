@@ -1,6 +1,7 @@
 package com.capstone.bus_service.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -67,5 +68,11 @@ public class BusController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(buses);
+    }
+    
+    @DeleteMapping("/{busId}")
+    public ResponseEntity<?> deleteBusById(@PathVariable long busId){
+    	busService.deleteBusById(busId);
+    	return new ResponseEntity<>(Map.entry("message", "Successfully Deleted the bus"),HttpStatus.OK);
     }
 }

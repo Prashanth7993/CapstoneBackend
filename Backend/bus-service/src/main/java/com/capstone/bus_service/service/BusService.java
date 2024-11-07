@@ -72,6 +72,11 @@ public class BusService {
         });
         return pojoBuses;
     }
+    
+    public boolean deleteBusById(long busId) {
+    	busRepository.deleteById(busId);
+    	return true;
+    }
 
     private BusPojo convertToPojo(Bus bus) {
         BusPojo busPojo = new BusPojo();

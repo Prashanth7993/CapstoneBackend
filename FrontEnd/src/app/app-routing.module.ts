@@ -7,8 +7,11 @@ import { ResetPasswordComponent } from './auth/reset-password/reset-password.com
 import { BookingsComponent } from './dashboard/bookings/bookings.component';
 import { BusComponent } from './dashboard/bus/bus.component';
 import { CarpoolComponent } from './dashboard/carpool/carpool.component';
+import { FeedbackComponent } from './dashboard/feedback/feedback.component';
 import { HomeComponent } from './dashboard/home/home.component';
 import { OperatorsComponent } from './dashboard/operators/operators.component';
+import { PaymentComponent } from './dashboard/payment/payment.component';
+import { RoutesComponent } from './dashboard/routes/routes.component';
 import { UsersComponent } from './dashboard/users/users.component';
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
@@ -22,9 +25,12 @@ const routes: Routes = [
       { path: 'dashboard', component: HomeComponent },
       { path: 'users', component: UsersComponent },
       { path: 'operators', component: OperatorsComponent },
-      { path: 'bus', component: BusComponent },
+      { path: 'buses', component: BusComponent },
       { path: 'car-pool', component: CarpoolComponent },
       { path: 'bookings', component: BookingsComponent },
+      { path: 'payment', component: PaymentComponent },
+      { path: 'feedbacks', component: FeedbackComponent },
+      { path: 'routes', component: RoutesComponent },
     ],
   },
   {

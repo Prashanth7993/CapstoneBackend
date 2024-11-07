@@ -1,17 +1,27 @@
-/* sidebar.component.scss */
 :host {
-    display: block;
+  display: block;
+}
+
+.transition-transform {
+  transition-property: transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
+}
+
+#sidebar {
+  box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 640px) {
+  #sidebar {
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
   }
-  
-  /* If you need any specific styles beyond the Tailwind classes */
-  @media (max-width: 640px) {
-    .sm\:translate-x-0 {
-      transform: translateX(0);
-    }
-  }
-  
-  .transition-transform {
-    transition-property: transform;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    transition-duration: 150ms;
-  }
+}
+
+.hover\:bg-white\/5:hover {
+  transition: background-color 0.2s ease-in-out;
+}
+
+button {
+  transition: all 0.2s ease-in-out;
+}

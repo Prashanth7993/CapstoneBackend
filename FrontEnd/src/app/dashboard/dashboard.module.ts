@@ -6,6 +6,9 @@ import { BookingsComponent } from './bookings/bookings.component';
 import { CarpoolComponent } from './carpool/carpool.component';
 import { BusComponent } from './bus/bus.component';
 import { OperatorsComponent } from './operators/operators.component';
+import { FeedbackComponent } from './feedback/feedback.component';
+import { PaymentComponent } from './payment/payment.component';
+import { RoutesComponent } from './routes/routes.component';
 
 
 
@@ -16,7 +19,10 @@ import { OperatorsComponent } from './operators/operators.component';
     BookingsComponent,
     CarpoolComponent,
     BusComponent,
-    OperatorsComponent
+    OperatorsComponent,
+    FeedbackComponent,
+    PaymentComponent,
+    RoutesComponent
   ],
   imports: [
     CommonModule

@@ -10,6 +10,7 @@ import { AuthModule } from './auth/auth.module';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { SpinnerComponent } from './spinner/spinner.component';
+import { LucideAngularModule, File, Home, Menu, UserCheck,LayoutDashboard,UserCog,CarTaxiFront,TicketCheck,Bus, MessageCircleHeart,BadgeIndianRupee } from 'lucide-angular';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { SpinnerComponent } from './spinner/spinner.component';
     BrowserModule,
     AppRoutingModule,
     AuthModule,
-    DashboardModule
+    DashboardModule,
+    LucideAngularModule.pick({File, Home, Menu, UserCheck,LayoutDashboard,UserCog,CarTaxiFront,TicketCheck,Bus,MessageCircleHeart,BadgeIndianRupee })
   ],
   providers: [
     provideClientHydration(),
