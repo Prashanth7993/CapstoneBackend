@@ -8,6 +8,7 @@ import com.project.authentication_service.models.UserPojo;
 
 @FeignClient(value = "users-service", url = "http://localhost:9000/users")
 public interface UserClient {
+	
 	@GetMapping("/{id}")
 	public UserPojo getAUser(@PathVariable long id);
 	

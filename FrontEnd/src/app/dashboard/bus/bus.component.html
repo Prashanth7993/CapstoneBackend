@@ -193,7 +193,7 @@
       >
         <tr>
           <th scope="col" class="px-6 py-3">Bus Id</th>
-          <th scope="col" class="px-6 py-3">RouteId</th>
+          <th scope="col" class="px-6 py-3">Route</th>
           <th scope="col" class="px-6 py-3">Capacity</th>
           <th scope="col" class="px-6 py-3">Schedules</th>
           <th scope="col" class="px-6 py-3">Status</th>
@@ -209,7 +209,7 @@
             >
               {{ bus.id }}
             </th>
-            <td class="px-6 py-4">{{ bus.routeId }}</td>
+            <td class="px-6 py-4">{{ bus?.route?.name }} ({{ bus.routeId }})</td>
             <td class="px-6 py-4">{{ bus.capacity }}</td>
             <td class="px-6 py-4">
               <div

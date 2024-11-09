@@ -16,6 +16,7 @@ import com.capstone.carpool_service.service.CarPoolService;
 @RestController
 @RequestMapping("/carpools")
 public class CarPoolController {
+
 	private final CarPoolService carpoolService;
 
 	public CarPoolController(CarPoolService carpoolService) {
@@ -39,8 +40,8 @@ public class CarPoolController {
 
 	@PostMapping("/{carpoolId}/users/{userId}")
 	public ResponseEntity<?> addUserToCarpool(@PathVariable Long carpoolId, @PathVariable Long userId) {
-		CarPoolPojo pojoCar=carpoolService.addUserToCarpool(carpoolId, userId);
-		return new ResponseEntity<>(pojoCar	, HttpStatus.OK);
+		CarPoolPojo pojoCar = carpoolService.addUserToCarpool(carpoolId, userId);
+		return new ResponseEntity<>(pojoCar, HttpStatus.OK);
 	}
 
 	@DeleteMapping("/{carpoolId}/users/{userId}")
@@ -53,9 +54,19 @@ public class CarPoolController {
 	public ResponseEntity<?> getCarpoolUsers(@PathVariable Long carpoolId) {
 		return ResponseEntity.ok(carpoolService.findCarpoolUsers(carpoolId));
 	}
-	
+
 	@GetMapping("/route/{routeId}")
-	public ResponseEntity<?> getCarPoolsByRouteId(@PathVariable long routeId){
-		return new ResponseEntity<>(carpoolService.getCarPoolsByRoute(routeId),HttpStatus.OK);
+	public ResponseEntity<?> getCarPoolsByRouteId(@PathVariable long routeId) {
+		return new ResponseEntity<>(carpoolService.getCarPoolsByRoute(routeId), HttpStatus.OK);
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<?> deleteCarPoolById(@PathVariable long id) {
+		return new ResponseEntity<>(carpoolService.deleteCarPool(id), HttpStatus.OK);
+	}
+
+	@GetMapping("/bookings-count")
+	public ResponseEntity<?> getBookingsCountTillDate() {
+		return new ResponseEntity<>(carpoolService.getAllBookingsTillDate(), HttpStatus.OK);
 	}
 }

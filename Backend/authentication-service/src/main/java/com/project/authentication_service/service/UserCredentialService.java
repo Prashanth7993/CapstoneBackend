@@ -51,11 +51,11 @@ public class UserCredentialService {
 		List<Role> roles = rolesPojo.stream().map(rolePojo -> {
 			Role role = new Role();
 			BeanUtils.copyProperties(rolePojo, role);
+			role.setUsersCrential(user);
 			return role;
 		}).collect(Collectors.toList());
 		user.setRoles(roles);
 		userRepository.save(user);
-		user.setPassword(null);
 		UserCredentialPojo pojo = new UserCredentialPojo();
 		BeanUtils.copyProperties(user, pojo);
 		return pojo;

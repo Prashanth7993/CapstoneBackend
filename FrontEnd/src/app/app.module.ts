@@ -9,8 +9,7 @@ import { provideHttpClient, withFetch } from '@angular/common/http';
 import { AuthModule } from './auth/auth.module';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { DashboardModule } from './dashboard/dashboard.module';
-import { SpinnerComponent } from './spinner/spinner.component';
-import { LucideAngularModule, File, Home, Menu, UserCheck,LayoutDashboard,UserCog,CarTaxiFront,TicketCheck,Bus, MessageCircleHeart,BadgeIndianRupee } from 'lucide-angular';
+import { LucideAngularModule, File, Home, Menu, UserCheck,LayoutDashboard,UserCog,CarTaxiFront,TicketCheck,Bus, MessageCircleHeart,BadgeIndianRupee,Users,Settings2,Delete,Route } from 'lucide-angular';
 
 @NgModule({
   declarations: [
@@ -25,7 +24,7 @@ import { LucideAngularModule, File, Home, Menu, UserCheck,LayoutDashboard,UserCo
     AppRoutingModule,
     AuthModule,
     DashboardModule,
-    LucideAngularModule.pick({File, Home, Menu, UserCheck,LayoutDashboard,UserCog,CarTaxiFront,TicketCheck,Bus,MessageCircleHeart,BadgeIndianRupee })
+    LucideAngularModule.pick({Delete, File, Home, Menu, UserCheck,LayoutDashboard,UserCog,CarTaxiFront,TicketCheck,Bus,MessageCircleHeart,BadgeIndianRupee,Users,Settings2,Route})
   ],
   providers: [
     provideClientHydration(),

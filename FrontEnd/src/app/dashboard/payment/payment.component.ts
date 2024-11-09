@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as XLSX from 'xlsx';
+import { PaymentService } from '../../services/payment.service';
 
 @Component({
   selector: 'app-payment',
@@ -7,7 +8,7 @@ import * as XLSX from 'xlsx';
   styleUrl: './payment.component.css'
 })
 export class PaymentComponent implements OnInit {
-
+  private isLoading:boolean=false;
   transactions: any[] = [
     {
       transactionId: 1,
@@ -46,9 +47,31 @@ export class PaymentComponent implements OnInit {
       createdAt: "2024-03-15T17:10:00"
     }
   ];
-  constructor() { }
 
-  ngOnInit(): void { }
+  constructor(private paymentService:PaymentService) { }
+
+  ngOnInit(): void { 
+    this.loadAllPaymentTransactions();
+  }
+
+  loadAllPaymentTransactions():any{
+    this.isLoading=true;
+    this.paymentService.getAllPaymentTransactions().subscribe({
+      next:(data)=>{
+        console.log("Success");
+        this.transactions=data
+        this.isLoading=false
+      },
+      error:(error)=>{
+        console.log(error)
+        this.isLoading=false
+      },
+      complete:()=>{
+        console.log("executing complete block")
+        this.isLoading=false
+      }
+    })
+  }
 
   getStatusClass(status: string): string {
     switch (status.toUpperCase()) {
@@ -76,11 +99,12 @@ export class PaymentComponent implements OnInit {
 
   exportToExcel(): void {
     // Prepare the data for export
+    console.log("in export")
     const exportData = this.transactions.map(transaction => ({
       'Transaction ID': transaction.transactionId,
       'User ID': transaction.userId,
       'Order ID': transaction.orderId,
-      'Amount': this.formatAmount(transaction.amount, transaction.currency),
+      'Amount': this.formatAmount(transaction.amount, 'INR'),
       'Status': transaction.status,
       'Date of Transactions': this.formatDateTime(transaction.createdAt)
     }));

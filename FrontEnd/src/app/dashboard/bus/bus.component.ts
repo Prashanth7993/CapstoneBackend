@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { RouteService } from '../../services/route.service';
 import { BusService } from '../services/bus.service';
 
 @Component({
@@ -7,6 +8,7 @@ import { BusService } from '../services/bus.service';
   styleUrl: './bus.component.css',
 })
 export class BusComponent implements OnInit {
+
   buses: any = [
     {
       id: 1,
@@ -94,12 +96,33 @@ export class BusComponent implements OnInit {
       ],
     },
   ];
+  routes:any=[]
   loading: boolean = false;
-  constructor(private busService: BusService) {}
+  constructor(private busService: BusService,private routeService:RouteService) {}
   ngOnInit(): void {
-    // this.getAllBuses();
+   this.getAllRoutesAndBuses()
+
   }
 
+  getAllRoutesAndBuses(): void {
+    this.routeService.getAllRoutes().subscribe({
+      next: (routes) => {
+        console.log(routes);
+        this.routes = routes;
+        this.busService.getAllBuses().subscribe({
+          next: (buses) => {
+            let newBusesObjects = buses.map((bus: any) => {
+              let routeFound = routes.find((route: any) => route.id === bus.routeId);
+              bus.route = routeFound;
+              return bus; 
+            });
+            this.buses = newBusesObjects;
+            console.log(newBusesObjects)
+          }
+        });
+      }
+    });
+  }
   getAllBuses(): void {
     this.loading = true;
     this.busService.getAllBuses().subscribe({

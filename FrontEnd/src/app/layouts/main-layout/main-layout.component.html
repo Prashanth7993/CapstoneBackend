@@ -36,8 +36,8 @@
       </div>
 
       <!-- Navigation Menu -->
-      <nav class="px-4 py-4">
-        <ul class="space-y-2">
+      <nav class="px-2 py-2">
+        <ul class="">
           <li *ngFor="let item of menuItems">
             <a
               [routerLink]="item.route"
@@ -157,7 +157,7 @@
           </button>
 
           <!-- Profile Dropdown Trigger -->
-          <button
+          <button (click)="logOut()"
             class="p-1.5 rounded-lg hover:bg-gray-100/80 active:bg-gray-200 transition-colors duration-150"
           >
             <svg

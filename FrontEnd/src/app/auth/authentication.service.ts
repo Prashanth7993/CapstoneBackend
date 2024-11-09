@@ -13,6 +13,7 @@ export class AuthenticationService {
 
   private token=localStorage.getItem("__auth")
 
+
   public headers=new HttpHeaders({
     'Authorization':`Bearer ${this.token}`
   })

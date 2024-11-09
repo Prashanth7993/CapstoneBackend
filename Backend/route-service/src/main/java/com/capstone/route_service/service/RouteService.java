@@ -179,4 +179,14 @@ public class RouteService {
 		}
 		return stations;
 	}
+	
+	public boolean deleteRouteById(long routeId) {
+		routeRepository.deleteById(routeId);
+		return true;
+	}
+	
+	
+	public long getCountOfActiveRoutes() {
+		return routeRepository.count();
+	}
 }

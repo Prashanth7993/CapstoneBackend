@@ -1,4 +1,6 @@
-package com.project.authentication_service.models;
+package com.capstone.user_service.models;
+
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

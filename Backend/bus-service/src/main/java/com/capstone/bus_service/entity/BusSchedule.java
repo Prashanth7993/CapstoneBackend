@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,13 +11,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
-
+@Getter
+@Setter
 @Entity
 public class BusSchedule {
 
@@ -32,9 +32,15 @@ public class BusSchedule {
     private LocalDateTime destinationArrivalTime;
     private boolean operatingStatus;
 
-    @ManyToOne(cascade=CascadeType.ALL)
+    @ManyToOne
+    @JoinColumn(name = "bus_id")
     @JsonBackReference
-    @JoinColumn(name = "bus_id", insertable = false, updatable = false)
     private Bus bus;
+
+	@Override
+	public String toString() {
+		return "BusSchedule [id=" + id + ", routeId=" + routeId + ", departureTime=" + departureTime
+				+ ", destinationArrivalTime=" + destinationArrivalTime + ", operatingStatus=" + operatingStatus + "]";
+	}
     
 }

@@ -23,53 +23,62 @@ import com.capstone.route_service.service.RouteService;
 @RequestMapping("/routes")
 public class RouteController {
 
-    @Autowired
-    private RouteService routeService;
+	@Autowired
+	private RouteService routeService;
 
-    @PostMapping
-    public ResponseEntity<?> createRoute(@RequestBody RoutePojo routePojo) {
-        RoutePojo createdRoute = routeService.createRoute(routePojo);
-        return ResponseEntity.ok(createdRoute);
-    }
+	@PostMapping
+	public ResponseEntity<?> createRoute(@RequestBody RoutePojo routePojo) {
+		RoutePojo createdRoute = routeService.createRoute(routePojo);
+		return ResponseEntity.ok(createdRoute);
+	}
 
-    @GetMapping
-    public ResponseEntity<?> getAllRoutes() {
-        List<RoutePojo> routes = routeService.getAllRoutes();
-        return ResponseEntity.ok(routes);
-    }
+	@GetMapping
+	public ResponseEntity<?> getAllRoutes() {
+		List<RoutePojo> routes = routeService.getAllRoutes();
+		return ResponseEntity.ok(routes);
+	}
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getRouteById(@PathVariable long id) {
-        return routeService.getRouteById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
+	@GetMapping("/{id}")
+	public ResponseEntity<?> getRouteById(@PathVariable long id) {
+		return routeService.getRouteById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+	}
 
-    @PostMapping("/{routeId}/stops")
-    public ResponseEntity<?> addStop(@PathVariable long routeId, @RequestBody StopPojo stopPojo) {
-        RoutePojo updatedRoute = routeService.addStopToRoute(routeId, stopPojo);
-        return updatedRoute != null ? ResponseEntity.ok(updatedRoute) : ResponseEntity.notFound().build();
-    }
+	@PostMapping("/{routeId}/stops")
+	public ResponseEntity<?> addStop(@PathVariable long routeId, @RequestBody StopPojo stopPojo) {
+		RoutePojo updatedRoute = routeService.addStopToRoute(routeId, stopPojo);
+		return updatedRoute != null ? ResponseEntity.ok(updatedRoute) : ResponseEntity.notFound().build();
+	}
 
-    @DeleteMapping("/{routeId}/stops/{stopId}")
-    public ResponseEntity<?> removeStop(@PathVariable long routeId, @PathVariable long stopId) {
-        RoutePojo updatedRoute = routeService.removeStopFromRoute(routeId, stopId);
-        return updatedRoute != null ? ResponseEntity.ok(updatedRoute) : ResponseEntity.notFound().build();
-    }
+	@DeleteMapping("/{routeId}/stops/{stopId}")
+	public ResponseEntity<?> removeStop(@PathVariable long routeId, @PathVariable long stopId) {
+		RoutePojo updatedRoute = routeService.removeStopFromRoute(routeId, stopId);
+		return updatedRoute != null ? ResponseEntity.ok(updatedRoute) : ResponseEntity.notFound().build();
+	}
 
-    @GetMapping("/find")
-    public ResponseEntity<?> findRoutes(@RequestParam String source, @RequestParam String destination) {
-        List<Long> routes = routeService.findRoutesBySourceAndDestination(source, destination);
-        return ResponseEntity.ok(routes);
-    }
-    
-    @PostMapping("/stations/{routeId}")
-    public ResponseEntity<?> addStationToRoute(@PathVariable long routeId,@RequestBody RailwayStationPojo stationPojo){
-    	return new ResponseEntity<>(routeService.addStationToRoute(routeId, stationPojo),HttpStatus.OK);
-    }
-    
-    @GetMapping("/stations/{routeId}")
-    public ResponseEntity<?> getAllStationsOfRoute(@PathVariable long routeId){
-    	return new ResponseEntity<>(routeService.getAllStationsOfRoute(routeId),HttpStatus.OK);
-    }
+	@GetMapping("/find")
+	public ResponseEntity<?> findRoutes(@RequestParam String source, @RequestParam String destination) {
+		List<Long> routes = routeService.findRoutesBySourceAndDestination(source, destination);
+		return ResponseEntity.ok(routes);
+	}
+
+	@PostMapping("/stations/{routeId}")
+	public ResponseEntity<?> addStationToRoute(@PathVariable long routeId,
+			@RequestBody RailwayStationPojo stationPojo) {
+		return new ResponseEntity<>(routeService.addStationToRoute(routeId, stationPojo), HttpStatus.OK);
+	}
+
+	@GetMapping("/stations/{routeId}")
+	public ResponseEntity<?> getAllStationsOfRoute(@PathVariable long routeId) {
+		return new ResponseEntity<>(routeService.getAllStationsOfRoute(routeId), HttpStatus.OK);
+	}
+
+	@GetMapping("/count")
+	public ResponseEntity<?> getCountOfRoutes() {
+		return new ResponseEntity<>(routeService.getCountOfActiveRoutes(), HttpStatus.OK);
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<?> deleteRouteById(@PathVariable long id) {
+		return new ResponseEntity<>(routeService.deleteRouteById(id), HttpStatus.OK);
+	}
 }

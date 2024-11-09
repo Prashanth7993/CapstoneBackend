@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit{
       this.authService.login(data).subscribe({
         next:(data)=>{
           localStorage.setItem("__auth",data.token)
-          this.router.navigate(['/vehicle-listing'])
+          this.router.navigate(['/admin/dashboard'])
           console.log("Success")
         },
         error:(error)=>{

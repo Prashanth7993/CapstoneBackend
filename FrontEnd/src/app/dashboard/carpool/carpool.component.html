@@ -22,8 +22,8 @@
           <tbody class="bg-white divide-y divide-gray-200">
             <tr *ngFor="let carpool of carpools">
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{carpool.id}}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{carpool.driverId}}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{carpool.routeId}}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{carpool?.user?.name}} ({{carpool.driverId}})</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{carpool?.route?.name}} ({{carpool.routeId}})</td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{carpool.capacity}}</td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{carpool.availableSeats}}</td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{carpool.departureTime}}</td>

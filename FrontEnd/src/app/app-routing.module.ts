@@ -1,3 +1,4 @@
+import { AuthGuard } from './dashboard/auth.guard';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ForgotPasswordComponent } from './auth/forgot-password/forgot-password.component';
@@ -17,12 +18,16 @@ import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 
+//userapp component
+import { HomeComponent as UserAppHomeComponent } from './userapp/home/home.component';
+
 const routes: Routes = [
   {
     path: 'admin',
     component: MainLayoutComponent,
+    canActivate:[AuthGuard],
     children: [
-      { path: 'dashboard', component: HomeComponent },
+      { path: 'dashboard', component: HomeComponent ,},
       { path: 'users', component: UsersComponent },
       { path: 'operators', component: OperatorsComponent },
       { path: 'buses', component: BusComponent },
@@ -30,7 +35,7 @@ const routes: Routes = [
       { path: 'bookings', component: BookingsComponent },
       { path: 'payment', component: PaymentComponent },
       { path: 'feedbacks', component: FeedbackComponent },
-      { path: 'routes', component: RoutesComponent },
+      { path: 'routes', component: RoutesComponent }
     ],
   },
   {
@@ -42,6 +47,10 @@ const routes: Routes = [
       { path: 'forgot-password', component: ForgotPasswordComponent },
       { path: 'reset-password', component: ResetPasswordComponent },
     ],
+  },
+  {
+    path: '',
+    component: UserAppHomeComponent
   },
   {
     path: '**',

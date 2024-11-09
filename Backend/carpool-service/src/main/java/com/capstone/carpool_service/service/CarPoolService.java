@@ -26,89 +26,7 @@ import jakarta.transaction.Transactional;
 @Service
 @Transactional
 public class CarPoolService {
-//    private final CarPoolRepository carpoolRepository;
-//    private final CarPoolUserRepository carpoolUserRepository;
 
-//    
-//    public CarPoolService(CarPoolRepository carpoolRepository, 
-//                         CarPoolUserRepository carpoolUserRepository) {
-//        this.carpoolRepository = carpoolRepository;
-//        this.carpoolUserRepository = carpoolUserRepository;
-//    }
-//    
-//    
-//    public List<CarPool> getAllCarPools(){
-//    	List<CarPool> carPoolsFound=carpoolRepository.findAll();
-//    	List<CarPoolPojo> carPools=new ArrayList<>();
-//    	carPoolsFound.stream().forEach(carPool->{
-//    		CarPoolPojo pojoPool=new CarPoolPojo();
-//    		BeanUtils.copyProperties(carPoolsFound, carPools);
-//    		List<CarPoolUserPojo> userPojos=new ArrayList<>();
-//    		
-//    	});
-//    	return carpoolRepository.findAll();
-//    }
-//    
-//    
-//    public CarPool createCarpool(CarPool carpool) {
-//        carpool.setAvailableSeats(carpool.getCapacity());
-//        return carpoolRepository.save(carpool);
-//    }
-//    
-//    public CarPoolUser addUserToCarpool(Long carpoolId, Long userId) {
-//        CarPool carpool = carpoolRepository.findById(carpoolId)
-//            .orElseThrow(() -> new EntityNotFoundException("Carpool not found"));
-//            
-//        if (carpool.getAvailableSeats() <= 0) {
-//            throw new IllegalStateException("No available seats");
-//        }
-//        
-////        if (carpool.getDepartureTime().isBefore(LocalTime.now())) {
-////            throw new IllegalStateException("Carpool has already departed");
-////        }
-//        
-//        // Check if user is already in the carpool
-//        boolean userExists = carpool.getCarpoolUsers().stream()
-//            .anyMatch(cu -> cu.getUserId().equals(userId));
-//            
-//        if (userExists) {
-//            throw new IllegalStateException("User already in carpool");
-//        }
-//        
-//        CarPoolUser carpoolUser = new CarPoolUser();
-//        carpoolUser.setCarpool(carpool);
-//        carpoolUser.setUserId(userId);
-//        carpoolUser.setRequestTime(LocalTime.now());
-//        carpool.getCarpoolUsers().add(carpoolUser);
-//        
-//        return carpoolUserRepository.save(carpoolUser);
-//    }
-//    
-//    public void removeUserFromCarpool(Long carpoolId, Long userId) {
-//        CarPool carpool = carpoolRepository.findById(carpoolId)
-//            .orElseThrow(() -> new EntityNotFoundException("Carpool not found"));
-//            
-//        CarPoolUser carpoolUser = carpool.getCarpoolUsers().stream()
-//            .filter(cu -> cu.getUserId().equals(userId))
-//            .findFirst()
-//            .orElseThrow(() -> new EntityNotFoundException("User not found in carpool"));
-//            
-//        carpool.getCarpoolUsers().remove(carpoolUser);
-//        carpoolUserRepository.delete(carpoolUser);
-//    }
-//    
-//    public List<CarPoolUser> findCarpoolUsers(Long carpoolId) {
-//        return carpoolUserRepository.findByCarpoolId(carpoolId);
-//    }
-//
-//
-//	public CarPool getCarPoolById(long id) {
-//		CarPool carPoolFound=carpoolRepository.findById(id).get();
-//		if(carPoolFound!=null) {
-//			return carPoolFound;
-//		}
-//		return null;
-//	}
 	@Autowired
 	private CarPoolRepository carpoolRepository;
 
@@ -261,5 +179,14 @@ public class CarPoolService {
 			carPoolPojo.add(pojoCarPool);
 		});
 		return carPoolPojo;
+	}
+
+	public boolean deleteCarPool(long id) {
+		carpoolRepository.deleteById(id);
+		return true;
+	}
+	
+	public long getAllBookingsTillDate() {
+		return carpoolUserRepository.count();
 	}
 }

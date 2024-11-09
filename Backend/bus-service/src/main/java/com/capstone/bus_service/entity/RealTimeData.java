@@ -25,8 +25,7 @@ public class RealTimeData {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonBackReference
+    @ManyToOne
     @JoinColumn(name = "bus_id")
     private Bus bus;
     

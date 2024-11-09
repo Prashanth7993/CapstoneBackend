@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FeedbackService } from '../../services/feedback.service';
 
 @Component({
   selector: 'app-feedback',
@@ -6,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrl: './feedback.component.css',
 })
 export class FeedbackComponent implements OnInit {
+  private isLoading: boolean = false;
   feedbacks: any[] = [
     {
       id: 1,
@@ -45,9 +47,43 @@ export class FeedbackComponent implements OnInit {
     },
   ];
 
-  constructor() {}
+  constructor(private feedbackService: FeedbackService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.loadAllFeedbacks()
+  }
+
+  loadAllFeedbacks(): any {
+    this.isLoading=true
+    this.feedbackService.getAllFeedbacks().subscribe({
+      next: (data) => {
+        console.log('Success');
+        this.feedbacks = data;
+      },
+      error:(error)=>{
+        console.log(error)
+      },
+      complete:()=>{
+        this.isLoading=false;
+      }
+    });
+  }
+
+  deleteFeedback(id:number):any{
+    console.log("here in delete feedback")
+    this.isLoading=true;
+    this.feedbackService.deleteFeedbackById(id).subscribe({
+      next:(data)=>{
+        console.log("Successfully deleted the feedback")
+      },
+      error:(error)=>{
+        console.log(error)
+      },
+      complete:()=>{
+        this.isLoading=false;
+      }
+    })
+  }
 
   getRatingClass(rating: number): string {
     switch (rating) {
@@ -62,13 +98,6 @@ export class FeedbackComponent implements OnInit {
     }
   }
 
-  onEdit(id: number): void {
-    console.log('Edit feedback:', id);
-  }
-
-  onDelete(id: number): void {
-    console.log('Delete feedback:', id);
-  }
 
   formatDateTime(dateString: string): string {
     return new Date(dateString).toLocaleString();

@@ -47,17 +47,18 @@ export class UsersComponent {
     });
   }
 
-  deleteUser(userId: string): void {
-    // Implement your delete logic here
-    // Example:
-    // this.userService.deleteUser(userId).subscribe({
-    //   next: () => {
-    //     this.users = this.users.filter(user => user.userId !== userId);
-    //   },
-    //   error: (error) => {
-    //     console.error('Error:', error);
-    //   }
-    // });
+  deleteUser(userId: number): void {
+    this.userService.deleteUserById(userId).subscribe({
+      next: () => {
+        console.log("User Deleted Successfully")
+      },
+      error: (error) => {
+        console.error('Error:', error);
+      },
+      complete:()=>{
+        this.loadUsers();
+      }
+    });
   }
 
  

@@ -75,4 +75,9 @@ public class BusController {
     	busService.deleteBusById(busId);
     	return new ResponseEntity<>(Map.entry("message", "Successfully Deleted the bus"),HttpStatus.OK);
     }
+    
+    @GetMapping("/count")
+    public ResponseEntity<?> getOperatingBusCount(){
+    	return new ResponseEntity<>(busService.getOperatingBusCount(),HttpStatus.OK);
+    }
 }

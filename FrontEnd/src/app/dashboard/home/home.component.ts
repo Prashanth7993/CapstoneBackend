@@ -1,5 +1,12 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ElementRef,
+  AfterViewInit,
+} from '@angular/core';
 import { Chart } from 'chart.js/auto';
+import { DashboardService } from '../../services/dashboard.service';
 
 interface MetricCard {
   title: string;
@@ -10,77 +17,187 @@ interface MetricCard {
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrl: './home.component.css'
+  styleUrl: './home.component.css',
 })
 export class HomeComponent implements OnInit, AfterViewInit {
   // dashboard.component.ts
 
   @ViewChild('userChart') userChartCanvas!: ElementRef;
   @ViewChild('busChart') busChartCanvas!: ElementRef;
-  
+
   userChart: Chart | undefined;
   busChart: Chart | undefined;
+
+  totalUsers: number = 0;
+  totalRoutes: number = 0;
+  totalBuses: number = 0;
+  bookingsCount:number = 0;
+  registrationData: any = [];
+  isLoading: boolean = false;
 
   metrics: MetricCard[] = [
     {
       title: 'Total Users',
-      value: 15847,
+      value: this.totalUsers,
       icon: 'fas fa-users',
-      trend: 12.5
+      trend: 12.5,
     },
     {
       title: 'Available Buses',
-      value: 284,
+      value: this.totalBuses,
       icon: 'fas fa-bus',
-      trend: 8.2
+      trend: 8.2,
     },
     {
       title: 'Active Routes',
-      value: 156,
+      value: this.totalRoutes,
       icon: 'fas fa-route',
-      trend: -2.4
+      trend: -2.4,
     },
     {
-      title: 'Daily Bookings',
-      value: 1234,
+      title: 'Bookings',
+      value: this.bookingsCount,
       icon: 'fas fa-ticket-alt',
-      trend: 15.7
-    }
+      trend: 15.7,
+    },
   ];
 
-  constructor() {}
+  constructor(private dashboardService: DashboardService) {}
 
   ngOnInit() {
-    // Initial setup if needed
+    console.log('in init');
+    this.getAllActiveRoutesCount();
+    this.getAllOperatingBusesCount();
+    this.getCountOfUserRegistration();
+    this.getAllCarPoolBookingsCounts();
+    this.getRegistrationAnalyticsOfTheYear();
+  }
+
+  getAllActiveRoutesCount(): any {
+    this.isLoading = true;
+    this.dashboardService.getActiveRoutesCount().subscribe({
+      next: (data) => {
+        this.metrics[2].value = data;
+        this.totalRoutes = data;
+      },
+      error: (error) => {
+        console.log(error);
+      },
+      complete: () => {
+        this.isLoading = false;
+      },
+    });
+  }
+  getAllOperatingBusesCount(): any {
+    this.isLoading = true;
+    this.dashboardService.getOperatingBusesCount().subscribe({
+      next: (data) => {
+        this.metrics[1].value = data;
+        this.totalBuses = data;
+      },
+      error: (error) => {
+        console.log(error);
+      },
+      complete: () => {
+        this.isLoading = false;
+      },
+    });
+  }
+
+  getCountOfUserRegistration(): any {
+    this.isLoading = true;
+
+    this.dashboardService.getActiveUsersCount().subscribe({
+      next: (data) => {
+        this.metrics[0].value = data;
+        this.totalUsers = data;
+      },
+      error: (error) => {
+        console.log(error);
+      },
+      complete: () => {
+        this.isLoading = false;
+      },
+    });
+  }
+
+  getRegistrationAnalyticsOfTheYear(): any {
+    this.isLoading = true;
+    this.dashboardService.getRegistrationsDataForTheYear().subscribe({
+      next: (data) => {
+        console.log(data)
+        this.initUserChart(data);
+        this.registrationData = data;
+      },
+      error: (error) => {
+        console.log(error);
+      },
+      complete: () => {
+        this.isLoading = false;
+      },
+    });
+  }
+
+  getAllCarPoolBookingsCounts(): any {
+    this.isLoading = true;
+    this.dashboardService.getCarPoolBookingsCount().subscribe({
+      next: (data) => {
+        this.metrics[3].value = data
+        this.bookingsCount = data;
+        console.log(data);
+      },
+      error: (error) => {
+        console.log(error);
+      },
+      complete: () => {
+        this.isLoading = false;
+      },
+    });
   }
 
   ngAfterViewInit() {
-    // Initialize charts after view is loaded
-    this.initUserChart();
-    this.initBusChart();
+    if (typeof window !== 'undefined') {
+      // this.initUserChart(this.registrationData);
+      this.initBusChart();
+    }
   }
 
-  initUserChart() {
+  initUserChart(registrationData: any) {
     const ctx = this.userChartCanvas.nativeElement.getContext('2d');
     this.userChart = new Chart(ctx, {
       type: 'line',
       data: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-        datasets: [{
-          label: 'New Users',
-          data: [650, 850, 920, 1100, 1200, 1350],
-          borderColor: 'rgb(59, 130, 246)',
-          tension: 0.4
-        }]
+        labels: [
+          'Jan',
+          'Feb',
+          'Mar',
+          'Apr',
+          'May',
+          'Jun',
+          'July',
+          'Aug',
+          'Sep',
+          'Oct',
+          'Nov',
+          'Dec',
+        ],
+        datasets: [
+          {
+            label: 'New Users',
+            data: registrationData,
+            borderColor: 'rgb(59, 130, 246)',
+            tension: 0.4,
+          },
+        ],
       },
       options: {
         responsive: true,
         plugins: {
           legend: {
-            position: 'bottom'
-          }
-        }
-      }
+            position: 'bottom',
+          },
+        },
+      },
     });
   }
 
@@ -90,26 +207,28 @@ export class HomeComponent implements OnInit, AfterViewInit {
       type: 'bar',
       data: {
         labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-        datasets: [{
-          label: 'Bus Utilization',
-          data: [85, 92, 88, 95, 90, 75, 70],
-          backgroundColor: 'rgba(59, 130, 246, 0.5)'
-        }]
+        datasets: [
+          {
+            label: 'Bus Utilization',
+            data: [85, 92, 88, 95, 90, 75, 70],
+            backgroundColor: 'rgba(59, 130, 246, 0.5)',
+          },
+        ],
       },
       options: {
         responsive: true,
         plugins: {
           legend: {
-            position: 'bottom'
-          }
+            position: 'bottom',
+          },
         },
         scales: {
           y: {
             beginAtZero: true,
-            max: 100
-          }
-        }
-      }
+            max: 100,
+          },
+        },
+      },
     });
   }
 
@@ -122,5 +241,4 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.busChart.destroy();
     }
   }
-
 }

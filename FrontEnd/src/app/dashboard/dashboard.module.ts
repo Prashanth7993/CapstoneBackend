@@ -11,7 +11,6 @@ import { PaymentComponent } from './payment/payment.component';
 import { RoutesComponent } from './routes/routes.component';
 
 
-
 @NgModule({
   declarations: [
     UsersComponent,

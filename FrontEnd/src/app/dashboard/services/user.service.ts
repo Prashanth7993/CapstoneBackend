@@ -20,4 +20,11 @@ export class UserService {
     return this.http.delete(this.url+`/${id}`)
   }
 
+  getAllOperators():Observable<any>{
+    return this.http.get(this.url+"/operators")
+  }
+
+  deleteOperatorById(id:number):Observable<any>{
+    return this.http.delete(this.url+`/${id}`)
+  }
 }
