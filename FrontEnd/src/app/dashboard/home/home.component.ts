@@ -126,7 +126,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.dashboardService.getRegistrationsDataForTheYear().subscribe({
       next: (data) => {
         console.log(data)
-        this.initUserChart(data);
+        if (typeof window !== 'undefined') {
+          this.initUserChart(data);
+        }
+        
         this.registrationData = data;
       },
       error: (error) => {

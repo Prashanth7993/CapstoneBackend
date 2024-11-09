@@ -1,8 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { Observable,of } from 'rxjs';
 import { environment } from '../../environments/environment';
-
+import { isPlatformBrowser } from '@angular/common';
 @Injectable({
   providedIn: 'root'
 })
@@ -11,14 +11,21 @@ export class AuthenticationService {
   
   private isAuthenticated:boolean=false;
 
-  private token=localStorage.getItem("__auth")
+  
 
+  private getToken(): string | null {
+    if (isPlatformBrowser(this.platformId)) {
+      return localStorage.getItem("__auth");
+    }
+    return null;
+  }
+  private token=this.getToken()
 
   public headers=new HttpHeaders({
     'Authorization':`Bearer ${this.token}`
   })
 
-  constructor(private http: HttpClient) {}
+  constructor( @Inject(PLATFORM_ID) private platformId: Object,private http: HttpClient) {}
 
   login(data: any): Observable<any> {
     console.log(data)
@@ -30,7 +37,11 @@ export class AuthenticationService {
   } 
 
   checkAuthentication():Observable<any>{
-    let storedToken=localStorage.getItem("__auth")
-    return this.http.get<any>(this.apiUrl+"/auth/validate/token?token="+storedToken,{headers:this.headers})
+    if (isPlatformBrowser(this.platformId)) {
+      let storedToken=localStorage.getItem("__auth");
+      return this.http.get<any>(this.apiUrl+"/auth/validate/token?token="+storedToken,{headers:this.headers})
+    }
+    
+    return of({ authenticated: false });
   }
 }

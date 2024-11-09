@@ -8,6 +8,8 @@ import { FeedbackService } from '../../services/feedback.service';
 })
 export class FeedbackComponent implements OnInit {
   private isLoading: boolean = false;
+  showSuccessToast: boolean = false;
+  showErrorToast: boolean = false;
   feedbacks: any[] = [
     {
       id: 1,
@@ -72,15 +74,22 @@ export class FeedbackComponent implements OnInit {
   deleteFeedback(id:number):any{
     console.log("here in delete feedback")
     this.isLoading=true;
+    
     this.feedbackService.deleteFeedbackById(id).subscribe({
       next:(data)=>{
+        this.showSuccessToast=true;
         console.log("Successfully deleted the feedback")
       },
       error:(error)=>{
         console.log(error)
+        this.showErrorToast=true;
       },
       complete:()=>{
         this.isLoading=false;
+        setTimeout(()=>{
+          this.showSuccessToast=false;
+          this.showErrorToast=false;
+        },1500)
       }
     })
   }
