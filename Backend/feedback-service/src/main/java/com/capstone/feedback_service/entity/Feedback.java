@@ -25,4 +25,9 @@ public class Feedback {
     private int rating; 
     private String comment; 
     private LocalDateTime timestamp; 
+    
+    @PrePersist
+    public void updateDateTime() {
+    	this.timestamp=LocalDateTime.now();
+    }
 }
