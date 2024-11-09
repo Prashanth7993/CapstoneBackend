@@ -1,0 +1,8 @@
+:host {
+    display: block;
+    background-image: url('https://res.cloudinary.com/dp8bdt1zu/image/upload/v1730697170/hnaqfnqivxkhoqvhozky.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh; /* Sets the component's height to the viewport height */
+}

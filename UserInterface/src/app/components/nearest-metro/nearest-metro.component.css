@@ -1,0 +1,37 @@
+.active {
+  color: #05fc4f; /* A vibrant color to highlight the active link */
+  font-weight: bold;
+  text-shadow: 1px 1px 6px rgba(5, 252, 79, 0.6); /* Soft glow effect */
+  position: relative;
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -4px; /* Adjust position below the text */
+  height: 2px; /* Thickness of the underline */
+  background-color: #05fc4f; /* Match the active color */
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease;
+}
+
+.active:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.active-link {
+  background-color: rgb(68, 201, 108); /* Softer background for hover */
+  border-radius: 6px;
+  padding: 10px 10px;
+  transition: background-color 0.3s ease;
+}
+
+.active-link:hover {
+  background-color: rgba(5, 252, 79, 0.2); /* Slightly darker on hover */
+  box-shadow: 0 4px 8px rgba(5, 252, 79, 0.3); /* Subtle shadow effect */
+}
