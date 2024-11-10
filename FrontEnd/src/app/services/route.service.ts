@@ -16,7 +16,21 @@ export class RouteService {
     return this.http.get(this.apiUrl);
   }
 
+  addNewRoute(data:any):Observable<any>{
+    return this.http.post(this.apiUrl,data)
+  }
+
   deleteRouteById(id:number):Observable<any>{
     return this.http.delete(this.apiUrl+`/${id}`)
   }
+
+  addStopToRoute(routeId:number,data:any):Observable<any>{
+    return this.http.post(this.apiUrl+`/${routeId}/stops`,data)
+  }
+
+  addStationToRoute(routeId:number,data:any):Observable<any>{
+    return this.http.post(this.apiUrl+`/stations/${routeId}`,data)
+  }
+
+
 }

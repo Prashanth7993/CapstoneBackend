@@ -44,4 +44,16 @@ export class AuthenticationService {
     
     return of({ authenticated: false });
   }
+
+  forgotPassword(data:any):Observable<any>{
+    return this.http.get<any>(this.apiUrl+"/auth/forgot-password?username="+data.email);
+  }
+
+  verifyForgotPasswordToken(token:any):Observable<any>{
+    return this.http.get<any>(this.apiUrl+"/auth/verify/forgot-password?token="+token)
+  }
+
+  resetPassword(token:any,data:any):Observable<any>{
+    return this.http.post<any>(this.apiUrl+"/auth/reset/password?token="+token,data)
+  }
 }

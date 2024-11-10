@@ -9,7 +9,7 @@ import { OperatorsComponent } from './operators/operators.component';
 import { FeedbackComponent } from './feedback/feedback.component';
 import { PaymentComponent } from './payment/payment.component';
 import { RoutesComponent } from './routes/routes.component';
-
+import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -24,7 +24,9 @@ import { RoutesComponent } from './routes/routes.component';
     RoutesComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule
   ]
 })
 export class DashboardModule { }

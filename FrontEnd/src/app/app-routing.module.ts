@@ -20,7 +20,8 @@ import { NotFoundComponent } from './not-found/not-found.component';
 
 //userapp component
 import { HomeComponent as UserAppHomeComponent } from './userapp/home/home.component';
-
+import { CarpoolComponent as UserCarPoolComponent } from './userapp/carpool/carpool.component';
+import { BusSearchComponent } from './userapp/bus-search/bus-search.component';
 const routes: Routes = [
   {
     path: 'admin',
@@ -46,12 +47,15 @@ const routes: Routes = [
       { path: 'register', component: RegisterComponent },
       { path: 'forgot-password', component: ForgotPasswordComponent },
       { path: 'reset-password', component: ResetPasswordComponent },
+      
     ],
   },
   {
     path: '',
     component: UserAppHomeComponent
   },
+  { path: 'carpool', component: UserCarPoolComponent},
+  { path:'bus-search',component:BusSearchComponent},
   {
     path: '**',
     component: NotFoundComponent,

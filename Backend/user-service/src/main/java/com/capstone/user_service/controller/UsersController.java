@@ -2,6 +2,7 @@ package com.capstone.user_service.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
@@ -73,7 +74,7 @@ public class UsersController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable long id) {
         userService.deleteUser(id);
-        return new ResponseEntity<>("Success",HttpStatus.OK);
+        return new ResponseEntity<>(Map.entry("message", "Successfully Deleted the User"),HttpStatus.OK);
     }
     
     @GetMapping("/operators")

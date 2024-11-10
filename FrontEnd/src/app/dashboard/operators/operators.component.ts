@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../services/user.service';
-
+import { UserService } from '../../services/user.service';
 @Component({
   selector: 'app-operators',
   templateUrl: './operators.component.html',
@@ -9,35 +8,57 @@ import { UserService } from '../services/user.service';
 export class OperatorsComponent implements OnInit {
   operators: any = [];
 
+  isUserEdit: boolean = false;
+
   isLoading: boolean = false;
+
+  showSuccessToast: boolean = false;
+
+  showErrorToast: boolean = false;
+
+  updatingUser!:number;
 
   constructor(private userService: UserService) {
     this.filteredUsers = this.users;
   }
 
-  users: any[] = [
-    {
-      id: 153,
-      name: 'BAC',
-      email: 'BAC@ust.com',
-      phone: '+93 6334234034874',
-      role: 'OPERATOR',
-      tickets: null,
-    },
-    {
-      id: 154,
-      name: 'DSFLKJ',
-      email: 'SADFKLJL@ust.com',
-      phone: '+93 98473473847',
-      role: 'OPERATOR',
-      tickets: null,
-    },
-  ];
+  users: any[] = [];
 
   filteredUsers: any[] = [];
   searchText: string = '';
 
-  ngOnInit(): void {}
+  isModalOpen = false; // Modal visibility control
+  newUser = {
+    name: '',
+    email: '',
+    phone: '',
+    role: 'OPERATOR',
+  };
+
+  // Open the modal
+  openModal() {
+    this.isModalOpen = true;
+  }
+
+  // Close the modal
+  closeModal() {
+    this.isModalOpen = false;
+    this.resetForm();
+  }
+
+  // Reset form
+  resetForm() {
+    this.newUser = {
+      name: '',
+      email: '',
+      phone: '',
+      role: 'OPERATOR',
+    };
+  }
+
+  ngOnInit(): void {
+    this.getAllOperators();
+  }
 
   filterUsers(): void {
     if (!this.searchText) {
@@ -61,8 +82,24 @@ export class OperatorsComponent implements OnInit {
   }
 
   deleteUser(user: any): void {
-    console.log('Deleting user:', user);
-    // Implement delete functionality
+    this.userService.deleteOperatorById(user.id).subscribe({
+      next: () => {
+        console.log('New User Added Successfully');
+        this.closeModal();
+        this.showSuccessToast = true;
+      },
+      error: (error) => {
+        console.log(error);
+        this.showErrorToast = true;
+      },
+      complete: () => {
+        this.getAllOperators();
+        setTimeout(() => {
+          this.showErrorToast = false;
+          this.showSuccessToast = false;
+        }, 1500);
+      },
+    })
   }
 
   getAllOperators(): any {
@@ -70,7 +107,8 @@ export class OperatorsComponent implements OnInit {
     this.userService.getAllOperators().subscribe({
       next: (data) => {
         console.log(data);
-        this.operators = data;
+        this.users = data;
+        this.filteredUsers = data;
       },
       error: (error) => {
         console.log(error);
@@ -79,5 +117,74 @@ export class OperatorsComponent implements OnInit {
         this.isLoading = false;
       },
     });
+  }
+
+  getUserById(id: number): any {
+    this.isLoading = true;
+    this.updatingUser=id;
+    this.userService.getUserById(id).subscribe({
+      next: (data) => {
+        this.newUser.email = data.email;
+        this.newUser.phone = data.phone;
+        this.newUser.name = data.name;
+        this.isUserEdit = true;
+        this.openModal();
+      },
+      error: (error) => {
+        console.log(error);
+      },
+      complete: () => {
+        this.isLoading = false;
+      },
+    });
+  }
+
+  onSubmit() {
+    if (
+      this.newUser.name &&
+      this.newUser.email &&
+      this.newUser.phone &&
+      this.newUser.role
+    ) {
+      if (this.isUserEdit) {
+        this.userService.updateUserDetails(this.updatingUser,this.newUser).subscribe({
+          next: (data) => {
+            console.log('New User Added Successfully');
+            this.closeModal();
+            this.showSuccessToast = true;
+          },
+          error: (error) => {
+            console.log(error);
+            this.showErrorToast = true;
+          },
+          complete: () => {
+            this.getAllOperators();
+            setTimeout(() => {
+              this.showErrorToast = false;
+              this.showSuccessToast = false;
+            }, 1500);
+          },
+        })
+      } else {
+        this.userService.addNewUser(this.newUser).subscribe({
+          next: (data) => {
+            console.log('New User Added Successfully');
+            this.closeModal();
+            this.showSuccessToast = true;
+          },
+          error: (error) => {
+            console.log(error);
+            this.showErrorToast = true;
+          },
+          complete: () => {
+            this.getAllOperators();
+            setTimeout(() => {
+              this.showErrorToast = false;
+              this.showSuccessToast = false;
+            }, 1500);
+          },
+        });
+      }
+    }
   }
 }

@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { RouteService } from '../../services/route.service';
-import { BusService } from '../services/bus.service';
-
+import { BusService } from '../../services/bus.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 @Component({
   selector: 'app-bus',
   templateUrl: './bus.component.html',
   styleUrl: './bus.component.css',
 })
 export class BusComponent implements OnInit {
-
   buses: any = [
     {
       id: 1,
@@ -96,12 +95,47 @@ export class BusComponent implements OnInit {
       ],
     },
   ];
-  routes:any=[]
-  loading: boolean = false;
-  constructor(private busService: BusService,private routeService:RouteService) {}
-  ngOnInit(): void {
-   this.getAllRoutesAndBuses()
 
+  showSuccessToast: boolean = false;
+
+  showErrorToast: boolean = false;
+
+  showModal = false;
+
+  busForm: FormGroup;
+
+  submitting = false;
+
+  routes: any = [];
+
+  showScheduleModal = false;
+
+  scheduleForm: FormGroup;
+
+  selectedBusId!: number;
+
+  loading: boolean = false;
+  
+  constructor(
+    private busService: BusService,
+    private routeService: RouteService,
+    private fb: FormBuilder
+  ) {
+    this.busForm = this.fb.group({
+      routeId: ['', Validators.required],
+      capacity: ['', [Validators.required, Validators.min(1)]],
+      status: ['', Validators.required],
+    });
+
+    this.scheduleForm = this.fb.group({
+      routeId: ['', Validators.required],
+      departureTime: ['', Validators.required],
+      destinationArrivalTime: ['', Validators.required],
+      operatingStatus: [false],
+    });
+  }
+  ngOnInit(): void {
+    this.getAllRoutesAndBuses();
   }
 
   getAllRoutesAndBuses(): void {
@@ -112,15 +146,17 @@ export class BusComponent implements OnInit {
         this.busService.getAllBuses().subscribe({
           next: (buses) => {
             let newBusesObjects = buses.map((bus: any) => {
-              let routeFound = routes.find((route: any) => route.id === bus.routeId);
+              let routeFound = routes.find(
+                (route: any) => route.id === bus.routeId
+              );
               bus.route = routeFound;
-              return bus; 
+              return bus;
             });
             this.buses = newBusesObjects;
-            console.log(newBusesObjects)
-          }
+            console.log(newBusesObjects);
+          },
         });
-      }
+      },
     });
   }
   getAllBuses(): void {
@@ -143,17 +179,98 @@ export class BusComponent implements OnInit {
     this.loading = true;
     this.busService.deleteBusById(id).subscribe({
       next: (data) => {
-        console.log(data);
-        this.busService.getAllBuses();
+        this.showSuccessToast = true;
         this.loading = false;
       },
       error: (error) => {
         console.log(error);
+        this.showErrorToast = true;
         this.loading = false;
       },
       complete: () => {
         this.loading = false;
+        this.getAllRoutesAndBuses();
+        setTimeout(() => {
+          this.showErrorToast = false;
+          this.showSuccessToast = false;
+        }, 1500);
       },
     });
+  }
+
+  openModal() {
+    this.showModal = true;
+    this.busForm.reset();
+  }
+
+  closeModal() {
+    this.showModal = false;
+    this.busForm.reset();
+  }
+
+  onSubmit() {
+    if (this.busForm.valid) {
+      this.submitting = true;
+
+      this.busService.addNewBus(this.busForm.value).subscribe({
+        next: (response) => {
+          this.closeModal();
+          this.showSuccessToast = true;
+        },
+        error: (error) => {
+          console.error('Error adding bus:', error);
+          this.showErrorToast = true;
+        },
+        complete: () => {
+          this.submitting = false;
+          this.getAllRoutesAndBuses();
+          setTimeout(() => {
+            this.showErrorToast = false;
+            this.showSuccessToast = false;
+          }, 1500);
+        },
+      });
+    }
+  }
+
+  openScheduleModal(id: number) {
+    this.selectedBusId = id;
+    this.showScheduleModal = true;
+    this.scheduleForm.reset();
+  }
+
+  closeScheduleModal() {
+    this.showScheduleModal = false;
+    this.scheduleForm.reset();
+  }
+
+  onScheduleSubmit() {
+    if (this.scheduleForm.valid) {
+      const scheduleData = {
+        ...this.scheduleForm.value,
+        routeId: parseInt(this.scheduleForm.value.routeId),
+      };
+
+      this.busService
+        .addScheduleToBus(this.selectedBusId, scheduleData)
+        .subscribe({
+          next: (data) => {
+            console.log(data);
+            this.closeScheduleModal();
+            this.showSuccessToast = true;
+          },
+          error: (error) => {
+            console.log(error);
+          },
+
+          complete: () => {
+            this.getAllRoutesAndBuses();
+            setTimeout(() => {
+              this.showErrorToast = false;
+              this.showSuccessToast = false;
+            }, 1500);
+          },
+        });
+    }
   }
 }

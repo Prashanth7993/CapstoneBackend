@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { UserService } from '../services/user.service';
+import { UserService } from '../../services/user.service';
 
 // users.interface.ts
 export interface User {
@@ -7,7 +7,7 @@ export interface User {
   name: string;
   email: string;
   phone: string;
-  createdAt: Date;
+  createdAt ?: Date;
   role:string;
 }
 
@@ -23,6 +23,39 @@ export class UsersComponent {
   }
 
   users: User[] = [];
+
+  isModalOpen = false;  
+
+  showSuccessToast:boolean = false;
+
+  showErrorToast:boolean = false;
+
+  newUser = {
+    name: '',
+    email: '',
+    phone: '',
+    role: 'USER'
+  };
+
+  openModal() {
+    this.isModalOpen = true;
+  }
+
+  closeModal() {
+    this.isModalOpen = false;
+    this.resetForm();
+  }
+
+  // Reset form
+  resetForm() {
+    this.newUser = {
+      name: '',
+      email: '',
+      phone: '',
+      role: 'USER'
+    };
+  }
+
   loading: boolean = true;
 
   ngOnInit() {
@@ -51,16 +84,46 @@ export class UsersComponent {
     this.userService.deleteUserById(userId).subscribe({
       next: () => {
         console.log("User Deleted Successfully")
+        this.showSuccessToast=true;
       },
-      error: (error) => {
+      error: (error:any) => {
         console.error('Error:', error);
+        this.showErrorToast=true
       },
       complete:()=>{
         this.loadUsers();
+        setTimeout(()=>{
+          this.showErrorToast=false;
+          this.showSuccessToast=false;
+        },1500)
       }
     });
   }
 
  
+  onSubmit() {
+    if (this.newUser.name && this.newUser.email && this.newUser.phone && this.newUser.role) {
+     
+      this.userService.addNewUser(this.newUser).subscribe({
+        next:(data)=>{
+          console.log("New User Added Successfully")
+          this.closeModal();
+          this.showSuccessToast=true
+        },
+        error:(error)=>{
+          console.log(error)
+          this.showErrorToast=true
+        },
+        complete:()=>{
+          this.loadUsers();
+        setTimeout(()=>{
+          this.showErrorToast=false;
+          this.showSuccessToast=false;
+        },1500)
+        }
+      })
+    }
+  }
+
 
 }

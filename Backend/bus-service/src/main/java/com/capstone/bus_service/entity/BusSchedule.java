@@ -1,6 +1,6 @@
 package com.capstone.bus_service.entity;
 
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -28,8 +28,8 @@ public class BusSchedule {
 
     private long routeId;
 
-    private LocalDateTime departureTime;
-    private LocalDateTime destinationArrivalTime;
+    private LocalTime  departureTime;
+    private LocalTime  destinationArrivalTime;
     private boolean operatingStatus;
 
     @ManyToOne
