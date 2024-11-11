@@ -32,7 +32,7 @@ public class NotificationController {
 		return new ResponseEntity<>(service.getNotificationByUserId(userId),HttpStatus.OK);
 	}
 	
-	@PostMapping("/user")
+	@PostMapping("/user/{userId}")
 	public ResponseEntity<?> addNewNotificationToUser(@PathVariable long userId,@RequestBody NotificationPojo notification){
 		return new ResponseEntity<>(service.addNotification(userId, notification),HttpStatus.OK);
 	}

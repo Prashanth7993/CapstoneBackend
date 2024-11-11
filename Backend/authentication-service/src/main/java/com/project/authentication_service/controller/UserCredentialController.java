@@ -1,13 +1,12 @@
 package com.project.authentication_service.controller;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchProperties.Restclient;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,10 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClient;
 
 import com.project.authentication_service.client.UserClient;
+import com.project.authentication_service.entity.Role;
+import com.project.authentication_service.entity.UserCredential;
 import com.project.authentication_service.models.ForgotPasswordTokenPojo;
 import com.project.authentication_service.models.ResetPassword;
 import com.project.authentication_service.models.UserCredentialPojo;
 import com.project.authentication_service.models.UserPojo;
+import com.project.authentication_service.repository.RoleRepository;
+import com.project.authentication_service.repository.UserCredentialRepository;
 import com.project.authentication_service.service.UserCredentialService;
 
 @RestController
@@ -31,6 +34,12 @@ public class UserCredentialController {
 
 	@Autowired
 	private UserCredentialService userCredentialService;
+	
+	@Autowired
+	private UserCredentialRepository userRepo;
+	
+	@Autowired
+	private RoleRepository roleRepo;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -43,9 +52,17 @@ public class UserCredentialController {
 		return "Hello! From Authentication Service..............";
 	}
 
+
 	@PostMapping("/login")
 	public ResponseEntity<?> loginUser(@RequestBody UserCredentialPojo user) {
-		return new ResponseEntity<>(Map.entry("token", userCredentialService.validateUser(user)), HttpStatus.OK);
+		UserCredential userFound=userRepo.findByUsername(user.getUsername()).get();
+		System.out.println(userFound.getId());
+		Map<String, String> responseMap = new HashMap<>();
+		System.out.println(userFound.getRoles().get(0).getName());
+	    responseMap.put("token", userCredentialService.validateUser(user));
+	    responseMap.put("role", userFound.getRoles().get(0).getName());
+//		return new ResponseEntity<>(Map.entry("token", userCredentialService.validateUser(user)), HttpStatus.OK);
+	    return new ResponseEntity<>(responseMap,HttpStatus.OK);
 	}
 
 	@PostMapping("/user/register")

@@ -1,7 +1,5 @@
 package com.project.authentication_service.entity;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.CascadeType;
@@ -31,4 +29,10 @@ public class Role {
 	@JoinColumn(name="user_id")
 	@JsonBackReference
 	private UserCredential usersCrential;
+	
+	 @Override
+	    public String toString() {
+	        return "Role{roleId=" + roleId + ", name='" + name + "', userCredential=" + 
+	               (usersCrential != null ? usersCrential.getUsername() : "No User") + "}";
+	    }
 }
