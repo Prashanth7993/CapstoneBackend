@@ -23,7 +23,7 @@ public class RealTimeDataService {
 
     public RealTimeDataPojo reportRealTimeData(long busId, RealTimeDataPojo dataPojo) {
         Bus bus = busRepository.findById(busId).orElse(null);
-        if (bus != null && "Active".equalsIgnoreCase(bus.getStatus())) {
+        if (bus != null && "Operating".equalsIgnoreCase(bus.getStatus())) {
             RealTimeData data = new RealTimeData(); // Assuming this is the original entity
             BeanUtils.copyProperties(dataPojo, data);
             data.setBus(bus);

@@ -1,4 +1,4 @@
-package com.capstone.notification_service.models;
+package com.capstone.carpool_service.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 
 public class NotificationPojo {
-	
+
 	private long id;
 	private long userId;
 	private String type;

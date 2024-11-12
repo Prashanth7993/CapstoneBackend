@@ -14,7 +14,9 @@ import lombok.NoArgsConstructor;
 public class RealTimeDataPojo {
 	private long id;
 	private BusPojo bus;
-	private String location;
+	private double latitude;
+    private double longitude;
 	private LocalTime timestamp;
 	private long occupancy;
+	private String nextStop;
 }

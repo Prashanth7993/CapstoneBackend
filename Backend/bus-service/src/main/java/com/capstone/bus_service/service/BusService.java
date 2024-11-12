@@ -9,8 +9,10 @@ import org.springframework.stereotype.Service;
 
 import com.capstone.bus_service.entity.Bus;
 import com.capstone.bus_service.entity.BusSchedule;
+import com.capstone.bus_service.entity.RealTimeData;
 import com.capstone.bus_service.models.BusPojo;
 import com.capstone.bus_service.models.BusSchedulePojo;
+import com.capstone.bus_service.models.RealTimeDataPojo;
 import com.capstone.bus_service.repository.BusRepository;
 import com.capstone.bus_service.repository.BusScheduleRepository;
 
@@ -31,6 +33,8 @@ public class BusService {
         List<BusPojo> pojoBuses = new ArrayList<>();
         buses.forEach(bus -> {
         	List<BusSchedule> schedules=bus.getBusSchedules();
+        	List<RealTimeData> realTimeData=bus.getRealTimeData();
+        	
         	List<BusSchedulePojo> schedulesPojo=new ArrayList<>();
         	schedules.stream().forEach(schedule->{
         		BusSchedulePojo pojo=new BusSchedulePojo();
@@ -38,13 +42,24 @@ public class BusService {
         		schedulesPojo.add(pojo);
         	});
         	BusPojo pojoBus = convertToPojo(bus);
+        	
         	pojoBus.setBusSchedules(schedulesPojo);
+        	
+        	List<RealTimeDataPojo> realTimeDataPojo=new ArrayList<>();
+        	RealTimeDataPojo realTimePojo=new RealTimeDataPojo();
+        	if(realTimeData.size()>0) {
+        		BeanUtils.copyProperties(realTimeData.get(realTimeData.size()-1), realTimePojo);
+        		realTimeDataPojo.add(realTimePojo);
+        	}
+        	
+        	pojoBus.setRealTimeData(realTimeDataPojo);
             pojoBuses.add(pojoBus);
         });
         return pojoBuses;
     }
 
     public BusPojo getBusById(long id) {
+    	System.out.print(id);
     	Bus busFound=busRepository.findById(id).get();
     	BusPojo busPojo=new BusPojo();
     	BeanUtils.copyProperties(busFound, busPojo);

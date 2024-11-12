@@ -1,0 +1,16 @@
+package com.capstone.carpool_service.client;
+
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import com.capstone.carpool_service.models.NotificationPojo;
+
+
+@FeignClient(value="notification-service",url="http://localhost:9092/notifications")
+public interface NotificationClient {
+	
+	@PostMapping("/user/{userId}")
+	public NotificationPojo addNewNotificationToUser(@PathVariable long userId,@RequestBody NotificationPojo notification);
+}

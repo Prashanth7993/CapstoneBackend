@@ -27,6 +27,7 @@ public class RealTimeDataController {
             RealTimeDataPojo reportedData = realTimeDataService.reportRealTimeData(busId, data);
             return ResponseEntity.ok(reportedData);
         } catch (IllegalStateException e) {
+        	e.printStackTrace();
             return ResponseEntity.badRequest().body(null);
         }
     }
@@ -34,9 +35,7 @@ public class RealTimeDataController {
     @GetMapping("/bus/{busId}")
     public ResponseEntity<List<RealTimeDataPojo>> getBusRealTimeData(@PathVariable Integer busId) {
         List<RealTimeDataPojo> realTimeDataList = realTimeDataService.getBusRealTimeData(busId);
-        if (realTimeDataList.isEmpty()) {
-            return ResponseEntity.noContent().build(); 
-        }
+        
         return ResponseEntity.ok(realTimeDataList);
     }
 }
