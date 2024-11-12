@@ -36,6 +36,7 @@ public class CarPool {
     private int availableSeats;
     private LocalTime departureTime;
     private String pickupLocation;
+//    private double price;
     
     @OneToMany(mappedBy = "carpool", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("carpool")  

@@ -1,7 +1,5 @@
 package com.project.authentication_service.models;
 
-import java.time.LocalDateTime;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,11 +8,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 
-public class UserPojo {
-	private long id;
-	private String name;
-	private String email;
-	private String phone;
-	private LocalDateTime createdAt;
+public class ChangePassworRequest {
 	
+	private String email;
+	private String password;
+	private String confirmPassword;
+
 }

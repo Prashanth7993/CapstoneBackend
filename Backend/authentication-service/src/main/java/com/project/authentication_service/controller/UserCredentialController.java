@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,8 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClient;
 
 import com.project.authentication_service.client.UserClient;
-import com.project.authentication_service.entity.Role;
 import com.project.authentication_service.entity.UserCredential;
+import com.project.authentication_service.models.ChangePassworRequest;
 import com.project.authentication_service.models.ForgotPasswordTokenPojo;
 import com.project.authentication_service.models.ResetPassword;
 import com.project.authentication_service.models.UserCredentialPojo;
@@ -58,7 +59,6 @@ public class UserCredentialController {
 		UserCredential userFound=userRepo.findByUsername(user.getUsername()).get();
 		System.out.println(userFound.getId());
 		Map<String, String> responseMap = new HashMap<>();
-		System.out.println(userFound.getRoles().get(0).getName());
 	    responseMap.put("token", userCredentialService.validateUser(user));
 	    responseMap.put("role", userFound.getRoles().get(0).getName());
 //		return new ResponseEntity<>(Map.entry("token", userCredentialService.validateUser(user)), HttpStatus.OK);
@@ -116,6 +116,20 @@ public class UserCredentialController {
 	@GetMapping("/validate/token")
 	public ResponseEntity<?> validateJwtToken(@RequestParam("token") String token) {
 		return new ResponseEntity<>(userCredentialService.validateToken(token), HttpStatus.OK);
+	}
+	
+	@GetMapping("/admin/validate/token")
+	public ResponseEntity<?> validateJwtTokenAndRole(@RequestParam("token") String token){
+		return new ResponseEntity<>(userCredentialService.validateTokenAndRole(token),HttpStatus.OK);
+	}
+	
+	@PutMapping("/change-password/{email}")
+	public ResponseEntity<?> changePassword(@RequestBody ChangePassworRequest request,@PathVariable String email){
+		boolean changed=userCredentialService.changePassword(email,request);
+		if(!changed) {
+			return new ResponseEntity<>(Map.entry("message", "Change Password Failed"),HttpStatus.OK);
+		}
+		return new ResponseEntity<>(Map.entry("message", "Password Change Successfull"),HttpStatus.OK);
 	}
 
 }

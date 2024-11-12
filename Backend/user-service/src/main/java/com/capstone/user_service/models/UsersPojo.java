@@ -18,6 +18,7 @@ public class UsersPojo {
 	private String email;
 	private String phone;
 	private String role;
+	private String password;
 	
 	List<TicketPojo> tickets;
 }

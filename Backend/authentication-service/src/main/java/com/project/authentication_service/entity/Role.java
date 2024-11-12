@@ -13,7 +13,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -24,15 +23,15 @@ public class Role {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long roleId;
 	private String name;
-	
-	@ManyToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="user_id")
+
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "user_id")
 	@JsonBackReference
 	private UserCredential usersCrential;
-	
-	 @Override
-	    public String toString() {
-	        return "Role{roleId=" + roleId + ", name='" + name + "', userCredential=" + 
-	               (usersCrential != null ? usersCrential.getUsername() : "No User") + "}";
-	    }
+
+	@Override
+	public String toString() {
+		return "Role{roleId=" + roleId + ", name='" + name + "', userCredential="
+				+ (usersCrential != null ? usersCrential.getUsername() : "No User") + "}";
+	}
 }

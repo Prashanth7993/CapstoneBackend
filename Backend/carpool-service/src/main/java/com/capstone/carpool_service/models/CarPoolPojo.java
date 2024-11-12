@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @AllArgsConstructor
-
 @Data
+
 public class CarPoolPojo {
 
 	private Long id;

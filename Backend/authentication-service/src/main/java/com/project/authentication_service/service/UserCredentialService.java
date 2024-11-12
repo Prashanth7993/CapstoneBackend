@@ -1,6 +1,7 @@
 package com.project.authentication_service.service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -11,19 +12,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.project.authentication_service.client.MailClient;
 import com.project.authentication_service.entity.ForgotPasswordToken;
 import com.project.authentication_service.entity.Role;
 import com.project.authentication_service.entity.UserCredential;
+import com.project.authentication_service.models.ChangePassworRequest;
 import com.project.authentication_service.models.ForgotPasswordTokenPojo;
 import com.project.authentication_service.models.JavaMailMessagePojo;
 import com.project.authentication_service.models.ResetPassword;
 import com.project.authentication_service.models.RolePojo;
 import com.project.authentication_service.models.UserCredentialPojo;
-import com.project.authentication_service.models.UserPojo;
 import com.project.authentication_service.repository.ForgotPasswordTokenRepository;
+import com.project.authentication_service.repository.RoleRepository;
 import com.project.authentication_service.repository.UserCredentialRepository;
 
 @Service
@@ -40,22 +43,36 @@ public class UserCredentialService {
 
 	@Autowired
 	private UserCredentialRepository userRepository;
+	
+	@Autowired
+	private RoleRepository roleRepository;
 
 	@Autowired
 	private ForgotPasswordTokenRepository tokenRepository;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	public UserCredentialPojo registerNewUser(UserCredentialPojo userCredential) {
 		UserCredential user = new UserCredential();
 		BeanUtils.copyProperties(userCredential, user);
 		List<RolePojo> rolesPojo = userCredential.getRoles();
-		List<Role> roles = rolesPojo.stream().map(rolePojo -> {
-			Role role = new Role();
-			BeanUtils.copyProperties(rolePojo, role);
-			role.setUsersCrential(user);
-			return role;
-		}).collect(Collectors.toList());
+		if(rolesPojo!=null && rolesPojo.size()>0) {
+			List<Role> roles = rolesPojo.stream().map(rolePojo -> {
+				Role role = new Role();
+				BeanUtils.copyProperties(rolePojo, role);
+				role.setUsersCrential(user);
+				return role;
+			}).collect(Collectors.toList());
+		}
+		Role userRole=new Role();
+		userRole.setName("USER");
+		List<Role> roles=new ArrayList<>();
+		roles.add(userRole);
 		user.setRoles(roles);
-		userRepository.save(user);
+		UserCredential userCreated=userRepository.save(user);
+		userRole.setUsersCrential(userCreated);
+		roleRepository.save(userRole);
 		UserCredentialPojo pojo = new UserCredentialPojo();
 		BeanUtils.copyProperties(user, pojo);
 		return pojo;
@@ -122,11 +139,36 @@ public class UserCredentialService {
 
 	public boolean validateToken(String token) {
 		jwtService.validateToken(token);
+		
 		return true;
 	}
 
 	public String getUserId(String token) {
 		return jwtService.getUserId(token);
+	}
+	
+	public boolean validateTokenAndRole(String token) {
+		jwtService.validateToken(token);
+		String username=jwtService.getUserId(token);
+		Optional<UserCredential> userFound=userRepository.findByUsername(username);
+		if(userFound.isEmpty()) {
+			return false;
+		}
+		if(!userFound.get().getRoles().get(0).getName().equalsIgnoreCase("ADMIN")) {
+			return false;
+		}
+		return true;
+	}
+
+	public boolean changePassword(String email, ChangePassworRequest request) {
+		System.out.println(request);
+		UserCredential user=userRepository.findByUsername(email).get();
+		if(user!=null) {
+			user.setPassword(passwordEncoder.encode(request.getConfirmPassword()));
+			userRepository.save(user);
+			return true;
+		}
+		return false;
 	}
 
 }

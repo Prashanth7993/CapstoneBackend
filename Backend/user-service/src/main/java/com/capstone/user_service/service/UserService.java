@@ -44,6 +44,7 @@ public class UserService {
 	public UsersPojo updateUser(long id, UsersPojo userDetails) {
 		Users user = usersRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
 		BeanUtils.copyProperties(userDetails, user, "id"); // Ignore id while copying
+		user.setRole("USER");
 		Users updatedUser = usersRepository.save(user);
 		return convertToPojo(updatedUser);
 	}
@@ -111,6 +112,7 @@ public class UserService {
 		Users userFound=usersRepository.findByEmail(email);
 		UsersPojo user=new UsersPojo();
 		BeanUtils.copyProperties(userFound, user);
+//		user.setId(userFound.getId());
 		return user;
 	}
 }

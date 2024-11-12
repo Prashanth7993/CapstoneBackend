@@ -39,7 +39,11 @@ public class UsersController {
         UsersPojo createdUser = userService.registerUser(userPojo);
         UserCredentialPojo credentialPojo=new UserCredentialPojo();
         credentialPojo.setUsername(createdUser.getEmail());
-        credentialPojo.setPassword(createdUser.getEmail().split("@")[0]);
+        if(userPojo.getPassword()!=null) {
+        	credentialPojo.setPassword(userPojo.getPassword());
+        }else {
+        	credentialPojo.setPassword(createdUser.getEmail().split("@")[0]);
+        }
         List<RolePojo> roles=new ArrayList<>();
         RolePojo pojoRole=new RolePojo();
         pojoRole.setName(createdUser.getRole());
