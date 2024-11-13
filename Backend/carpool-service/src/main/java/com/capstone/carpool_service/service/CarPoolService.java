@@ -170,6 +170,23 @@ public class CarPoolService {
 		return carpoolUserRepository.findByCarpoolId(carpoolId);
 	}
 	
+	public List<CarPoolUserPojo> getRecentBookingsOfUser(long userId){
+		System.out.println("Service");
+		List<CarPoolUser> userList=carpoolUserRepository.findByUserId(userId);
+//		System.out.println(userList);
+		List<CarPoolUserPojo> listOfReservations=new ArrayList<>();
+		userList.stream().forEach(user->{
+			CarPoolUserPojo pojo=new CarPoolUserPojo();
+			CarPoolPojo carPoolPojo=new CarPoolPojo();
+			BeanUtils.copyProperties(user, pojo);
+			BeanUtils.copyProperties(user.getCarpool(), carPoolPojo);
+			pojo.setCarpool(carPoolPojo);
+			listOfReservations.add(pojo);
+		});
+		
+		return listOfReservations;
+	}
+	
 	public List<CarPoolPojo> getCarPoolsByRoute(long routeId){
 		List<CarPool> carPoolsFound=carpoolRepository.findByRouteId(routeId);
 		List<CarPoolPojo> carPoolPojo=new ArrayList<>();

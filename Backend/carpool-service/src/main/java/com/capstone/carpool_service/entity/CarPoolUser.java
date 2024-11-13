@@ -35,4 +35,12 @@ public class CarPoolUser {
     @JoinColumn(name = "carpool_id")
     @JsonIgnoreProperties("carpoolUsers")
     private CarPool carpool;
+
+//	@Override
+//	public String toString() {
+//		return "CarPoolUser [id=" + id + ", userId=" + userId + ", requestTime=" + requestTime + ", carpool=" + carpool
+//				+ "]";
+//	}
+//    
+    
 }

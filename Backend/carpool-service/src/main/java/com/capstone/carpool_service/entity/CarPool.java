@@ -36,11 +36,19 @@ public class CarPool {
     private int availableSeats;
     private LocalTime departureTime;
     private String pickupLocation;
-//    private double price;
+    private double price;
     
     @OneToMany(mappedBy = "carpool", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("carpool")  
     private Set<CarPoolUser> carpoolUsers = new HashSet<>();
+
+//	@Override
+//	public String toString() {
+//		return "CarPool [id=" + id + ", driverId=" + driverId + ", routeId=" + routeId + ", capacity=" + capacity
+//				+ ", availableSeats=" + availableSeats + ", departureTime=" + departureTime + ", pickupLocation="
+//				+ pickupLocation + ", price=" + price + ", carpoolUsers=" + carpoolUsers + "]";
+//	}
+    
     
     
 }

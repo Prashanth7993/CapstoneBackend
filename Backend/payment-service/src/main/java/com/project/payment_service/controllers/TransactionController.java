@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.project.payment_service.client.NotificationClient;
 import com.project.payment_service.entity.Transaction;
+import com.project.payment_service.models.NotificationPojo;
 import com.project.payment_service.models.TransactionPojo;
 import com.project.payment_service.service.TransactionService;
 import com.razorpay.Order;
@@ -28,6 +30,9 @@ public class TransactionController {
 
 	@Autowired
 	private TransactionService transactionService;
+	
+	@Autowired
+	private NotificationClient notificationClient;
 
 	@Autowired
 	RazorpayClient razorpay;
@@ -58,7 +63,14 @@ public class TransactionController {
 			transactionService.createTransaction(transaction);
 		}
 		System.out.println(order);
+		
+		NotificationPojo notification=new NotificationPojo();
+		notification.setMessage("Your Payment of "+transaction.getAmount()+" is Successfull.Your Ride is Booked.");
+		notification.setRead(false);
+		notification.setUserId(transaction.getUserId());
+		notification.setType("Informational");
 
+		notificationClient.addNewNotificationToUser(transaction.getUserId(), notification);
 		return new ResponseEntity<>(transaction, HttpStatus.OK);
 	}
 

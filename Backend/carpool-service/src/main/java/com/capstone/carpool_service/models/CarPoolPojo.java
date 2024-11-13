@@ -24,7 +24,7 @@ public class CarPoolPojo {
 	private int availableSeats;
 	private LocalTime departureTime;
 	private String pickupLocation;
-
+    private double price;
 	private Set<CarPoolUserPojo> carpoolUsers = new HashSet<>();
 
 }

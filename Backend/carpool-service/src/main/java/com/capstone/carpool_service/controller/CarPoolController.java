@@ -1,5 +1,8 @@
 package com.capstone.carpool_service.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.capstone.carpool_service.client.NotificationClient;
+import com.capstone.carpool_service.client.PaymentClient;
 import com.capstone.carpool_service.models.CarPoolPojo;
 import com.capstone.carpool_service.models.NotificationPojo;
+import com.capstone.carpool_service.models.TransactionPojo;
 import com.capstone.carpool_service.service.CarPoolService;
 
 @RestController
@@ -28,6 +33,9 @@ public class CarPoolController {
 	
 	@Autowired
 	NotificationClient notificationClient;
+	
+	@Autowired
+	PaymentClient paymentClient;
 
 	@GetMapping
 	public ResponseEntity<?> getAllCarPools() {
@@ -51,7 +59,8 @@ public class CarPoolController {
 	}
 
 	@PostMapping("/{carpoolId}/users/{userId}")
-	public ResponseEntity<?> addUserToCarpool(@PathVariable Long carpoolId, @PathVariable Long userId) {
+	public ResponseEntity<?> addUserToCarpool(@PathVariable Long carpoolId, @PathVariable Long userId) throws Exception {
+		CarPoolPojo foundCar=carpoolService.getCarpool(carpoolId);
 		CarPoolPojo pojoCar = carpoolService.addUserToCarpool(carpoolId, userId);
 		NotificationPojo notification=new NotificationPojo();
 		notification.setMessage("Hurrayyyyy.......Seat Reservation Success.....!!");
@@ -59,7 +68,16 @@ public class CarPoolController {
 		notification.setRead(false);
 		notification.setType("Informational");
 		NotificationPojo notified=notificationClient.addNewNotificationToUser(userId, notification);
-		return new ResponseEntity<>(pojoCar, HttpStatus.OK);
+		Map<String,Object> responseMap=new HashMap<>();
+	    responseMap.put("reservation", pojoCar);
+	    TransactionPojo transactionPojo=new TransactionPojo();
+	    transactionPojo.setAmount(foundCar.getPrice()*100);
+	    transactionPojo.setCurrency("INR");
+	    transactionPojo.setStatus("Created");
+	    transactionPojo.setUserId(userId);
+	    TransactionPojo transaction=paymentClient.createNewTransaction(transactionPojo);
+	    responseMap.put("paymentTransaction", transaction);
+		return new ResponseEntity<>(responseMap, HttpStatus.OK);
 	}
 
 	@DeleteMapping("/{carpoolId}/users/{userId}")
@@ -96,6 +114,11 @@ public class CarPoolController {
 		return new ResponseEntity<>(carpoolService.deleteCarPool(id), HttpStatus.OK);
 	}
 
+	@GetMapping("/recent-bookings/{userId}")
+	public ResponseEntity<?> getRecentBookings(@PathVariable long userId){
+		return new ResponseEntity<>(carpoolService.getRecentBookingsOfUser(userId),HttpStatus.OK);
+	}
+	
 	@GetMapping("/bookings-count")
 	public ResponseEntity<?> getBookingsCountTillDate() {
 		return new ResponseEntity<>(carpoolService.getAllBookingsTillDate(), HttpStatus.OK);
