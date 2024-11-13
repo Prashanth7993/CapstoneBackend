@@ -60,4 +60,14 @@ public class NotificationService {
 		return true;
 	}
 
+	public boolean notificationMarkAsRead(long id) {
+		Notification notification=notificationRepository.findById(id).get();
+		if(notification!=null) {
+			notification.setRead(true);
+			notificationRepository.save(notification);
+			return true;
+		}
+		return false;
+	}
+
 }

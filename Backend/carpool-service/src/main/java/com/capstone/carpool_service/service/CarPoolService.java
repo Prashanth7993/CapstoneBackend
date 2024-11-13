@@ -57,6 +57,31 @@ public class CarPoolService {
 
 		return carpools;
 	}
+	
+	public List<CarPoolPojo> getAllCarpoolsByUserId(long userId) {
+		List<CarPool> carpoolsFound = carpoolRepository.findByDriverId(userId);
+		List<CarPoolPojo> carpools = new ArrayList<>();
+
+		carpoolsFound.forEach(carpool -> {
+			// Create and map the main carpool object
+			CarPoolPojo carpoolPojo = new CarPoolPojo();
+			BeanUtils.copyProperties(carpool, carpoolPojo);
+
+			// Map the nested carpool users
+			Set<CarPoolUserPojo> userPojos = new HashSet<>();
+			if (carpool.getCarpoolUsers() != null) {
+				carpool.getCarpoolUsers().forEach(user -> {
+					CarPoolUserPojo userPojo = new CarPoolUserPojo();
+					BeanUtils.copyProperties(user, userPojo);
+					userPojos.add(userPojo);
+				});
+			}
+			carpoolPojo.setCarpoolUsers(userPojos);
+			carpools.add(carpoolPojo);
+		});
+
+		return carpools;
+	}
 
 	public CarPoolPojo getCarpool(Long id) {
 		CarPool carpool = carpoolRepository.findById(id)

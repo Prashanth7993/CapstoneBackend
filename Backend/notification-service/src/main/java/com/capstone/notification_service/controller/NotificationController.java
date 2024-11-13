@@ -43,4 +43,10 @@ public class NotificationController {
 		return new ResponseEntity<>(deleted,HttpStatus.OK);
 	}
 	
+	@GetMapping("/mark-as-read/{id}")
+	public ResponseEntity<?> notificationMarkAsRead(@PathVariable long id){
+		boolean marked=service.notificationMarkAsRead(id);
+		return new ResponseEntity<>(marked,HttpStatus.OK);
+	}
+	
 }

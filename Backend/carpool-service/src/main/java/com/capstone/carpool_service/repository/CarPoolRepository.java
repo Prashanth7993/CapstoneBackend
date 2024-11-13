@@ -12,7 +12,7 @@ import com.capstone.carpool_service.entity.CarPool;
 
 @Repository
 public interface CarPoolRepository extends JpaRepository<CarPool, Long> {
-    List<CarPool> findByDriverId(Long driverId);
+    List<CarPool> findByDriverId(long driverId);
     List<CarPool> findByAvailableSeatsGreaterThan(int seats);
     List<CarPool> findByRouteId(long routeId);
 }
