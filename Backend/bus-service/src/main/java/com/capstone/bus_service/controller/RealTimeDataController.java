@@ -1,5 +1,6 @@
 package com.capstone.bus_service.controller;
 
+import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,24 +19,22 @@ import com.capstone.bus_service.service.RealTimeDataService;
 @RequestMapping("/realtime")
 public class RealTimeDataController {
 
-    @Autowired
-    private RealTimeDataService realTimeDataService;
+	@Autowired
+	private RealTimeDataService realTimeDataService;
 
-    @PostMapping("/{busId}")
-    public ResponseEntity<RealTimeDataPojo> reportRealTimeData(@PathVariable int busId, @RequestBody RealTimeDataPojo data) {
-        try {
-            RealTimeDataPojo reportedData = realTimeDataService.reportRealTimeData(busId, data);
-            return ResponseEntity.ok(reportedData);
-        } catch (IllegalStateException e) {
-        	e.printStackTrace();
-            return ResponseEntity.badRequest().body(null);
-        }
-    }
+	@PostMapping("/{busId}")
+	public ResponseEntity<RealTimeDataPojo> reportRealTimeData(@PathVariable int busId,
+			@RequestBody RealTimeDataPojo data) {
+		data.setTimestamp(LocalTime.now());
+		RealTimeDataPojo reportedData = realTimeDataService.reportRealTimeData(busId, data);
+		return ResponseEntity.ok(reportedData);
 
-    @GetMapping("/bus/{busId}")
-    public ResponseEntity<List<RealTimeDataPojo>> getBusRealTimeData(@PathVariable Integer busId) {
-        List<RealTimeDataPojo> realTimeDataList = realTimeDataService.getBusRealTimeData(busId);
-        
-        return ResponseEntity.ok(realTimeDataList);
-    }
+	}
+
+	@GetMapping("/bus/{busId}")
+	public ResponseEntity<List<RealTimeDataPojo>> getBusRealTimeData(@PathVariable Integer busId) {
+		List<RealTimeDataPojo> realTimeDataList = realTimeDataService.getBusRealTimeData(busId);
+
+		return ResponseEntity.ok(realTimeDataList);
+	}
 }
