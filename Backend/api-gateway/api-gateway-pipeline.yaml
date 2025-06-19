@@ -21,15 +21,16 @@ stages:
     - checkout: self
 
     - script: |
-        echo "Installing Java 11..."
+        echo "Installing Java 17..."
         sudo apt-get update -y
-        sudo apt-get install -y openjdk-11-jre-headless
+        sudo apt-get install -y openjdk-17-jdk
         java -version
 
         echo "Installing Maven..."
         sudo apt-get install -y maven
         mvn -version
-      displayName: 'Install Java 11 and Maven'
+      displayName: 'Install Java 17 and Maven'
+
 
     - script: |
         echo "Running Maven Build..."
