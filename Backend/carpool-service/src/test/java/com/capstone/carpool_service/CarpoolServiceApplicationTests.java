@@ -8,6 +8,7 @@ class CarpoolServiceApplicationTests {
 
 	@Test
 	void contextLoads() {
+		assertTrue(true);
 	}
 
 }
