@@ -51,7 +51,7 @@ stages:
           -Dsonar.projectKey=devuser09_CapStone-Project-Azure \
           -Dsonar.organization=devuser09 \
           -Dsonar.host.url=https://sonarcloud.io \
-          -Dsonar.login=$(SONAR_TOKEN)
+          -Dsonar.login=$(8d1302ab909564d1d8dfc10aed40e5c48606e2ce)
       displayName: 'Run Unit Test and SonarCloud Analysis'
       env:
         SONAR_TOKEN: $(SONAR_TOKEN)  # Define this secret in your pipeline
