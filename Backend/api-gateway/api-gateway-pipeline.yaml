@@ -29,7 +29,7 @@ stages:
         java -version
         mvn -version
       displayName: 'Install Java and Maven'
-
+    
     - task: SonarCloudPrepare@1
       inputs:
         SonarCloud: 'sonar'
@@ -47,17 +47,8 @@ stages:
 
     - script: |
         cd $(workingDirectory)
-        mvn clean verify sonar:sonar \
-          -Dsonar.projectKey=devuser09_CapStone-Project-Azure \
-          -Dsonar.organization=devuser09 \
-          -Dsonar.host.url=https://sonarcloud.io \
-          -Dsonar.login=$(8d1302ab909564d1d8dfc10aed40e5c48606e2ce)
-      displayName: 'Run Unit Test and SonarCloud Analysis'
-      env:
-        SONAR_TOKEN: $(SONAR_TOKEN)  # Define this secret in your pipeline
-
-# No need for deprecated SonarCloudAnalyze or Publish task
-
+        mvn clean verify
+      displayName: 'Run Unit Tests'
 
     - task: SonarCloudAnalyze@1
       displayName: 'Run SonarCloud Analysis'
@@ -67,21 +58,14 @@ stages:
       inputs:
         pollingTimeoutSec: '300'
 
+    
+
 
     - script: |
         echo "Running Tests and Code Coverage..."
         cd $(workingDirectory)
         mvn clean verify
       displayName: 'Maven Test & Coverage'
-
-    - task: SonarQubeAnalyze@5
-      displayName: 'Run SonarQube Analysis'
-
-    - task: SonarQubePublish@5
-      displayName: 'Check Quality Gate'
-      inputs:
-        pollingTimeoutSec: '300'
-
     - task: PublishPipelineArtifact@1
       displayName: 'Publish JAR Artifact'
       inputs:
