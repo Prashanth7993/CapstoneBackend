@@ -32,7 +32,7 @@ stages:
 
     - task: SonarCloudPrepare@1
       inputs:
-        SonarCloud: 'sonar'  # your SonarCloud connection
+        SonarCloud: 'sonar'
         organization: 'devuser09'
         scannerMode: 'CLI'
         configMode: 'manual'
@@ -45,8 +45,17 @@ stages:
 
     - script: |
         cd $(workingDirectory)
-        mvn clean verify
-      displayName: 'Run Unit Tests and Generate Coverage'
+        mvn clean verify sonar:sonar \
+          -Dsonar.projectKey=devuser09_CapStone-Project-Azure \
+          -Dsonar.organization=devuser09 \
+          -Dsonar.host.url=https://sonarcloud.io \
+          -Dsonar.login=$(SONAR_TOKEN)
+      displayName: 'Run Unit Test and SonarCloud Analysis'
+      env:
+        SONAR_TOKEN: $(SONAR_TOKEN)  # Define this secret in your pipeline
+
+# No need for deprecated SonarCloudAnalyze or Publish task
+
 
     - task: SonarCloudAnalyze@1
       displayName: 'Run SonarCloud Analysis'
