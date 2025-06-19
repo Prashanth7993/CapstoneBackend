@@ -1,4 +1,5 @@
-trigger: none
+trigger:
+  - main
 
 variables:
   dockerRegistryServiceConnection: 'b0e254bb-b547-4604-a227-4bf606715cf8'
