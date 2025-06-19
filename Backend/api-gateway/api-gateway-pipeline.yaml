@@ -18,13 +18,6 @@ stages:
       name: Default
 
     steps:
-
-    - task: UseJavaVersion@1
-      inputs:
-        versionSpec: '11'
-        jdkArchitecture: 'x64'
-      displayName: 'Install Java 11'
-
     - task: Maven@4
       displayName: 'Maven Build and Test'
       inputs:
@@ -35,6 +28,7 @@ stages:
         testResultsFiles: '**/surefire-reports/TEST-*.xml'
         codeCoverageToolOption: 'JaCoCo'
         javaHomeOption: 'JDKVersion'
+        jdkVersionOption: '1.11'
         mavenVersionOption: 'Default'
 
     - task: Docker@2
