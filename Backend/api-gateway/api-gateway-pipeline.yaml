@@ -38,7 +38,6 @@ stages:
         configMode: 'manual'
         cliProjectKey: 'devuser09_CapStone-Project-Azure'
         cliProjectName: 'CapStone-Project-Azure'
-        cliSources: 'src'
         extraProperties: |
           sonar.java.binaries=target/classes
           sonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
