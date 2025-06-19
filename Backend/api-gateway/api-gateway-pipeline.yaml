@@ -18,6 +18,8 @@ stages:
       name: Default
 
     steps:
+    - checkout: self
+
     - task: Maven@4
       displayName: 'Maven Build and Test'
       inputs:
@@ -27,8 +29,8 @@ stages:
         publishJUnitResults: true
         testResultsFiles: '**/surefire-reports/TEST-*.xml'
         codeCoverageToolOption: 'JaCoCo'
-        javaHomeOption: 'JDKVersion'
-        jdkVersionOption: '1.11'
+        javaHomeOption: 'Path'
+        jdkDirectory: '/usr/lib/jvm/java-11-openjdk-amd64'
         mavenVersionOption: 'Default'
 
     - task: Docker@2
