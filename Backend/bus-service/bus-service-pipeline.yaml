@@ -1,0 +1,95 @@
+trigger:
+  - main
+
+variables:
+  dockerRegistryServiceConnection: 'b0e254bb-b547-4604-a227-4bf606715cf8'
+  sonarQubeServiceConnection: 'sonar'  # Change this to your actual service connection name
+  imageRepository: 'bus-service-pipeline'
+  containerRegistry: 'mysharedacr1234.azurecr.io'
+  dockerfilePath: '$(Build.SourcesDirectory)/Backend/bus-service-pipeline/Dockerfile'
+  tag: '1.0.0'
+  workingDirectory: '$(Build.SourcesDirectory)/Backend/bus-service-pipeline'
+
+stages:
+- stage: Build
+  displayName: CI Build, Test & Sonar Analysis
+  jobs:
+  - job: BuildAndTest
+    displayName: Build, Test, Coverage, Sonar
+    pool:
+      name: Default
+
+    steps:
+    - checkout: self
+      fetchDepth: 0
+
+    - script: |
+        echo "Installing Java 17 and Maven..."
+        sudo apt-get update -y
+        sudo apt-get install -y openjdk-17-jdk maven
+        java -version
+        mvn -version
+      displayName: 'Install Java and Maven'
+    
+    - task: SonarCloudPrepare@1
+      inputs:
+        SonarCloud: 'sonar'
+        organization: 'devuser09'
+        scannerMode: 'CLI'
+        configMode: 'manual'
+        cliProjectKey: 'devuser09_CapStone-Project-Azure'
+        cliProjectName: 'CapStone-Project-Azure'
+        extraProperties: |
+          sonar.projectBaseDir=$(Build.SourcesDirectory)/Backend/bus-service-pipeline
+          sonar.java.binaries=target/classes
+          sonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
+          sonar.sources=src/main/java
+          sonar.tests=src/test/java
+
+    - script: |
+        cd $(workingDirectory)
+        mvn clean verify
+      displayName: 'Run Unit Tests'
+
+    - task: SonarCloudAnalyze@1
+      displayName: 'Run SonarCloud Analysis'
+
+    - task: SonarCloudPublish@1
+      displayName: 'Check Quality Gate'
+      inputs:
+        pollingTimeoutSec: '300'
+
+    - script: |
+        echo "Running Tests and Code Coverage..."
+        cd $(workingDirectory)
+        mvn clean verify
+      displayName: 'Maven Test & Coverage'
+    - task: PublishPipelineArtifact@1
+      displayName: 'Publish JAR Artifact'
+      inputs:
+        targetPath: '$(workingDirectory)/target/bus-service-pipeline.jar'
+        artifact: 'bus-service-pipeline'
+        publishLocation: 'pipeline'
+
+- stage: ArtifactBuild
+  dependsOn: Build
+  displayName: Docker Build and Push
+  jobs:
+  - job: Dockerize
+    displayName: Build Docker Image from Artifact
+    pool:
+      name: Default
+
+    steps:
+    - download: current
+      artifact: bus-service-pipeline
+
+    - task: Docker@2
+      displayName: 'Build and Push Docker Image to ACR'
+      inputs:
+        command: 'buildAndPush'
+        repository: '$(imageRepository)'
+        dockerfile: '$(dockerfilePath)'
+        containerRegistry: '$(dockerRegistryServiceConnection)'
+        tags: |
+          $(tag)
