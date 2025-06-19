@@ -1,0 +1,48 @@
+trigger: none
+
+variables:
+  dockerRegistryServiceConnection: 'b0e254bb-b547-4604-a227-4bf606715cf8'
+  imageRepository: 'api-gateway'
+  containerRegistry: 'mysharedacr1234.azurecr.io'
+  dockerfilePath: '$(Build.SourcesDirectory)/Backend/api-gateway/Dockerfile'
+  tag: '1.0.0'
+  workingDirectory: '$(Build.SourcesDirectory)/Backend/api-gateway'
+
+stages:
+- stage: Build
+  displayName: Build and Push Stage
+  jobs:
+  - job: BuildAndPush
+    displayName: Build, Test, Dockerize, and Push
+    pool:
+      name: Default
+
+    steps:
+
+    - task: UseJavaVersion@1
+      inputs:
+        versionSpec: '11'
+        jdkArchitecture: 'x64'
+      displayName: 'Install Java 11'
+
+    - task: Maven@4
+      displayName: 'Maven Build and Test'
+      inputs:
+        mavenPomFile: '$(workingDirectory)/pom.xml'
+        goals: 'clean package'
+        options: '-DskipTests=false'
+        publishJUnitResults: true
+        testResultsFiles: '**/surefire-reports/TEST-*.xml'
+        codeCoverageToolOption: 'JaCoCo'
+        javaHomeOption: 'JDKVersion'
+        mavenVersionOption: 'Default'
+
+    - task: Docker@2
+      displayName: 'Build and Push Docker Image to ACR'
+      inputs:
+        command: 'buildAndPush'
+        repository: '$(imageRepository)'
+        dockerfile: '$(dockerfilePath)'
+        containerRegistry: '$(dockerRegistryServiceConnection)'
+        tags: |
+          $(tag)
