@@ -19,6 +19,7 @@ stages:
       
     steps:
     - checkout: self
+      fetchDepth: 0
 
     - script: |
         echo "Installing Java 17..."
@@ -37,14 +38,22 @@ stages:
         mvn clean package
       displayName: 'Installing Maven'
     
-
-    
-    - task: PublishBuildArtifacts@1
-      displayName: Publishing the artifact
+    - task: PublishPipelineArtifact@1
       inputs:
-        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-        ArtifactName: 'api-gateway'
-        publishLocation: 'Container'
+        targetPath: '$(Pipeline.Workspace)'
+        artifact: 'api-gateway'
+        publishLocation: 'pipeline'
+    - task: SonarCloudPrepare@3
+      inputs:
+        SonarQube: 'sonar'
+        organization: 'devuser09'
+        scannerMode: 'other'
+        extraProperties: |
+          # Additional properties that will be passed to the scanner,
+          # Put one key=value per line, example:
+          # sonar.exclusions=**/*.bin
+          sonar.projectKey=devuser09_CapStone-Project-Azure
+          sonar.projectName=CapStone-Project-Azure
 
 
 - stage: ArtifactBuild
