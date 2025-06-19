@@ -16,7 +16,7 @@ stages:
     displayName: Install Java & Maven → Build → Dockerize → Push
     pool:
       name: Default
-
+      
     steps:
     - checkout: self
 
