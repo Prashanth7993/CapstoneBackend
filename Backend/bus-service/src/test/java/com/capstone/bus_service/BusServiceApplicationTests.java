@@ -8,6 +8,7 @@ class BusServiceApplicationTests {
 
 	@Test
 	void contextLoads() {
+		assertTrue(true);
 	}
 
 }
