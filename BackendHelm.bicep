@@ -1,0 +1,24 @@
+param releaseName string
+param chartName string
+param chartVersion string
+param chartRepo string
+param namespace string
+
+resource helmRelease 'Microsoft.KubernetesConfiguration/extensions@2022-03-01' = {
+  name: releaseName
+  properties: {
+    extensionType: 'helm'
+    releaseTrain: 'stable'
+    autoUpgradeMinorVersion: false
+    version: chartVersion
+    scope: {
+      cluster: {
+        releaseNamespace: namespace
+      }
+    }
+    configurationSettings: {
+      chart: chartName
+      repository: chartRepo
+    }
+  }
+}
