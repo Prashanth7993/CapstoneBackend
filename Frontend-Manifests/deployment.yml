@@ -1,19 +1,19 @@
 apiVersion : apps/v1
 kind: Deployment
 metadata:
-  name: Frontend-Angular 
+  name: frontendangular 
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: Frontend-Angular
+      app: frontendangular
   template:
     metadata:
       labels:
-        app: Frontend-Angular 
+        app: frontendangular 
     spec:
       containers:
-        - name: Frontend-Angular 
+        - name: frontendangular 
           image: mysharedacr1234.azurecr.io/frontend-image
           ports:
           - containerPort: 80
