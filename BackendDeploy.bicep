@@ -13,7 +13,7 @@ resource aks 'Microsoft.ContainerService/managedClusters@2023-01-01' existing = 
 }
 
 // Use module to deploy helm
-module helmDeploy 'modules/helm-extension.bicep' = {
+module helmDeploy 'BackendHelm.bicep' = {
   name: 'helmDeployToAKS'
   scope: aks
   params: {
