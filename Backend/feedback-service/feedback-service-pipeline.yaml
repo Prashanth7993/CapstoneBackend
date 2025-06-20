@@ -68,7 +68,7 @@ stages:
     - task: PublishPipelineArtifact@1
       displayName: 'Publish JAR Artifact'
       inputs:
-        targetPath: '$(workingDirectory)/target/feedback-service.jar'
+        targetPath: '$(workingDirectory)/target/feedback-service*.jar'
         artifact: 'feedback-service'
         publishLocation: 'pipeline'
 
