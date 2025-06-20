@@ -1,7 +1,7 @@
 @description('AKS cluster name')
 param aksName string
 
-@description('Resource group where AKS is deployed')
+@description('AKS cluster resource group')
 param aksResourceGroup string
 
 @description('Helm release name')
@@ -13,19 +13,21 @@ param chartName string
 @description('Helm chart version')
 param chartVersion string
 
-@description('Helm repo URL (e.g., https://charts.bitnami.com/bitnami)')
+@description('Helm repo URL')
 param chartRepo string
 
-@description('Namespace to deploy the chart')
+@description('Namespace to deploy chart')
 param namespace string = 'default'
 
-
+resource aks 'Microsoft.ContainerService/managedClusters@2023-01-01' existing = {
+  name: aksName
+  scope: resourceGroup(aksResourceGroup)
+}
 
 resource helmExtension 'Microsoft.KubernetesConfiguration/extensions@2022-03-01' = {
   name: releaseName
-  scope: resourceGroup(aksResourceGroup)
-  parent: resourceId('Microsoft.ContainerService/managedClusters', aksName)
-  location: resourceGroup(aksResourceGroup).location
+  scope: aks
+  location: aks.location
   properties: {
     extensionType: 'kubernetesconfiguration'
     autoUpgradeMinorVersion: true
