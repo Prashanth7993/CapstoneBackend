@@ -18,6 +18,36 @@ variables:
 
 
 stages:
+- stage: DeployOnAks1
+  displayName: Deploy stage
+  jobs:
+  - deployment: DeployOnAks1
+    displayName: DeployOnAks1
+    pool:
+      name: Default
+    environment: 'CapStoneProjectAzure.default'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - checkout: self
+          - task: KubernetesManifest@0
+            displayName: Create imagePullSecret
+            inputs:
+              action: createSecret
+              secretName: $(imagePullSecret)
+              dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
+          - task: KubernetesManifest@0
+            displayName: Deploy to Kubernetes cluster
+            inputs:
+              action: deploy
+              manifests: |
+                $(Build.SourcesDirectory)/Frontend-Manifests/deployment.yml
+                $(Build.SourcesDirectory)/Frontend-Manifests/service.yml
+              imagePullSecrets: |
+                $(imagePullSecret)
+              containers: |
+                $(containerRegistry)/$(imageRepository):$(tag)
 
 - stage: Deploy
   displayName: Deploy stage
