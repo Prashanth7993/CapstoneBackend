@@ -12,20 +12,22 @@ variables:
   helmNamespace: 'backend'
 
 stages:
-  - stage: HelmDeployAk1
+  - stage: HelmDeployAks1
     displayName: Deploy Helm Chart to AKS Cluster 1
     jobs:
-      - job: Deploy
+      - job: DeployAks1
+        displayName: Deploy to AKS 1
         pool:
-          name: Default
+          vmImage: ubuntu-latest
         steps:
           - task: AzureCLI@2
-            displayName: 'Deploy Helm Chart via Bicep'
+            displayName: 'Deploy to AKS 1 via Bicep'
             inputs:
               azureSubscription: $(azureSubscription)
               scriptType: bash
               scriptLocation: inlineScript
               inlineScript: |
+                echo "Deploying Helm chart to AKS Cluster 1..."
                 az deployment sub create \
                   --location eastus \
                   --template-file BackendDeploy.bicep \
@@ -38,33 +40,30 @@ stages:
                     chartRepo="$(helmChartRepo)" \
                     namespace="$(helmNamespace)"
 
-
-
-
-  - stage: HelmDeployAk2
+  - stage: HelmDeployAks2
     displayName: Deploy Helm Chart to AKS Cluster 2
     jobs:
-      - job: Deploy
+      - job: DeployAks2
+        displayName: Deploy to AKS 2
         pool:
-          name: Default
+          vmImage: ubuntu-latest
         steps:
           - task: AzureCLI@2
-            displayName: 'Deploy Helm Chart via Bicep'
+            displayName: 'Deploy to AKS 2 via Bicep'
             inputs:
               azureSubscription: $(azureSubscription)
-                scriptType: bash
-                scriptLocation: inlineScript
-                inlineScript: |
-                  az deployment sub create \
-                    --location eastus \
-                    --template-file BackendDeploy.bicep \
-                    --parameters \
-                      aksName="$(aksClusterName1)" \
-                      aksResourceGroup="$(aksResourceGroup)" \
-                      releaseName="$(helmReleaseName)" \
-                      chartName="$(helmChartName)" \
-                      chartVersion="$(helmChartVersion)" \
-                      chartRepo="$(helmChartRepo)" \
-                      namespace="$(helmNamespace)"
-
-
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+                echo "Deploying Helm chart to AKS Cluster 2..."
+                az deployment sub create \
+                  --location eastus \
+                  --template-file BackendDeploy.bicep \
+                  --parameters \
+                    aksName="$(aksClusterName2)" \
+                    aksResourceGroup="$(aksResourceGroup)" \
+                    releaseName="$(helmReleaseName)" \
+                    chartName="$(helmChartName)" \
+                    chartVersion="$(helmChartVersion)" \
+                    chartRepo="$(helmChartRepo)" \
+                    namespace="$(helmNamespace)"
