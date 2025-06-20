@@ -1,3 +1,4 @@
+targetScope = 'resource'
 param aksName string
 param aksResourceGroup string
 param releaseName string
