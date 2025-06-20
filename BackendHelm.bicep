@@ -1,26 +1,29 @@
 // BackendHelm.bicep
-param aksName string
+// param aksName string // REMOVE this line - it's no longer used directly in this file
 param releaseName string
 param chartName string
 param chartVersion string
 param chartRepo string
 param namespace string
 
-// REMOVED: The 'aks' existing resource declaration is not needed here
-// as the extension deployment doesn't directly use it as a parent/scope.
-// The association is implied by the module's deployment scope.
+// We need to define the AKS cluster as an existing resource
+// because the extension needs to be scoped to it.
+resource aks 'Microsoft.ContainerService/managedClusters@2023-01-01' existing = {
+  name: aksName // This 'aksName' will come from the module parameter
+}
 
 resource helmExtension 'Microsoft.KubernetesConfiguration/extensions@2022-11-01' = {
   name: releaseName
-  // REMOVED: The 'scope' property here (at the top-level resource) is incorrect.
-  // The deployment scope is handled by the module call in BackendDeploy.bicep.
-  // The 'scope' *within* properties is for the Kubernetes-internal scope.
+  // The 'scope' property for this resource type, when defined at the top level,
+  // should point to the parent resource, which is the AKS cluster.
+  scope: aks // CORRECT: Referencing the existing 'aks' resource
   properties: {
     extensionType: 'kubernetesConfiguration'
     autoUpgradeMinorVersion: true
     releaseTrain: 'Stable'
     version: chartVersion
-    // This 'scope' property correctly defines the scope within the Kubernetes cluster itself.
+    // This 'scope' property within 'properties' defines the scope of the Helm release
+    // *within the Kubernetes cluster* (e.g., cluster-wide or namespace-specific).
     scope: {
       cluster: {
         releaseNamespace: namespace
