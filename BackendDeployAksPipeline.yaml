@@ -20,7 +20,7 @@ stages:
           name: Default
         steps:
           - task: AzureCLI@2
-            displayName: 'Deploy Helm Chart to AKS1 using Bicep'
+            displayName: 'Deploy Helm Chart via Bicep'
             inputs:
               azureSubscription: $(azureSubscription)
               scriptType: bash
@@ -37,6 +37,7 @@ stages:
                     chartVersion="$(helmChartVersion)" \
                     chartRepo="$(helmChartRepo)" \
                     namespace="$(helmNamespace)"
+
 
 
 
@@ -48,21 +49,23 @@ stages:
           name: Default
         steps:
           - task: AzureCLI@2
-            displayName: 'Deploy Helm Chart to AKS2 using Bicep'
-            inputs:
-              azureSubscription: $(azureSubscription)
-              scriptType: bash
-              scriptLocation: inlineScript
-              inlineScript: |
-                az deployment sub create \
-                  --location eastus \
-                  --template-file BackendDeploy.bicep \
-                  --parameters \
-                    aksName="$(aksClusterName1)" \
-                    aksResourceGroup="$(aksResourceGroup)" \
-                    releaseName="$(helmReleaseName)" \
-                    chartName="$(helmChartName)" \
-                    chartVersion="$(helmChartVersion)" \
-                    chartRepo="$(helmChartRepo)" \
-                    namespace="$(helmNamespace)"
+            - task: AzureCLI@2
+              displayName: 'Deploy Helm Chart via Bicep'
+              inputs:
+                azureSubscription: $(azureSubscription)
+                scriptType: bash
+                scriptLocation: inlineScript
+                inlineScript: |
+                  az deployment sub create \
+                    --location eastus \
+                    --template-file BackendDeploy.bicep \
+                    --parameters \
+                      aksName="$(aksClusterName1)" \
+                      aksResourceGroup="$(aksResourceGroup)" \
+                      releaseName="$(helmReleaseName)" \
+                      chartName="$(helmChartName)" \
+                      chartVersion="$(helmChartVersion)" \
+                      chartRepo="$(helmChartRepo)" \
+                      namespace="$(helmNamespace)"
+
 
