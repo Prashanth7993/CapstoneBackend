@@ -1,19 +1,19 @@
 apiVersion : apps/v1
 kind: Deployment
 metadata:
-  name: capstoneprojectazure 
+  name: Frontend-Angular 
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: capstoneprojectazure
+      app: Frontend-Angular
   template:
     metadata:
       labels:
-        app: capstoneprojectazure 
+        app: Frontend-Angular 
     spec:
       containers:
-        - name: capstoneprojectazure 
-          image: mysharedacr1234.azurecr.io/capstoneprojectazure
+        - name: Frontend-Angular 
+          image: mysharedacr1234.azurecr.io/Frontend-Angular
           ports:
           - containerPort: 80
