@@ -6,7 +6,7 @@ variables:
   aksClusterName2: 'aks-cluster-vnet2'
   aksResourceGroup: 'my-rg'
   helmChartName: 'backend-chart'
-  helmChartRepo: './captest'
+  helmChartRepo: 'oci://mysharedacr1234.azurecr.io/helm'
   helmChartVersion: '1.0.0'
   helmReleaseName: 'backend-app'
   helmNamespace: 'backend'
