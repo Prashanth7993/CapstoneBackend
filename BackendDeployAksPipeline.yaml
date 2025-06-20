@@ -16,7 +16,7 @@ steps:
       inlineScript: |
         az deployment group create \
           --resource-group $(resourceGroupName) \
-          --template-file ./bicep/main.bicep \
+          --template-file ./BackendHelm.bicep \
           --parameters \
               cluster1Name=$(cluster1Name) \
               cluster2Name=$(cluster2Name) \
