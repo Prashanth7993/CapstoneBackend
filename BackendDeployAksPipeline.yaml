@@ -1,8 +1,9 @@
 trigger: none
 
 variables:
-  azureSubscription: 'Your-Azure-Service-Connection'
-  aksClusterName: 'aks-cluster-vnet2'
+  azureSubscription: 'prashanthscn'
+  aksClusterName1: 'aks-cluster-vnet1'
+  aksClusterName2: 'aks-cluster-vnet2'
   aksResourceGroup: 'my-rg'
   helmChartName: 'backend-chart'
   helmChartRepo: './captest'
@@ -11,7 +12,35 @@ variables:
   helmNamespace: 'backend'
 
 stages:
-  - stage: HelmDeploy
+  - stage: HelmDeployAk1
+    displayName: Deploy Helm Chart to AKS Cluster 1
+    jobs:
+      - job: Deploy
+        pool:
+          name: Default
+        steps:
+          - task: AzureCLI@2
+            displayName: 'Deploy Helm Chart via Bicep'
+            inputs:
+              azureSubscription: $(azureSubscription)
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+                echo "Starting Helm chart deployment to AKS Cluster 1"
+
+                az deployment group create \
+                  --resource-group $(aksResourceGroup) \
+                  --template-file BackendDeploy.bicep \
+                  --parameters \
+                      aksName="$(aksClusterName1)" \
+                      aksResourceGroup="$(aksResourceGroup)" \
+                      releaseName="$(helmReleaseName)" \
+                      chartName="$(helmChartName)" \
+                      chartVersion="$(helmChartVersion)" \
+                      chartRepo="$(helmChartRepo)" \
+                      namespace="$(helmNamespace)"
+stages:
+  - stage: HelmDeployAk2
     displayName: Deploy Helm Chart to AKS Cluster 2
     jobs:
       - job: Deploy
@@ -29,13 +58,12 @@ stages:
 
                 az deployment group create \
                   --resource-group $(aksResourceGroup) \
-                  --template-file helm-deploy.bicep \
+                  --template-file BackendDeploy.bicep \
                   --parameters \
-                      aksName="$(aksClusterName)" \
+                      aksName="$(aksClusterName2)" \
                       aksResourceGroup="$(aksResourceGroup)" \
                       releaseName="$(helmReleaseName)" \
                       chartName="$(helmChartName)" \
                       chartVersion="$(helmChartVersion)" \
                       chartRepo="$(helmChartRepo)" \
-                      chartValues="@./helm-values.yaml" \
                       namespace="$(helmNamespace)"
