@@ -21,9 +21,13 @@ param chartRepo string
 @description('Namespace to deploy')
 param namespace string
 
+targetScope = 'subscription'
+
+// ... (params)
+
 module helmDeploy 'BackendHelm.bicep' = {
   name: 'helmDeployModule'
-  scope: resourceGroup(aksResourceGroup)
+  scope: resourceGroup(aksResourceGroup) // This sets the scope for the module deployment
   params: {
     aksName: aksName
     releaseName: releaseName
