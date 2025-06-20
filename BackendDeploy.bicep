@@ -19,9 +19,7 @@ param chartRepo string
 @description('Namespace to deploy the chart')
 param namespace string = 'default'
 
-@description('Helm values YAML')
-@secure()
-param chartValues string
+
 
 resource helmExtension 'Microsoft.KubernetesConfiguration/extensions@2022-03-01' = {
   name: releaseName
