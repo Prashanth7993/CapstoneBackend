@@ -55,7 +55,7 @@ stages:
   - deployment: Deploy
     displayName: Deploy
     pool:
-      vmImage: $(vmImageName)
+      name: Default
     environment: 'CapStoneProjectAzure-1833.default'
     strategy:
       runOnce:
