@@ -1,7 +1,7 @@
-@description('AKS cluster name')
+@description('Name of the AKS cluster')
 param aksName string
 
-@description('AKS cluster resource group')
+@description('Resource group of the AKS cluster')
 param aksResourceGroup string
 
 @description('Helm release name')
@@ -13,29 +13,33 @@ param chartName string
 @description('Helm chart version')
 param chartVersion string
 
-@description('Helm repo URL')
+@description('Helm chart repository URL')
 param chartRepo string
 
-@description('Namespace to deploy chart')
-param namespace string = 'default'
+@description('Kubernetes namespace for deployment')
+param namespace string = 'backend'
 
 resource aks 'Microsoft.ContainerService/managedClusters@2023-01-01' existing = {
   name: aksName
   scope: resourceGroup(aksResourceGroup)
 }
 
-resource helmExtension 'Microsoft.KubernetesConfiguration/extensions@2022-03-01' = {
+resource helmRelease 'Microsoft.KubernetesConfiguration/extensions@2022-03-01' = {
   name: releaseName
   scope: aks
-  location: aks.location
   properties: {
-    extensionType: 'kubernetesconfiguration'
-    autoUpgradeMinorVersion: true
-    releaseNamespace: namespace
+    extensionType: 'helm'
+    releaseTrain: 'stable'
+    version: chartVersion
+    autoUpgradeMinorVersion: false
+    scope: {
+      cluster: {
+        releaseNamespace: Default
+      }
+    }
     configurationSettings: {
-      'helm.chart': chartName
-      'helm.repository': chartRepo
-      'helm.version': chartVersion
+      chart: chartName
+      repository: chartRepo
     }
   }
 }
