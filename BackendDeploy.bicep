@@ -24,11 +24,9 @@ param namespace string
 
 module helmDeploy 'BackendHelm.bicep' = {
   name: 'helmDeployModule'
-  // The scope of the module itself is the resource group containing the AKS cluster.
-  // This is correct as Bicep deployments at subscription scope operate on resource groups.
   scope: resourceGroup(aksResourceGroup)
   params: {
-    aksName: aksName // Pass aksName to the module
+    aksName: aksName // Ensure this is correctly passing the param from BackendDeploy to BackendHelm
     releaseName: releaseName
     chartName: chartName
     chartVersion: chartVersion
@@ -36,3 +34,12 @@ module helmDeploy 'BackendHelm.bicep' = {
     namespace: namespace
   }
 }
+
+// *** IMPORTANT: Ensure there are NO other 'param' declarations or 'params' blocks below this point in BackendDeploy.bicep.
+// Remove anything like:
+/*
+param aksName string // REMOVE THIS IF IT'S DUPLICATED HERE
+param releaseName string // REMOVE THIS IF IT'S DUPLICATED HERE
+// ... and so on for other params if they are duplicated
+*/
+// Also remove any block that starts with `params: { ... }` that is not part of the module call.
