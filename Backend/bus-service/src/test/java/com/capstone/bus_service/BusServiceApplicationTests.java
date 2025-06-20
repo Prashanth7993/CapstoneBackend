@@ -1,9 +1,9 @@
-package com.project.authentication_service;
+package com.project.bus-service;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class AuthenticationServiceApplicationTests {
+class BusServiceApplicationTests {
 
     @Test
     void dummyTest() {
