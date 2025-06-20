@@ -1,16 +1,22 @@
-targetScope = 'resource'
+targetScope = 'subscription'
+
+param aksName string
+param aksResourceGroup string
 param releaseName string
 param chartName string
 param chartVersion string
 param chartRepo string
-param namespace string
-param aksName string
-param aksResourceGroup string
+param namespace string = 'backend'
 
-resource helmExtension 'Microsoft.KubernetesConfiguration/extensions@2022-03-01' = {
+// Reference existing AKS cluster
+resource aks 'Microsoft.ContainerService/managedClusters@2023-01-01' existing = {
+  name: aksName
+  scope: resourceGroup(aksResourceGroup)
+}
+
+resource helmExt 'Microsoft.KubernetesConfiguration/extensions@2022-03-01' = {
   name: releaseName
-  scope: resource('Microsoft.ContainerService/managedClusters', aksName)
-  parent: resourceGroup(aksResourceGroup)
+  scope: aks
   properties: {
     extensionType: 'helm'
     releaseTrain: 'stable'
