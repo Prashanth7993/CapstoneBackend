@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: capstoneprojectazure 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: capstoneprojectazure
+  template:
+    metadata:
+      labels:
+        app: capstoneprojectazure 
+    spec:
+      containers:
+        - name: capstoneprojectazure 
+          image: mysharedacr1234.azurecr.io/capstoneprojectazure
+          ports:
+          - containerPort: 80
