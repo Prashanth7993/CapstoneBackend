@@ -18,7 +18,7 @@ stages:
       - job: DeployAks1
         displayName: Deploy to AKS 1
         pool:
-          vmImage: ubuntu-latest
+          name: Default
         steps:
           - task: AzureCLI@2
             displayName: 'Deploy to AKS 1 via Bicep'
@@ -46,7 +46,7 @@ stages:
       - job: DeployAks2
         displayName: Deploy to AKS 2
         pool:
-          vmImage: ubuntu-latest
+          name: Default
         steps:
           - task: AzureCLI@2
             displayName: 'Deploy to AKS 2 via Bicep'
