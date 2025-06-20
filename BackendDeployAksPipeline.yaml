@@ -29,7 +29,7 @@ stages:
               inlineScript: |
                 echo "Deploying Helm chart to AKS Cluster 1..."
                 az deployment sub create \
-                  --location centralindia \
+                  --location eastus \
                   --template-file BackendDeploy.bicep \
                   --parameters \
                     aksName="$(aksClusterName1)" \
@@ -39,7 +39,7 @@ stages:
                     chartVersion="$(helmChartVersion)" \
                     chartRepo="$(helmChartRepo)" \
                     namespace="$(helmNamespace)" \
-                  --output none
+                  --output none # <--- ADD THIS LINE
 
   - stage: HelmDeployAks2
     displayName: Deploy Helm Chart to AKS Cluster 2
@@ -61,10 +61,11 @@ stages:
                   --location eastus \
                   --template-file BackendDeploy.bicep \
                   --parameters \
-                    aksName="$(aksClusterName2)" \
+                    aksName="$(aksClusterName1)" \
                     aksResourceGroup="$(aksResourceGroup)" \
                     releaseName="$(helmReleaseName)" \
                     chartName="$(helmChartName)" \
                     chartVersion="$(helmChartVersion)" \
                     chartRepo="$(helmChartRepo)" \
-                    namespace="$(helmNamespace)"
+                    namespace="$(helmNamespace)" \
+                  --output none # <--- ADD THIS LINE
