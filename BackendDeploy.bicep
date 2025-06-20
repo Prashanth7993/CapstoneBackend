@@ -1,23 +1,31 @@
+targetScope = 'subscription'
 
+@description('Name of the AKS Cluster')
 param aksName string
+
+@description('Resource Group of the AKS Cluster')
 param aksResourceGroup string
+
+@description('Helm release name')
 param releaseName string
+
+@description('Helm chart name')
 param chartName string
+
+@description('Helm chart version')
 param chartVersion string
+
+@description('Helm chart repo URL')
 param chartRepo string
-param namespace string = 'backend'
 
-// Get AKS cluster as existing resource
-resource aks 'Microsoft.ContainerService/managedClusters@2023-01-01' existing = {
-  name: aksName
-  scope: resourceGroup(aksResourceGroup)
-}
+@description('Namespace to deploy')
+param namespace string
 
-// Use module to deploy helm
 module helmDeploy 'BackendHelm.bicep' = {
-  name: 'helmDeployToAKS'
-  scope: aks
+  name: 'helmDeployModule'
+  scope: resourceGroup(aksResourceGroup)
   params: {
+    aksName: aksName
     releaseName: releaseName
     chartName: chartName
     chartVersion: chartVersion
