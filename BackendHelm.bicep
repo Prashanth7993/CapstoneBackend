@@ -1,37 +1,56 @@
-// BackendHelm.bicep
-param aksName string // RE-ADD THIS LINE - It's essential for referencing the AKS cluster
-param releaseName string
-param chartName string
-param chartVersion string
-param chartRepo string
-param namespace string
+param cluster1Name string = 'aks-cluster1'
+param cluster2Name string = 'aks-cluster2'
+param location string = resourceGroup().location
+param helmChartName string = 'backend'
+param helmChartVersion string = '1.0.0'
+param helmRepoUrl string = 'oci://mysharedacr1234.azurecr.io/helm'
+param namespace string = 'default'
+param releaseName string = 'my-backend-release'
 
-// We need to define the AKS cluster as an existing resource
-// because the extension needs to be scoped to it.
-resource aks 'Microsoft.ContainerService/managedClusters@2023-01-01' existing = {
-  name: aksName // This now correctly references the 'aksName' parameter of this module
+// Reference AKS Cluster 1
+resource aksCluster1 'Microsoft.ContainerService/managedClusters@2023-01-01' existing = {
+  name: cluster1Name
 }
 
-resource helmExtension 'Microsoft.KubernetesConfiguration/extensions@2022-11-01' = {
-  name: releaseName
-  // The 'scope' property for this resource type, when defined at the top level,
-  // should point to the parent resource, which is the AKS cluster.
-  scope: aks // This correctly references the existing 'aks' resource defined above
+// Reference AKS Cluster 2
+resource aksCluster2 'Microsoft.ContainerService/managedClusters@2023-01-01' existing = {
+  name: cluster2Name
+}
+
+// Helm Deployment to Cluster 1
+resource helmReleaseCluster1 'Microsoft.KubernetesConfiguration/extensions@2023-05-01' = {
+  name: '${releaseName}-helm-cluster1'
+  scope: resourceGroup()
   properties: {
-    extensionType: 'kubernetesConfiguration'
+    extensionType: 'microsoft.helm'
     autoUpgradeMinorVersion: true
-    releaseTrain: 'Stable'
-    version: chartVersion
-    // This 'scope' property within 'properties' defines the scope of the Helm release
-    // *within the Kubernetes cluster* (e.g., cluster-wide or namespace-specific).
-    scope: {
-      cluster: {
-        releaseNamespace: namespace
-      }
-    }
     configurationSettings: {
-      chartName: chartName
-      repositoryUrl: chartRepo
+      'helm.operator.enabled': 'true'
+      'helm.operator.chartName': helmChartName
+      'helm.operator.chartVersion': helmChartVersion
+      'helm.operator.repository': helmRepoUrl
+      'helm.operator.namespace': namespace
+      'helm.operator.releaseName': releaseName
     }
+    scope: aksCluster1.id
+  }
+}
+
+// Helm Deployment to Cluster 2
+resource helmReleaseCluster2 'Microsoft.KubernetesConfiguration/extensions@2023-05-01' = {
+  name: '${releaseName}-helm-cluster2'
+  scope: resourceGroup()
+  properties: {
+    extensionType: 'microsoft.helm'
+    autoUpgradeMinorVersion: true
+    configurationSettings: {
+      'helm.operator.enabled': 'true'
+      'helm.operator.chartName': helmChartName
+      'helm.operator.chartVersion': helmChartVersion
+      'helm.operator.repository': helmRepoUrl
+      'helm.operator.namespace': namespace
+      'helm.operator.releaseName': releaseName
+    }
+    scope: aksCluster2.id
   }
 }
