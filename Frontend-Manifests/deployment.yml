@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
         - name: Frontend-Angular 
-          image: mysharedacr1234.azurecr.io/Frontend-Angular
+          image: mysharedacr1234.azurecr.io/frontend-image
           ports:
           - containerPort: 80
