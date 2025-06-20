@@ -5,7 +5,7 @@ variables:
   sonarQubeServiceConnection: 'sonar'  # Change this to your actual service connection name
   imageRepository: 'bus-service-pipeline'
   containerRegistry: 'mysharedacr1234.azurecr.io'
-  dockerfilePath: '$(Build.SourcesDirectory)/Backend/bus-service-pipeline/Dockerfile'
+  dockerfilePath: '$(Build.SourcesDirectory)/Backend/bus-service/Dockerfile'
   tag: '1.0.0'
   workingDirectory: '$(Build.SourcesDirectory)/Backend/bus-service'
 
