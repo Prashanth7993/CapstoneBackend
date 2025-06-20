@@ -49,7 +49,7 @@ stages:
               containers: |
                 $(containerRegistry)/$(imageRepository):$(tag)
 
-- stage: Deploy
+- stage: DeployOnaks2
   displayName: Deploy stage
   jobs:
   - deployment: Deploy
