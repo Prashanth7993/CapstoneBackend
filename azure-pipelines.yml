@@ -42,7 +42,7 @@ stages:
             displayName: Deploy to Kubernetes cluster
             inputs:
               action: deploy
-               manifests: |
+              manifests: |
                 $(Build.SourcesDirectory)/Frontend-Manifests/deployment.yml
                 $(Build.SourcesDirectory)/Frontend-Manifests/service.yml
               imagePullSecrets: |
