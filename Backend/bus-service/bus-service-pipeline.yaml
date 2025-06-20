@@ -66,7 +66,7 @@ stages:
     - task: PublishPipelineArtifact@1
       displayName: 'Publish JAR Artifact'
       inputs:
-        targetPath: '$(workingDirectory)/target/maven-status/bus-service-pipeline*.jar'
+        targetPath: '$(workingDirectory)/target/'
         artifact: 'bus-service-pipeline'
         publishLocation: 'pipeline'
 
