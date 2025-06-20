@@ -37,8 +37,5 @@ resource helmExtension 'Microsoft.KubernetesConfiguration/extensions@2022-03-01'
       'helm.repository': chartRepo
       'helm.version': chartVersion
     }
-    configurationProtectedSettings: {
-      'helm.values': chartValues
-    }
   }
 }
