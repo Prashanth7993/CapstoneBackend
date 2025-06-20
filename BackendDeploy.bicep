@@ -1,5 +1,5 @@
 // BackendDeploy.bicep
-targetScope = 'subscription' // Keep only one declaration
+targetScope = 'subscription'
 
 @description('Name of the AKS Cluster')
 param aksName string
@@ -24,9 +24,11 @@ param namespace string
 
 module helmDeploy 'BackendHelm.bicep' = {
   name: 'helmDeployModule'
-  scope: resourceGroup(aksResourceGroup) // This is crucial for scoping the extension to the correct RG
+  // The scope of the module itself is the resource group containing the AKS cluster.
+  // This is correct as Bicep deployments at subscription scope operate on resource groups.
+  scope: resourceGroup(aksResourceGroup)
   params: {
-    aksName: aksName
+    aksName: aksName // Pass aksName to the module
     releaseName: releaseName
     chartName: chartName
     chartVersion: chartVersion
@@ -34,13 +36,3 @@ module helmDeploy 'BackendHelm.bicep' = {
     namespace: namespace
   }
 }
-
-// REMOVED: Duplicate targetScope = 'subscription' and related parameters.
-// The parameters for BackendDeploy.bicep are already defined above.
-// The provided snippet had them duplicated below the module definition.
-// param aksName string // This was a duplicate
-// param releaseName string // This was a duplicate
-// param chartName string // This was a duplicate
-// param chartVersion string // This was a duplicate
-// param chartRepo string // This was a duplicate
-// param namespace string // This was a duplicate
