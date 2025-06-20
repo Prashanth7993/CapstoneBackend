@@ -39,7 +39,7 @@ stages:
                       chartVersion="$(helmChartVersion)" \
                       chartRepo="$(helmChartRepo)" \
                       namespace="$(helmNamespace)"
-stages:
+
   - stage: HelmDeployAk2
     displayName: Deploy Helm Chart to AKS Cluster 2
     jobs:
