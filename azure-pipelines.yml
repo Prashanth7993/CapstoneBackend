@@ -43,8 +43,8 @@ stages:
             inputs:
               action: deploy
               manifests: |
-                $(Build.SourcesDirectory)/manifests/deployment.yml
-                $(Build.SourcesDirectory)/manifests/service.yml
+                Frontend-Manifests/deployment.yml
+                Frontend-Manifests/service.yml
               imagePullSecrets: |
                 $(imagePullSecret)
               containers: |
