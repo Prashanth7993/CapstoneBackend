@@ -66,12 +66,14 @@ stages:
         cd $(workingDirectory)
         mvn clean verify
       displayName: 'Maven Test & Coverage'
+
     - task: PublishPipelineArtifact@1
       displayName: 'Publish JAR Artifact'
       inputs:
-        targetPath: '$(workingDirectory)/target/notification-service*.jar'
+        targetPath: '$(workingDirectory)/target'
         artifact: 'notification-service'
         publishLocation: 'pipeline'
+
 
 - stage: ArtifactBuild
   dependsOn: Build
