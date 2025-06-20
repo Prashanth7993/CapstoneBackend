@@ -29,7 +29,7 @@ stages:
               inlineScript: |
                 echo "Deploying Helm chart to AKS Cluster 1..."
                 az deployment sub create \
-                  --location eastus \
+                  --location centralindia \
                   --template-file BackendDeploy.bicep \
                   --parameters \
                     aksName="$(aksClusterName1)" \
