@@ -20,13 +20,12 @@ stages:
           name: Default
         steps:
           - task: AzureCLI@2
-            displayName: 'Deploy Helm Chart via Bicep'
+            displayName: 'Deploy Helm Chart to AKS1 using Bicep'
             inputs:
               azureSubscription: $(azureSubscription)
               scriptType: bash
               scriptLocation: inlineScript
               inlineScript: |
-                echo "Deploying Helm chart to AKS..."
                 az deployment sub create \
                   --location eastus \
                   --template-file BackendDeploy.bicep \
@@ -40,6 +39,7 @@ stages:
                     namespace="$(helmNamespace)"
 
 
+
   - stage: HelmDeployAk2
     displayName: Deploy Helm Chart to AKS Cluster 2
     jobs:
@@ -48,13 +48,12 @@ stages:
           name: Default
         steps:
           - task: AzureCLI@2
-            displayName: 'Deploy Helm Chart via Bicep'
+            displayName: 'Deploy Helm Chart to AKS2 using Bicep'
             inputs:
               azureSubscription: $(azureSubscription)
               scriptType: bash
               scriptLocation: inlineScript
               inlineScript: |
-                echo "Deploying Helm chart to AKS..."
                 az deployment sub create \
                   --location eastus \
                   --template-file BackendDeploy.bicep \
