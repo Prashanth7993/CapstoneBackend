@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
         - name: frontendangular 
-          image: mysharedacr1234.azurecr.io/frontend-image
+          image: mysharedacr1234.azurecr.io/frontendangularimg
           ports:
           - containerPort: 80
