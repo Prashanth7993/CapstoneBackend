@@ -26,19 +26,19 @@ stages:
               scriptType: bash
               scriptLocation: inlineScript
               inlineScript: |
-                echo "Starting Helm chart deployment to AKS Cluster 1"
-
-                az deployment group create \
-                  --resource-group $(aksResourceGroup) \
+                echo "Deploying Helm chart to AKS..."
+                az deployment sub create \
+                  --location eastus \
                   --template-file BackendDeploy.bicep \
                   --parameters \
-                      aksName="$(aksClusterName1)" \
-                      aksResourceGroup="$(aksResourceGroup)" \
-                      releaseName="$(helmReleaseName)" \
-                      chartName="$(helmChartName)" \
-                      chartVersion="$(helmChartVersion)" \
-                      chartRepo="$(helmChartRepo)" \
-                      namespace="$(helmNamespace)"
+                    aksName="$(aksClusterName1)" \
+                    aksResourceGroup="$(aksResourceGroup)" \
+                    releaseName="$(helmReleaseName)" \
+                    chartName="$(helmChartName)" \
+                    chartVersion="$(helmChartVersion)" \
+                    chartRepo="$(helmChartRepo)" \
+                    namespace="$(helmNamespace)"
+
 
   - stage: HelmDeployAk2
     displayName: Deploy Helm Chart to AKS Cluster 2
@@ -54,16 +54,16 @@ stages:
               scriptType: bash
               scriptLocation: inlineScript
               inlineScript: |
-                echo "Starting Helm chart deployment to AKS Cluster 2"
-
-                az deployment group create \
-                  --resource-group $(aksResourceGroup) \
+                echo "Deploying Helm chart to AKS..."
+                az deployment sub create \
+                  --location eastus \
                   --template-file BackendDeploy.bicep \
                   --parameters \
-                      aksName="$(aksClusterName2)" \
-                      aksResourceGroup="$(aksResourceGroup)" \
-                      releaseName="$(helmReleaseName)" \
-                      chartName="$(helmChartName)" \
-                      chartVersion="$(helmChartVersion)" \
-                      chartRepo="$(helmChartRepo)" \
-                      namespace="$(helmNamespace)"
+                    aksName="$(aksClusterName1)" \
+                    aksResourceGroup="$(aksResourceGroup)" \
+                    releaseName="$(helmReleaseName)" \
+                    chartName="$(helmChartName)" \
+                    chartVersion="$(helmChartVersion)" \
+                    chartRepo="$(helmChartRepo)" \
+                    namespace="$(helmNamespace)"
+
