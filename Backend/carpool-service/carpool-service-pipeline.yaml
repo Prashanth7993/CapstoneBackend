@@ -68,7 +68,7 @@ stages:
     - task: PublishPipelineArtifact@1
       displayName: 'Publish JAR Artifact'
       inputs:
-        targetPath: '$(workingDirectory)/target/carpool-service*.jar'
+        targetPath: '$(workingDirectory)/target/'
         artifact: 'carpool-service'
         publishLocation: 'pipeline'
 
