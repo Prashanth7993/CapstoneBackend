@@ -1,5 +1,5 @@
 // BackendHelm.bicep
-// param aksName string // REMOVE this line - it's no longer used directly in this file
+param aksName string // RE-ADD THIS LINE - It's essential for referencing the AKS cluster
 param releaseName string
 param chartName string
 param chartVersion string
@@ -9,14 +9,14 @@ param namespace string
 // We need to define the AKS cluster as an existing resource
 // because the extension needs to be scoped to it.
 resource aks 'Microsoft.ContainerService/managedClusters@2023-01-01' existing = {
-  name: aksName // This 'aksName' will come from the module parameter
+  name: aksName // This now correctly references the 'aksName' parameter of this module
 }
 
 resource helmExtension 'Microsoft.KubernetesConfiguration/extensions@2022-11-01' = {
   name: releaseName
   // The 'scope' property for this resource type, when defined at the top level,
   // should point to the parent resource, which is the AKS cluster.
-  scope: aks // CORRECT: Referencing the existing 'aks' resource
+  scope: aks // This correctly references the existing 'aks' resource defined above
   properties: {
     extensionType: 'kubernetesConfiguration'
     autoUpgradeMinorVersion: true
