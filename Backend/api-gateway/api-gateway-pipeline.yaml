@@ -69,7 +69,7 @@ stages:
     - task: PublishPipelineArtifact@1
       displayName: 'Publish JAR Artifact'
       inputs:
-        targetPath: '$(workingDirectory)/target/api-gateway*.jar'
+        targetPath: '$(workingDirectory)/target/'
         artifact: 'api-gateway-jar'
         publishLocation: 'pipeline'
 
