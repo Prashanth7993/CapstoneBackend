@@ -5,6 +5,7 @@
 trigger:
 - main
 
+
 variables:
 
   # Container registry service connection established during pipeline creation
@@ -31,6 +32,7 @@ stages:
       runOnce:
         deploy:
           steps:
+          - checkout: self
           - task: KubernetesManifest@0
             displayName: Create imagePullSecret
             inputs:
