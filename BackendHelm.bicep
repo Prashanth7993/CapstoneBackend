@@ -11,7 +11,9 @@ resource aks 'Microsoft.ContainerService/managedClusters@2023-01-01' existing = 
 
 resource helmExtension 'Microsoft.KubernetesConfiguration/extensions@2022-11-01' = {
   name: releaseName
-  parent: aks
+  // REMOVE THE 'parent' PROPERTY HERE
+  // parent: aks // THIS LINE SHOULD BE DELETED
+  scope: resourceGroup().id // Explicitly define the scope if needed, or rely on the module's scope
   properties: {
     extensionType: 'kubernetesConfiguration'
     autoUpgradeMinorVersion: true
@@ -23,8 +25,8 @@ resource helmExtension 'Microsoft.KubernetesConfiguration/extensions@2022-11-01'
       }
     }
     configurationSettings: {
-      'chartName': chartName
-      'repositoryUrl': chartRepo
+      chartName: chartName // Removed quotes
+      repositoryUrl: chartRepo // Removed quotes
     }
   }
 }
