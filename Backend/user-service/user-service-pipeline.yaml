@@ -69,7 +69,7 @@ stages:
     - task: PublishPipelineArtifact@1
       displayName: 'Publish JAR Artifact'
       inputs:
-        targetPath: '$(workingDirectory)/target/user-service.jar'
+        targetPath: '$(workingDirectory)/target/user-service*.jar'
         artifact: 'user-service'
         publishLocation: 'pipeline'
 
