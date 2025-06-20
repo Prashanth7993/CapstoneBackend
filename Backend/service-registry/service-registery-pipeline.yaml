@@ -38,7 +38,7 @@ stages:
         cliProjectKey: 'devuser09_CapStone-Project-Azure'
         cliProjectName: 'CapStone-Project-Azure'
         extraProperties: |
-          sonar.projectBaseDir=$(Build.SourcesDirectory)/Backend/service-registery
+          sonar.projectBaseDir=$(Build.SourcesDirectory)/Backend/service-registry
           sonar.java.binaries=target/classes
           sonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
           sonar.sources=src/main/java
