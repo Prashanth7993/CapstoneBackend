@@ -7,7 +7,7 @@ steps:
   - task: AzureCLI@2
     displayName: 'Deploy Helm Chart via Bicep'
     inputs:
-      azureSubscription: 'prashanthscn'
+      azureSubscription: 'azure-service-connection'
       scriptType: 'bash'
       scriptLocation: 'inlineScript'
       inlineScript: |
