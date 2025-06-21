@@ -1,7 +1,4 @@
-trigger:
-  branches:
-    include:
-      - main
+trigger: none
 
 variables:
   resourceGroup: 'my-rg'
@@ -15,7 +12,7 @@ pool:
 steps:
 - checkout: self
 
-- task: AzureCLI@2
+- task: DeployAppToAks1
   inputs:
     azureSubscription: 'prashanthscn'  # Replace with your Azure DevOps service connection
     scriptType: 'bash'
