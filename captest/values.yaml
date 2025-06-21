@@ -2,11 +2,11 @@ appVersion: "latest-v2"
 
 images:
   - name: api-gateway
-    image: prashanth7993/captest-api-gateway:1.2.1
+    image: mysharedacr1234.azurecr.io/api-gateway:1.0.0
     port: 9000
 
   - name: authentication-service
-    image: prashanth7993/captest-authentication-service:1.2.1
+    image: mysharedacr1234.azurecr.io/authentication-service:1.0.0
     port: 9089
     env:
       - name: SPRING_DATASOURCE_URL
@@ -17,7 +17,7 @@ images:
         value: mypassword
 
   - name: bus-service
-    image: prashanth7993/captest-bus-service:1.2.1
+    image: mysharedacr1234.azurecr.io/bus-service-pipeline:1.0.0
     port: 9095
     env:
       - name: SPRING_DATASOURCE_URL
@@ -28,7 +28,7 @@ images:
         value: mypassword
 
   - name: carpool-service
-    image: prashanth7993/captest-carpool-service:1.2.1
+    image: mysharedacr1234.azurecr.io/carpool-service:1.0.0
     port: 9096
     env:
       - name: SPRING_DATASOURCE_URL
@@ -39,7 +39,7 @@ images:
         value: mypassword
 
   - name: feedback-service
-    image: prashanth7993/captest-feedback-service:1.2.1
+    image: mysharedacr1234.azurecr.io/feedback-service:1.0.0
     port: 9099
     env:
       - name: SPRING_DATASOURCE_URL
@@ -50,7 +50,7 @@ images:
         value: mypassword
 
   - name: notification-service
-    image: prashanth7993/captest-notification-service:1.2.1
+    image: mysharedacr1234.azurecr.io/notification-service:1.0.0
     port: 9092
     env:
       - name: SPRING_DATASOURCE_URL
@@ -61,7 +61,7 @@ images:
         value: mypassword
 
   - name: payment-service
-    image: prashanth7993/captest-payment-service:1.2.1
+    image: mysharedacr1234.azurecr.io/payment-service:1.0.0
     port: 9696
     env:
       - name: SPRING_DATASOURCE_URL
@@ -72,7 +72,7 @@ images:
         value: mypassword
 
   - name: route-service
-    image: prashanth7993/captest-route-service:1.2.1
+    image: mysharedacr1234.azurecr.io/route-service:1.0.0
     port: 9097
     env:
       - name: SPRING_DATASOURCE_URL
@@ -83,11 +83,11 @@ images:
         value: mypassword
 
   - name: service-registry
-    image: prashanth7993/captest-service-registry:1.2.1
+    image: mysharedacr1234.azurecr.io/service-registry:1.0.0
     port: 8761
 
   - name: user-service
-    image: prashanth7993/captest-user-service:1.2.1
+    image: mysharedacr1234.azurecr.io/user-service:1.0.0
     port: 9098
     env:
       - name: SPRING_DATASOURCE_URL
@@ -107,59 +107,16 @@ initdbScript: |
   CREATE DATABASE route_db;
   CREATE DATABASE user_db;
 
-ingress:
-  enabled: true
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
-  hosts:
-    - host: example.com
-      paths:
-        - path: /auth(/|$)(.*)
-          serviceName: authentication-service
-          servicePort: 9089
-        - path: /buses(/|$)(.*)
-          serviceName: bus-service
-          servicePort: 9095
-        - path: /busSchedules(/|$)(.*)
-          serviceName: bus-service
-          servicePort: 9095
-        - path: /routes(/|$)(.*)
-          serviceName: route-service
-          servicePort: 9097
-        - path: /carpools(/|$)(.*)
-          serviceName: carpool-service
-          servicePort: 9096
-        - path: /feedback(/|$)(.*)
-          serviceName: feedback-service
-          servicePort: 9099
-        - path: /notifications(/|$)(.*)
-          serviceName: notification-service
-          servicePort: 9092
-        - path: /payment(/|$)(.*)
-          serviceName: payment-service
-          servicePort: 9696
-        - path: /stops(/|$)(.*)
-          serviceName: route-service
-          servicePort: 9097
-        - path: /tickets(/|$)(.*)
-          serviceName: ticket-service
-          servicePort: 8080
-        - path: /users(/|$)(.*)
-          serviceName: user-service
-          servicePort: 9098
-        - path: /realtime(/|$)(.*)
-          serviceName: bus-service
-          servicePort: 9095
 
 
 # appVersion: "latest-v2"
 # images:
 #   - name: api-gateway
-#     image: prashanth7993/captest-api-gateway:1.2.1
+#     image: mysharedacr1234.azurecr.io/api-gateway:1.0.0
 #     port: 9000
 
 #   - name: authentication-service
-#     image: prashanth7993/captest-authentication-service:1.2.1
+#     image: mysharedacr1234.azurecr.io/authentication-service:1.0.0
 #     port: 9089
 #     database: authentication_db
 #     env:
@@ -171,7 +128,7 @@ ingress:
 #         value: mypassword
 
 #   - name: bus-service
-#     image: prashanth7993/captest-bus-service:1.2.1
+#     image: mysharedacr1234.azurecr.io/bus-service:1.0.0
 #     port: 9095
 #     database: bus_db
 #     env:
@@ -183,7 +140,7 @@ ingress:
 #         value: mypassword
 
 #   - name: carpool-service
-#     image: prashanth7993/captest-carpool-service:1.2.1
+#     image: mysharedacr1234.azurecr.io/carpool-service:1.0.0
 #     port: 9096
 #     database: carpool_db
 #     env:
@@ -195,7 +152,7 @@ ingress:
 #         value: mypassword
 
 #   - name: feedback-service
-#     image: prashanth7993/captest-feedback-service:1.2.1
+#     image: mysharedacr1234.azurecr.io/feedback-service:1.0.0
 #     port: 9099
 #     database: feedback_db
 #     env:
@@ -207,7 +164,7 @@ ingress:
 #         value: mypassword
 
 #   - name: notification-service
-#     image: prashanth7993/captest-notification-service:1.2.1
+#     image: mysharedacr1234.azurecr.io/notification-service:1.0.0
 #     port: 9092
 #     database: notification_db
 #     env:
@@ -219,7 +176,7 @@ ingress:
 #         value: mypassword
 
 #   - name: payment-service
-#     image: prashanth7993/captest-payment-service:1.2.1
+#     image: mysharedacr1234.azurecr.io/payment-service:1.0.0
 #     port: 9696
 #     database: payment_db
 #     env:
@@ -231,7 +188,7 @@ ingress:
 #         value: mypassword
 
 #   - name: route-service
-#     image: prashanth7993/captest-route-service:1.2.1
+#     image: mysharedacr1234.azurecr.io/route-service:1.0.0
 #     port: 9097
 #     database: route_db
 #     env:
@@ -243,11 +200,11 @@ ingress:
 #         value: mypassword
 
 #   - name: service-registry
-#     image: prashanth7993/captest-service-registry:1.2.1
+#     image: mysharedacr1234.azurecr.io/service-registry:1.0.0
 #     port: 8761
 
 #   - name: user-service
-#     image: prashanth7993/captest-user-service:1.2.1
+#     image: mysharedacr1234.azurecr.io/user-service:1.0.0
 #     port: 9098
 #     database: user_db
 #     env:
