@@ -38,8 +38,8 @@ stages:
         command: apply
         useConfigurationFile: true
         configuration: |
-          ./BackendKubeManifest/postgres-init-configmap.yaml
-          ./BackendKubeManifest/postgres-init-job.yaml          
+          BackendKubeManifest/postgres-init-configmap.yaml
+          BackendKubeManifest/postgres-init-job.yaml          
 
     - task: HelmInstaller@1
       inputs:
