@@ -1,56 +1,45 @@
-param cluster1Name string = 'aks-cluster1'
-param cluster2Name string = 'aks-cluster2'
-param location string = resourceGroup().location
-param helmChartName string = 'nginx'
-param helmChartVersion string = '4.11.1'
-param helmRepoUrl string = 'https://kubernetes.github.io/ingress-nginx'
+@description('Name of the AKS cluster')
+param aksClusterName string
+
+@description('Resource group of the AKS cluster')
+param aksClusterResourceGroup string
+
+@description('Namespace where the Helm chart should be installed')
 param namespace string = 'default'
-param releaseName string = 'my-nginx-release'
 
-// Reference AKS Cluster 1
-resource aksCluster1 'Microsoft.ContainerService/managedClusters@2023-01-01' existing = {
-  name: cluster1Name
+@description('Name of the Helm release')
+param releaseName string
+
+@description('Repository URL of the Helm chart')
+param repoUrl string
+
+@description('Name of the Helm chart')
+param chartName string
+
+@description('Version of the Helm chart')
+param chartVersion string = 'latest'
+
+@description('Optional: Values.yaml override')
+param values string = ''
+
+// Import AKS cluster
+resource aks 'Microsoft.ContainerService/managedClusters@2023-05-02-preview' existing = {
+  name: aksClusterName
+  scope: resourceGroup(aksClusterResourceGroup)
 }
 
-// Reference AKS Cluster 2
-resource aksCluster2 'Microsoft.ContainerService/managedClusters@2023-01-01' existing = {
-  name: cluster2Name
-}
-
-// Helm Deployment to Cluster 1
-resource helmReleaseCluster1 'Microsoft.KubernetesConfiguration/extensions@2023-05-01' = {
-  name: '${releaseName}-helm-cluster1'
-  scope: resourceGroup()
+// Link Kubernetes extension
+resource helmChart 'Microsoft.KubernetesConfiguration/helmCharts@2022-11-01' = {
+  name: releaseName
+  scope: extensionResourceId(aks.id, 'Microsoft.Kubernetes/connectedClusters', 'default') // use 'connectedClusters' if using Arc, or use 'managedClusters' for AKS
   properties: {
-    extensionType: 'microsoft.helm'
-    autoUpgradeMinorVersion: true
-    configurationSettings: {
-      'helm.operator.enabled': 'true'
-      'helm.operator.chartName': helmChartName
-      'helm.operator.chartVersion': helmChartVersion
-      'helm.operator.repository': helmRepoUrl
-      'helm.operator.namespace': namespace
-      'helm.operator.releaseName': releaseName
+    chartName: chartName
+    chartVersion: chartVersion
+    repositoryUrl: repoUrl
+    scope: {
+      namespace: namespace
+      releaseNamespace: namespace
     }
-    scope: aksCluster1.id
-  }
-}
-
-// Helm Deployment to Cluster 2
-resource helmReleaseCluster2 'Microsoft.KubernetesConfiguration/extensions@2023-05-01' = {
-  name: '${releaseName}-helm-cluster2'
-  scope: resourceGroup()
-  properties: {
-    extensionType: 'microsoft.helm'
-    autoUpgradeMinorVersion: true
-    configurationSettings: {
-      'helm.operator.enabled': 'true'
-      'helm.operator.chartName': helmChartName
-      'helm.operator.chartVersion': helmChartVersion
-      'helm.operator.repository': helmRepoUrl
-      'helm.operator.namespace': namespace
-      'helm.operator.releaseName': releaseName
-    }
-    scope: aksCluster2.id
+    values: values
   }
 }
