@@ -1,19 +1,19 @@
 trigger: none
 
 variables:
-  azureSubscription: 'prashanthscn'  # Name of your Azure DevOps service connection
+  azureSubscription: 'prashanthscn'  # Your Azure DevOps service connection name
   resourceGroup: 'my-rg'
   aksCluster: 'aks-cluster-vnet1'
   helmReleaseName: 'my-app'
-  chartPath: './captest' # Path to your local Helm chart
+  chartPath: './captest'  # Path to local Helm chart
   chartVersion: '1.0.0'
 
 stages:
 - stage: DeployHelmChart
-  displayName: Deploy Helm chart to AKS
+  displayName: Deploy Helm chart to AKS (default namespace)
   jobs:
   - job: HelmDeploy
-    displayName: Deploy via Helm
+    displayName: Deploy via Helm (no namespace)
     pool:
       name: Default
 
@@ -33,16 +33,12 @@ stages:
         helmVersionToInstall: 'latest'
 
     - script: |
-        echo "Packaging Helm chart..."
+        echo "Linting and packaging Helm chart..."
         helm lint $(chartPath)
         helm package $(chartPath) --version $(chartVersion) --destination .
       displayName: Helm Lint & Package
 
     - script: |
-        echo "Creating namespace if not exists..."
-        kubectl get namespace $(namespace) || kubectl create namespace $(namespace)
-
-        echo "Installing/Upgrading Helm release..."
-        helm upgrade --install $(helmReleaseName) ./$(helmReleaseName)-$(chartVersion).tgz \
-          --namespace $(namespace) --create-namespace
-      displayName: Helm Upgrade Install
+        echo "Installing or upgrading Helm release in default namespace..."
+        helm upgrade --install $(helmReleaseName) ./$(helmReleaseName)-$(chartVersion).tgz
+      displayName: Helm Upgrade Install (default namespace)
