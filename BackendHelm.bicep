@@ -1,9 +1,9 @@
 param aksClusterName string
 param aksResourceGroup string
-param releaseName string = 'myapp'
+param releaseName string
 param namespace string = 'default'
 param chartName string
-param chartVersion string = '0.1.0'
+param chartVersion string
 param acrName string
 
 resource aks 'Microsoft.ContainerService/managedClusters@2023-05-02-preview' existing = {
@@ -11,7 +11,7 @@ resource aks 'Microsoft.ContainerService/managedClusters@2023-05-02-preview' exi
   scope: resourceGroup(aksResourceGroup)
 }
 
-module helmDeploy 'BackendHelm.bicep' = {
+module helmDeploy './BackenDeploy.bicep' = {
   name: 'helmDeployment'
   scope: aks
   params: {
