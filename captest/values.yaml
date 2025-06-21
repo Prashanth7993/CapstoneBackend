@@ -10,77 +10,77 @@ images:
     port: 9089
     env:
       - name: SPRING_DATASOURCE_URL
-        value: jdbc:postgresql://postgres:5432/authentication_db
+        value: jdbc:postgresql://my-pgsql-server.postgres.database.azure.com:5432/authentication_db?sslmode=require
       - name: SPRING_DATASOURCE_USERNAME
-        value: myuser
+        value: pgadmin
       - name: SPRING_DATASOURCE_PASSWORD
-        value: mypassword
+        value: asdfghjklzxcvbnm@123
 
   - name: bus-service
     image: mysharedacr1234.azurecr.io/bus-service-pipeline:1.0.0
     port: 9095
     env:
       - name: SPRING_DATASOURCE_URL
-        value: jdbc:postgresql://postgres:5432/bus_db
+        value: jdbc:postgresql://my-pgsql-server.postgres.database.azure.com:5432/bus_db?sslmode=require
       - name: SPRING_DATASOURCE_USERNAME
-        value: myuser
+        value: pgadmin
       - name: SPRING_DATASOURCE_PASSWORD
-        value: mypassword
+        value: asdfghjklzxcvbnm@123
 
   - name: carpool-service
     image: mysharedacr1234.azurecr.io/carpool-service:1.0.0
     port: 9096
     env:
       - name: SPRING_DATASOURCE_URL
-        value: jdbc:postgresql://postgres:5432/carpool_db
+        value: jdbc:postgresql://my-pgsql-server.postgres.database.azure.com:5432/carpool_db?sslmode=require
       - name: SPRING_DATASOURCE_USERNAME
-        value: myuser
+        value: pgadmin
       - name: SPRING_DATASOURCE_PASSWORD
-        value: mypassword
+        value: asdfghjklzxcvbnm@123
 
   - name: feedback-service
     image: mysharedacr1234.azurecr.io/feedback-service:1.0.0
     port: 9099
     env:
       - name: SPRING_DATASOURCE_URL
-        value: jdbc:postgresql://postgres:5432/feedback_db
+        value: jdbc:postgresql://my-pgsql-server.postgres.database.azure.com:5432/feedback_db?sslmode=require
       - name: SPRING_DATASOURCE_USERNAME
-        value: myuser
+        value: pgadmin
       - name: SPRING_DATASOURCE_PASSWORD
-        value: mypassword
+        value: asdfghjklzxcvbnm@123
 
   - name: notification-service
     image: mysharedacr1234.azurecr.io/notification-service:1.0.0
     port: 9092
     env:
       - name: SPRING_DATASOURCE_URL
-        value: jdbc:postgresql://postgres:5432/notification_db
+        value: jdbc:postgresql://my-pgsql-server.postgres.database.azure.com:5432/notification_db?sslmode=require
       - name: SPRING_DATASOURCE_USERNAME
-        value: myuser
+        value: pgadmin
       - name: SPRING_DATASOURCE_PASSWORD
-        value: mypassword
+        value: asdfghjklzxcvbnm@123
 
   - name: payment-service
     image: mysharedacr1234.azurecr.io/payment-service:1.0.0
     port: 9696
     env:
       - name: SPRING_DATASOURCE_URL
-        value: jdbc:postgresql://postgres:5432/payment_db
+        value: jdbc:postgresql://my-pgsql-server.postgres.database.azure.com:5432/payment_db?sslmode=require
       - name: SPRING_DATASOURCE_USERNAME
-        value: myuser
+        value: pgadmin
       - name: SPRING_DATASOURCE_PASSWORD
-        value: mypassword
+        value: asdfghjklzxcvbnm@123
 
   - name: route-service
     image: mysharedacr1234.azurecr.io/route-service:1.0.0
     port: 9097
     env:
       - name: SPRING_DATASOURCE_URL
-        value: jdbc:postgresql://postgres:5432/route_db
+        value: jdbc:postgresql://my-pgsql-server.postgres.database.azure.com:5432/route_db?sslmode=require
       - name: SPRING_DATASOURCE_USERNAME
-        value: myuser
+        value: pgadmin
       - name: SPRING_DATASOURCE_PASSWORD
-        value: mypassword
+        value: asdfghjklzxcvbnm@123
 
   - name: service-registry
     image: mysharedacr1234.azurecr.io/service-registry:1.0.0
@@ -91,11 +91,11 @@ images:
     port: 9098
     env:
       - name: SPRING_DATASOURCE_URL
-        value: jdbc:postgresql://postgres:5432/user_db
+        value: jdbc:postgresql://my-pgsql-server.postgres.database.azure.com:5432/user_db?sslmode=require
       - name: SPRING_DATASOURCE_USERNAME
-        value: myuser
+        value: pgadmin
       - name: SPRING_DATASOURCE_PASSWORD
-        value: mypassword
+        value: asdfghjklzxcvbnm@123
 
 initdbScript: |
   CREATE DATABASE authentication_db;
@@ -121,11 +121,11 @@ initdbScript: |
 #     database: authentication_db
 #     env:
 #       - name: SPRING_DATASOURCE_URL
-#         value: jdbc:postgresql://postgres:5432/authentication_db
+#         value: jdbc:postgresql://my-pgsql-server.postgres.database.azure.com:5432/authentication_db
 #       - name: SPRING_DATASOURCE_USERNAME
-#         value: myuser
+#         value: pgadmin
 #       - name: SPRING_DATASOURCE_PASSWORD
-#         value: mypassword
+#         value: asdfghjklzxcvbnm@123
 
 #   - name: bus-service
 #     image: mysharedacr1234.azurecr.io/bus-service:1.0.0
@@ -133,11 +133,11 @@ initdbScript: |
 #     database: bus_db
 #     env:
 #       - name: SPRING_DATASOURCE_URL
-#         value: jdbc:postgresql://postgres:5432/bus_db
+#         value: jdbc:postgresql://my-pgsql-server.postgres.database.azure.com:5432/bus_db
 #       - name: SPRING_DATASOURCE_USERNAME
-#         value: myuser
+#         value: pgadmin
 #       - name: SPRING_DATASOURCE_PASSWORD
-#         value: mypassword
+#         value: asdfghjklzxcvbnm@123
 
 #   - name: carpool-service
 #     image: mysharedacr1234.azurecr.io/carpool-service:1.0.0
@@ -145,11 +145,11 @@ initdbScript: |
 #     database: carpool_db
 #     env:
 #       - name: SPRING_DATASOURCE_URL
-#         value: jdbc:postgresql://postgres:5432/carpool_db
+#         value: jdbc:postgresql://my-pgsql-server.postgres.database.azure.com:5432/carpool_db
 #       - name: SPRING_DATASOURCE_USERNAME
-#         value: myuser
+#         value: pgadmin
 #       - name: SPRING_DATASOURCE_PASSWORD
-#         value: mypassword
+#         value: asdfghjklzxcvbnm@123
 
 #   - name: feedback-service
 #     image: mysharedacr1234.azurecr.io/feedback-service:1.0.0
@@ -157,11 +157,11 @@ initdbScript: |
 #     database: feedback_db
 #     env:
 #       - name: SPRING_DATASOURCE_URL
-#         value: jdbc:postgresql://postgres:5432/feedback_db
+#         value: jdbc:postgresql://my-pgsql-server.postgres.database.azure.com:5432/feedback_db
 #       - name: SPRING_DATASOURCE_USERNAME
-#         value: myuser
+#         value: pgadmin
 #       - name: SPRING_DATASOURCE_PASSWORD
-#         value: mypassword
+#         value: asdfghjklzxcvbnm@123
 
 #   - name: notification-service
 #     image: mysharedacr1234.azurecr.io/notification-service:1.0.0
@@ -169,11 +169,11 @@ initdbScript: |
 #     database: notification_db
 #     env:
 #       - name: SPRING_DATASOURCE_URL
-#         value: jdbc:postgresql://postgres:5432/notification_db
+#         value: jdbc:postgresql://my-pgsql-server.postgres.database.azure.com:5432/notification_db
 #       - name: SPRING_DATASOURCE_USERNAME
-#         value: myuser
+#         value: pgadmin
 #       - name: SPRING_DATASOURCE_PASSWORD
-#         value: mypassword
+#         value: asdfghjklzxcvbnm@123
 
 #   - name: payment-service
 #     image: mysharedacr1234.azurecr.io/payment-service:1.0.0
@@ -181,11 +181,11 @@ initdbScript: |
 #     database: payment_db
 #     env:
 #       - name: SPRING_DATASOURCE_URL
-#         value: jdbc:postgresql://postgres:5432/payment_db
+#         value: jdbc:postgresql://my-pgsql-server.postgres.database.azure.com:5432/payment_db
 #       - name: SPRING_DATASOURCE_USERNAME
-#         value: myuser
+#         value: pgadmin
 #       - name: SPRING_DATASOURCE_PASSWORD
-#         value: mypassword
+#         value: asdfghjklzxcvbnm@123
 
 #   - name: route-service
 #     image: mysharedacr1234.azurecr.io/route-service:1.0.0
@@ -193,11 +193,11 @@ initdbScript: |
 #     database: route_db
 #     env:
 #       - name: SPRING_DATASOURCE_URL
-#         value: jdbc:postgresql://postgres:5432/route_db
+#         value: jdbc:postgresql://my-pgsql-server.postgres.database.azure.com:5432/route_db
 #       - name: SPRING_DATASOURCE_USERNAME
-#         value: myuser
+#         value: pgadmin
 #       - name: SPRING_DATASOURCE_PASSWORD
-#         value: mypassword
+#         value: asdfghjklzxcvbnm@123
 
 #   - name: service-registry
 #     image: mysharedacr1234.azurecr.io/service-registry:1.0.0
@@ -209,11 +209,11 @@ initdbScript: |
 #     database: user_db
 #     env:
 #       - name: SPRING_DATASOURCE_URL
-#         value: jdbc:postgresql://postgres:5432/user_db
+#         value: jdbc:postgresql://my-pgsql-server.postgres.database.azure.com:5432/user_db
 #       - name: SPRING_DATASOURCE_USERNAME
-#         value: myuser
+#         value: pgadmin
 #       - name: SPRING_DATASOURCE_PASSWORD
-#         value: mypassword
+#         value: asdfghjklzxcvbnm@123
 
 # initdbScript: |
 #   CREATE DATABASE authentication_db;
