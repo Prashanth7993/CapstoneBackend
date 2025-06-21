@@ -1,39 +1,40 @@
-trigger:
-  branches:
-    include:
-      - main
+  trigger:
+    branches:
+      include:
+        - main
 
-variables:
-  resourceGroup: 'my-rg'
-  aksCluster: 'aks-cluster-vent1'
-  acrName: 'mysharedacr1234'
-  chartName: 'myapp'
-  chartVersion: '0.1.0'
-  releaseName: 'myapp-release'
-  namespace: 'default'
-  bicepFile: 'BackendHelm.bicep'
+  variables:
+    resourceGroup: 'my-rg'
+    aksCluster: 'aks-cluster-vent1'
+    acrName: 'mysharedacr1234'
+    chartName: 'myapp'
+    chartVersion: '0.1.0'
+    releaseName: 'myapp-release'
+    namespace: 'default'
+    bicepFile: 'BackendHelm.bicep'
 
-pool:
-  name: Default
+  pool:
+    name: Default
 
-steps:
-- checkout: self
+  steps:
+  - checkout: self
 
-- task: AzureCLI@2
-  inputs:
-    azureSubscription: 'prashanthscn'  # Change this to your service connection
-    scriptType: 'bash'
-    scriptLocation: 'inlineScript'
-    inlineScript: |
-      az bicep install
-      az deployment group create \
-        --resource-group $(resourceGroup) \
-        --template-file $(bicepFile) \
-        --parameters \
-          aksClusterName=$(aksCluster) \
-          aksResourceGroup=$(resourceGroup) \
-          acrName=$(acrName) \
-          chartName=$(chartName) \
-          chartVersion=$(chartVersion) \
-          releaseName=$(releaseName) \
-          namespace=$(namespace)
+  - task: AzureCLI@2
+    inputs:
+      azureSubscription: 'prashanthscn'  # Must be a valid service connection name
+      scriptType: 'bash'
+      scriptLocation: 'inlineScript'
+      inlineScript: |
+        az bicep install
+        az deployment group create \
+          --resource-group $(resourceGroup) \
+          --template-file $(bicepFile) \
+          --parameters \
+            aksClusterName=$(aksCluster) \
+            aksResourceGroup=$(resourceGroup) \
+            acrName=$(acrName) \
+            chartName=$(chartName) \
+            chartVersion=$(chartVersion) \
+            releaseName=$(releaseName) \
+            namespace=$(namespace)
+
