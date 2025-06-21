@@ -67,6 +67,17 @@ stages:
         echo "Installing or upgrading Helm release in default namespace..."
         helm upgrade --install $(helmReleaseName) ./$(chartPath)-$(chartVersion).tgz
       displayName: Helm Upgrade Install (default namespace)
+    
+    - task: Kubernetes@1
+      displayName: Apply Postgres Init Job
+      inputs:
+        connectionType: Azure Resource Manager
+        azureSubscriptionEndpoint: $(azureSubscription)
+        azureResourceGroup: $(resourceGroup)
+        kubernetesCluster: $(aksCluster1)
+        command: apply
+        useConfigurationFile: true
+        configuration: BackendKubeManifest/ingress.yaml
 
 
 - stage: DeployHelmChartAks2
