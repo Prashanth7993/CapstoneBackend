@@ -31,7 +31,7 @@ stages:
     - script: ls -R $(Build.SourcesDirectory)
       displayName: "List repo files for debug"
     - task: Kubernetes@1
-      displayName: ApplyDBInitConfigMapandJob
+      displayName: Apply Postgres Init ConfigMap
       inputs:
         connectionType: Azure Resource Manager
         azureSubscriptionEndpoint: $(azureSubscription)
@@ -39,9 +39,19 @@ stages:
         kubernetesCluster: $(aksCluster1)
         command: apply
         useConfigurationFile: true
-        configuration: |
-          BackendKubeManifest/postgres-init-configmap.yaml
-          BackendKubeManifest/postgres-init-job.yaml          
+        configuration: BackendKubeManifest/postgres-init-configmap.yaml
+
+    - task: Kubernetes@1
+      displayName: Apply Postgres Init Job
+      inputs:
+        connectionType: Azure Resource Manager
+        azureSubscriptionEndpoint: $(azureSubscription)
+        azureResourceGroup: $(resourceGroup)
+        kubernetesCluster: $(aksCluster1)
+        command: apply
+        useConfigurationFile: true
+        configuration: BackendKubeManifest/postgres-init-job.yaml
+         
 
     - task: HelmInstaller@1
       inputs:
