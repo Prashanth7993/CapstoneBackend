@@ -1,33 +1,34 @@
-trigger: none
+trigger:
+  branches:
+    include:
+      - main
+
+variables:
+  resourceGroup: 'my-rg'
+  aksCluster: 'aks-cluster-vnet1'
+  acrName: 'mysharedacr1234'
+  bicepFile: 'BackendHelm.bicep'
 
 pool:
   name: Default
 
 steps:
-  - task: AzureCLI@2
-    displayName: 'Deploy Helm Chart via Bicep'
-    inputs:
-      azureSubscription: 'prashanthscn'
-      scriptType: 'bash'
-      scriptLocation: 'inlineScript'
-      inlineScript: |
-        az deployment group create \
-          --resource-group $(resourceGroupName) \
-          --template-file ./BackendHelm.bicep \
-          --parameters \
-              cluster1Name=$(cluster1Name) \
-              cluster2Name=$(cluster2Name) \
-              helmChartName=$(helmChartName) \
-              helmChartVersion=$(helmChartVersion) \
-              helmRepoUrl=$(helmRepoUrl) \
-              namespace=$(namespace) \
-              releaseName=$(releaseName)
-    env:
-      resourceGroupName: '$(resourceGroupName)'
-      cluster1Name: 'aks-cluster1'
-      cluster2Name: 'aks-cluster2'
-      helmChartName: 'backend'
-      helmChartVersion: '4.11.1'
-      helmRepoUrl: 'oci://mysharedacr1234.azurecr.io/hel'
-      namespace: 'default'
-      releaseName: 'my-backend-release'
+- checkout: self
+
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'prashanthscn'  # Replace with your Azure DevOps service connection
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      az bicep install
+      az deployment group create \
+        --resource-group $(resourceGroup) \
+        --template-file $(bicepFile) \
+        --parameters \
+            aksClusterName=$(aksCluster) \
+            aksResourceGroup=$(resourceGroup) \
+            acrName=$(acrName) \
+            chartName='myapp' \
+            chartVersion='0.1.0' \
+            namespace='default'
