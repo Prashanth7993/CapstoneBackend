@@ -11,7 +11,7 @@ variables:
 
 stages:
 - stage: DeployHelmChartAks1
-  displayName: Deploy Helm chart to AKS (default namespace)
+  displayName: DeployHelmChartAKS1
   jobs:
   - job: HelmDeploy
     displayName: Deploy via Helm to AksCluster1
@@ -46,7 +46,7 @@ stages:
 
 
 - stage: DeployHelmChartAks2
-  displayName: Deploy Helm chart to AKS (default namespace)
+  displayName: DeployHelmChartAks2
   jobs:
   - job: HelmDeploy
     displayName: Deploy via Helm to AksCluster2
