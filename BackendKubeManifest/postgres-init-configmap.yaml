@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: azure-postgres-init
+data:
+  init.sql: |
+    CREATE DATABASE authentication_db;
+    CREATE DATABASE bus_db;
+    CREATE DATABASE carpool_db;
+    CREATE DATABASE feedback_db;
+    CREATE DATABASE notification_db;
+    CREATE DATABASE payment_db;
+    CREATE DATABASE route_db;
+    CREATE DATABASE user_db;
