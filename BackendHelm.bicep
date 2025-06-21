@@ -11,7 +11,7 @@ resource aks 'Microsoft.ContainerService/managedClusters@2023-05-02-preview' exi
   scope: resourceGroup(aksResourceGroup)
 }
 
-module helmDeploy './BackenDeploy.bicep' = {
+module helmDeploy './BackendDeploy.bicep' = {
   name: 'helmDeployment'
   scope: aks
   params: {
