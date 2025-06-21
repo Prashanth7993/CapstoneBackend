@@ -3,17 +3,18 @@ trigger: none
 variables:
   azureSubscription: 'prashanthscn'  # Your Azure DevOps service connection name
   resourceGroup: 'my-rg'
-  aksCluster: 'aks-cluster-vnet1'
+  aksCluster1: 'aks-cluster-vnet1'
+  aksCluster2: 'aks-cluster-vnet2'
   helmReleaseName: 'my-app'
   chartPath: './captest'  # Path to local Helm chart
   chartVersion: '1.0.0'
 
 stages:
-- stage: DeployHelmChart
+- stage: DeployHelmChartAks1
   displayName: Deploy Helm chart to AKS (default namespace)
   jobs:
   - job: HelmDeploy
-    displayName: Deploy via Helm (no namespace)
+    displayName: Deploy via Helm to AksCluster1
     pool:
       name: Default
 
@@ -26,7 +27,42 @@ stages:
         scriptLocation: inlineScript
         inlineScript: |
           echo "Getting AKS credentials..."
-          az aks get-credentials --resource-group $(resourceGroup) --name $(aksCluster) --overwrite-existing
+          az aks get-credentials --resource-group $(resourceGroup) --name $(aksCluster1) --overwrite-existing
+
+    - task: HelmInstaller@1
+      inputs:
+        helmVersionToInstall: 'latest'
+
+    - script: |
+        echo "Linting and packaging Helm chart..."
+        helm lint $(chartPath)
+        helm package $(chartPath) --version $(chartVersion) --destination .
+      displayName: Helm Lint & Package
+
+    - script: |
+        echo "Installing or upgrading Helm release in default namespace..."
+        helm upgrade --install $(helmReleaseName) ./$(chartPath)-$(chartVersion).tgz
+      displayName: Helm Upgrade Install (default namespace)
+
+
+- stage: DeployHelmChartAks2
+  displayName: Deploy Helm chart to AKS (default namespace)
+  jobs:
+  - job: HelmDeploy
+    displayName: Deploy via Helm to AksCluster2
+    pool:
+      name: Default
+
+    steps:
+    - task: AzureCLI@2
+      name: AKSLogin
+      inputs:
+        azureSubscription: $(azureSubscription)
+        scriptType: bash
+        scriptLocation: inlineScript
+        inlineScript: |
+          echo "Getting AKS credentials..."
+          az aks get-credentials --resource-group $(resourceGroup) --name $(aksCluster2) --overwrite-existing
 
     - task: HelmInstaller@1
       inputs:
