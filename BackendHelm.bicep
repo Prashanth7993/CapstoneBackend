@@ -1,11 +1,11 @@
 param cluster1Name string = 'aks-cluster1'
 param cluster2Name string = 'aks-cluster2'
 param location string = resourceGroup().location
-param helmChartName string = 'backend'
-param helmChartVersion string = '1.0.0'
-param helmRepoUrl string = 'oci://mysharedacr1234.azurecr.io/helm'
+param helmChartName string = 'nginx'
+param helmChartVersion string = '4.11.1'
+param helmRepoUrl string = 'https://kubernetes.github.io/ingress-nginx'
 param namespace string = 'default'
-param releaseName string = 'my-backend-release'
+param releaseName string = 'my-nginx-release'
 
 // Reference AKS Cluster 1
 resource aksCluster1 'Microsoft.ContainerService/managedClusters@2023-01-01' existing = {
