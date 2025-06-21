@@ -40,5 +40,5 @@ stages:
 
     - script: |
         echo "Installing or upgrading Helm release in default namespace..."
-        helm upgrade --install $(helmReleaseName) ./$(helmReleaseName)-$(chartVersion).tgz
+        helm upgrade --install $(helmReleaseName) ./$(chartPath)-$(chartVersion).tgz
       displayName: Helm Upgrade Install (default namespace)
