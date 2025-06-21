@@ -1,9 +1,16 @@
-trigger: none
+trigger:
+  branches:
+    include:
+      - main
 
 variables:
   resourceGroup: 'my-rg'
-  aksCluster: 'aks-cluster-vnet1'
+  aksCluster: 'aks-cluster-vent1'
   acrName: 'mysharedacr1234'
+  chartName: 'myapp'
+  chartVersion: '0.1.0'
+  releaseName: 'myapp-release'
+  namespace: 'default'
   bicepFile: 'BackendHelm.bicep'
 
 pool:
@@ -12,9 +19,9 @@ pool:
 steps:
 - checkout: self
 
-- task: DeployAppToAks1
+- task: AzureCLI@2
   inputs:
-    azureSubscription: 'prashanthscn'  # Replace with your Azure DevOps service connection
+    azureSubscription: 'prashanthscn'  # Change this to your service connection
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
     inlineScript: |
@@ -23,9 +30,10 @@ steps:
         --resource-group $(resourceGroup) \
         --template-file $(bicepFile) \
         --parameters \
-            aksClusterName=$(aksCluster) \
-            aksResourceGroup=$(resourceGroup) \
-            acrName=$(acrName) \
-            chartName='myapp' \
-            chartVersion='0.1.0' \
-            namespace='default'
+          aksClusterName=$(aksCluster) \
+          aksResourceGroup=$(resourceGroup) \
+          acrName=$(acrName) \
+          chartName=$(chartName) \
+          chartVersion=$(chartVersion) \
+          releaseName=$(releaseName) \
+          namespace=$(namespace)
