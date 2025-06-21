@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: init-azure-postgres
+  name: postgres-init-job
 spec:
   template:
     spec:
@@ -11,19 +11,18 @@ spec:
           command: ["/bin/sh", "-c"]
           args:
             - |
-              echo "Running init.sql against Azure PostgreSQL...";
-              psql "host=my-pgsql-server.postgres.database.azure.com \
-                    port=5432 \
-                    dbname=postgres \
-                    user=pgadmin@my-pgsql-server \
-                    password='asdfghjklzxcvbnm@123' \
-                    sslmode=require" \
-              -f /scripts/init.sql
-          volumeMounts:
-            - name: init-script
-              mountPath: /scripts
+              echo "Creating databases in Azure PostgreSQL...";
+              for db in authentication_db bus_db carpool_db feedback_db notification_db payment_db route_db user_db; do
+                echo "Creating database: $db"
+                createdb \
+                  --host=my-pgsql-server.postgres.database.azure.com \
+                  --port=5432 \
+                  --username=pgadmin@my-pgsql-server \
+                  --dbname=postgres \
+                  --sslmode=require \
+                  $db || echo "Failed to create database: $db"
+              done
+          env:
+            - name: PGPASSWORD
+              value: "asdfghjklzxcvbnm@123"
       restartPolicy: OnFailure
-      volumes:
-        - name: init-script
-          configMap:
-            name: azure-postgres-init
