@@ -19,7 +19,7 @@ resource helmRelease 'Microsoft.KubernetesConfiguration/helmCharts@2022-11-01' =
   properties: {
     chartName: chartName
     chartVersion: chartVersion
-    repositoryUrl: 'oci://'+acrName+'.azurecr.io/helm'
+    repositoryUrl: 'oci://${acrName}.azurecr.io/helm'
     scope: {
       namespace: namespace
       releaseNamespace: namespace
