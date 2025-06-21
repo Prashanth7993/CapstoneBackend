@@ -13,6 +13,6 @@ spec:
     - protocol: TCP
       port: {{ .port }}
       targetPort: {{ .port }}
-  type: ClusterIP
+  type: {{ if eq .name "api-gateway" }}LoadBalancer{{ else }}ClusterIP{{ end }}
 ---
 {{- end }}
