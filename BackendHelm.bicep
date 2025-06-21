@@ -19,21 +19,21 @@ param chartVersion string = '0.1.0'
 @description('ACR name (without .azurecr.io)')
 param acrName string
 
+
+
 resource aks 'Microsoft.ContainerService/managedClusters@2023-05-02-preview' existing = {
   name: aksClusterName
   scope: resourceGroup(aksResourceGroup)
 }
 
-resource helmChart 'Microsoft.KubernetesConfiguration/helmCharts@2022-11-01' = {
-  name: releaseName
-  parent: aks
-  properties: {
-    chartName: chartName
-    chartVersion: chartVersion
-    repositoryUrl: 'oci://${acrName}.azurecr.io/helm'
-    scope: {
-      namespace: namespace
-      releaseNamespace: namespace
-    }
+module helmDeploy 'BackendHelm.bicep' = {
+  name: 'helmDeployment'
+  scope: aks
+  params: {
+    releaseName: 'myapp'
+    namespace: 'default'
+    chartName: 'mychart'
+    chartVersion: '0.1.0'
+    acrName: 'mysharedacr1234'
   }
 }
