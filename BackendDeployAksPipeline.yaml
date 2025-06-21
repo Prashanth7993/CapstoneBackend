@@ -28,6 +28,18 @@ stages:
         inlineScript: |
           echo "Getting AKS credentials..."
           az aks get-credentials --resource-group $(resourceGroup) --name $(aksCluster1) --overwrite-existing
+    - task: Kubernetes@1
+      displayName: ApplyDBInitConfigMapandJob
+      inputs:
+        connectionType: Azure Resource Manager
+        azureSubscriptionEndpoint: $(azureSubscription)
+        azureResourceGroup: $(resourceGroup)
+        kubernetesCluster: $(aksCluster1)
+        command: apply
+        useConfigurationFile: true
+        configuration: |
+          BackendKubeManifes/postgres-init-configmap.yaml
+          BackendKubeManifes/postgres-init-job.yaml          
 
     - task: HelmInstaller@1
       inputs:
