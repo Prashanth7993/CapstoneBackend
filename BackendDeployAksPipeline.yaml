@@ -28,6 +28,8 @@ stages:
         inlineScript: |
           echo "Getting AKS credentials..."
           az aks get-credentials --resource-group $(resourceGroup) --name $(aksCluster1) --overwrite-existing
+    - script: ls -R $(Build.SourcesDirectory)
+      displayName: "List repo files for debug"
     - task: Kubernetes@1
       displayName: ApplyDBInitConfigMapandJob
       inputs:
