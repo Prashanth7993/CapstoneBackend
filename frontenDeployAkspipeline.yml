@@ -11,7 +11,7 @@ variables:
   dockerRegistryServiceConnection: '702fbc9a-0f37-4b61-aea4-ac4e3d3d8764'
   imageRepository: 'frontendfinalimage'
   containerRegistry: 'mysharedacr1234.azurecr.io'
-  tag: '1.0.3'
+  tag: '1.0.0'
   imagePullSecret: 'mysharedacr12341125eda9-auth'
 
   # Agent VM image name
@@ -31,12 +31,12 @@ stages:
         deploy:
           steps:
           - checkout: self
-          - task: KubernetesManifest@0
-            displayName: Create imagePullSecret
-            inputs:
-              action: createSecret
-              secretName: $(imagePullSecret)
-              dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
+          # - task: KubernetesManifest@0
+          #   displayName: Create imagePullSecret
+          #   inputs:
+          #     action: createSecret
+          #     secretName: $(imagePullSecret)
+          #     dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
           - task: KubernetesManifest@0
             displayName: Deploy to Kubernetes cluster
             inputs:
