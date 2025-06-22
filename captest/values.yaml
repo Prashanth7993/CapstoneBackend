@@ -2,11 +2,11 @@ appVersion: "latest-v2"
 
 images:
   - name: api-gateway
-    image: mysharedacr1234.azurecr.io/api-gateway:1.0.0
+    image: mysharedacr1234.azurecr.io/api-gateway:1.1.0
     port: 9000
 
   - name: authentication-service
-    image: mysharedacr1234.azurecr.io/authentication-service:1.0.0
+    image: mysharedacr1234.azurecr.io/authentication-service:1.1.0
     port: 9089
     env:
       - name: SPRING_DATASOURCE_URL
@@ -17,7 +17,7 @@ images:
         value: asdfghjklzxcvbnm@123
 
   - name: bus-service
-    image: mysharedacr1234.azurecr.io/bus-service-pipeline:1.0.0
+    image: mysharedacr1234.azurecr.io/bus-service-pipeline:1.1.0
     port: 9095
     env:
       - name: SPRING_DATASOURCE_URL
@@ -28,7 +28,7 @@ images:
         value: asdfghjklzxcvbnm@123
 
   - name: carpool-service
-    image: mysharedacr1234.azurecr.io/carpool-service:1.0.0
+    image: mysharedacr1234.azurecr.io/carpool-service:1.1.0
     port: 9096
     env:
       - name: SPRING_DATASOURCE_URL
@@ -39,7 +39,7 @@ images:
         value: asdfghjklzxcvbnm@123
 
   - name: feedback-service
-    image: mysharedacr1234.azurecr.io/feedback-service:1.0.0
+    image: mysharedacr1234.azurecr.io/feedback-service:1.1.0
     port: 9099
     env:
       - name: SPRING_DATASOURCE_URL
@@ -50,7 +50,7 @@ images:
         value: asdfghjklzxcvbnm@123
 
   - name: notification-service
-    image: mysharedacr1234.azurecr.io/notification-service:1.0.0
+    image: mysharedacr1234.azurecr.io/notification-service:1.1.0
     port: 9092
     env:
       - name: SPRING_DATASOURCE_URL
@@ -61,7 +61,7 @@ images:
         value: asdfghjklzxcvbnm@123
 
   - name: payment-service
-    image: mysharedacr1234.azurecr.io/payment-service:1.0.0
+    image: mysharedacr1234.azurecr.io/payment-service:1.1.0
     port: 9696
     env:
       - name: SPRING_DATASOURCE_URL
@@ -72,7 +72,7 @@ images:
         value: asdfghjklzxcvbnm@123
 
   - name: route-service
-    image: mysharedacr1234.azurecr.io/route-service:1.0.0
+    image: mysharedacr1234.azurecr.io/route-service:1.1.0
     port: 9097
     env:
       - name: SPRING_DATASOURCE_URL
@@ -83,11 +83,11 @@ images:
         value: asdfghjklzxcvbnm@123
 
   - name: service-registry
-    image: mysharedacr1234.azurecr.io/service-registry:1.0.0
+    image: mysharedacr1234.azurecr.io/service-registry:1.1.0
     port: 8761
 
   - name: user-service
-    image: mysharedacr1234.azurecr.io/user-service:1.0.0
+    image: mysharedacr1234.azurecr.io/user-service:1.1.0
     port: 9098
     env:
       - name: SPRING_DATASOURCE_URL
@@ -112,11 +112,11 @@ initdbScript: |
 # appVersion: "latest-v2"
 # images:
 #   - name: api-gateway
-#     image: mysharedacr1234.azurecr.io/api-gateway:1.0.0
+#     image: mysharedacr1234.azurecr.io/api-gateway:1.1.0
 #     port: 9000
 
 #   - name: authentication-service
-#     image: mysharedacr1234.azurecr.io/authentication-service:1.0.0
+#     image: mysharedacr1234.azurecr.io/authentication-service:1.1.0
 #     port: 9089
 #     database: authentication_db
 #     env:
@@ -128,7 +128,7 @@ initdbScript: |
 #         value: asdfghjklzxcvbnm@123
 
 #   - name: bus-service
-#     image: mysharedacr1234.azurecr.io/bus-service:1.0.0
+#     image: mysharedacr1234.azurecr.io/bus-service:1.1.0
 #     port: 9095
 #     database: bus_db
 #     env:
@@ -140,7 +140,7 @@ initdbScript: |
 #         value: asdfghjklzxcvbnm@123
 
 #   - name: carpool-service
-#     image: mysharedacr1234.azurecr.io/carpool-service:1.0.0
+#     image: mysharedacr1234.azurecr.io/carpool-service:1.1.0
 #     port: 9096
 #     database: carpool_db
 #     env:
@@ -152,7 +152,7 @@ initdbScript: |
 #         value: asdfghjklzxcvbnm@123
 
 #   - name: feedback-service
-#     image: mysharedacr1234.azurecr.io/feedback-service:1.0.0
+#     image: mysharedacr1234.azurecr.io/feedback-service:1.1.0
 #     port: 9099
 #     database: feedback_db
 #     env:
@@ -164,7 +164,7 @@ initdbScript: |
 #         value: asdfghjklzxcvbnm@123
 
 #   - name: notification-service
-#     image: mysharedacr1234.azurecr.io/notification-service:1.0.0
+#     image: mysharedacr1234.azurecr.io/notification-service:1.1.0
 #     port: 9092
 #     database: notification_db
 #     env:
@@ -176,7 +176,7 @@ initdbScript: |
 #         value: asdfghjklzxcvbnm@123
 
 #   - name: payment-service
-#     image: mysharedacr1234.azurecr.io/payment-service:1.0.0
+#     image: mysharedacr1234.azurecr.io/payment-service:1.1.0
 #     port: 9696
 #     database: payment_db
 #     env:
@@ -188,7 +188,7 @@ initdbScript: |
 #         value: asdfghjklzxcvbnm@123
 
 #   - name: route-service
-#     image: mysharedacr1234.azurecr.io/route-service:1.0.0
+#     image: mysharedacr1234.azurecr.io/route-service:1.1.0
 #     port: 9097
 #     database: route_db
 #     env:
@@ -200,11 +200,11 @@ initdbScript: |
 #         value: asdfghjklzxcvbnm@123
 
 #   - name: service-registry
-#     image: mysharedacr1234.azurecr.io/service-registry:1.0.0
+#     image: mysharedacr1234.azurecr.io/service-registry:1.1.0
 #     port: 8761
 
 #   - name: user-service
-#     image: mysharedacr1234.azurecr.io/user-service:1.0.0
+#     image: mysharedacr1234.azurecr.io/user-service:1.1.0
 #     port: 9098
 #     database: user_db
 #     env:
