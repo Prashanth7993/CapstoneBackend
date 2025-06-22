@@ -9,6 +9,13 @@ spec:
   rules:
   - http:
       paths:
+          - path: /frontendangular
+            pathType: Prefix
+            backend:
+              service:
+                name: authentication-service
+                port:
+                  number: 80
           # --- AUTHENTICATION SERVICE (PORT 9089)
           - path: /auth/greet
             pathType: Prefix
