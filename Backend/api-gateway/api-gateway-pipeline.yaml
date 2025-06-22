@@ -6,7 +6,7 @@ variables:
   imageRepository: 'api-gateway'
   containerRegistry: 'mysharedacr1234.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/Backend/api-gateway/Dockerfile'
-  tag: '1.0.0'
+  tag: '1.1.0'
   workingDirectory: '$(Build.SourcesDirectory)/Backend/api-gateway'
 
 stages:
