@@ -14,7 +14,7 @@ variables:
   dockerRegistryServiceConnection: '0e40140e-7ed4-4094-b87e-b8cee5f431d5'
   imageRepository: 'frontendfinalimage'
   containerRegistry: 'mysharedacr1234.azurecr.io'
-  tag: '1.0.1'
+  tag: '1.0.2'
   imagePullSecret: 'mysharedacr12341292f29b-auth'
 
   # Agent VM image name
