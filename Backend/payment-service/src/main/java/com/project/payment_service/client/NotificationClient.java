@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.project.payment_service.models.NotificationPojo;
 
-@FeignClient(value="notification-service",url="http://localhost:9092/notifications")
+@FeignClient(value="notification-service",url="http://notification-service:9092/notifications")
 public interface NotificationClient {
 	@PostMapping("/user/{userId}")
 	public NotificationPojo addNewNotificationToUser(@PathVariable long userId,@RequestBody NotificationPojo notification);
