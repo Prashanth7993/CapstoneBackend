@@ -12,13 +12,52 @@ variables:
   dockerRegistryServiceConnection: 'dc77e625-549d-4539-8938-89bc530738a1'
   imageRepository: 'frontendfinalimage'
   containerRegistry: 'mysharedacr1234.azurecr.io'
-  dockerfilePath: '$(Build.SourcesDirectory)/Backend/api-gateway/Dockerfile'
-  tag: '$(Build.BuildId)'
+  dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
+  tag: '1.0.0'
 
   # Agent VM image name
-  vmImageName: 'ubuntu-latest'
+  #vmImageName: 'ubuntu-latest'
 
 stages:
+- stage: TestingStage
+  displayName: Testing
+  jobs:
+  - job: Testing
+    displayName: Testing
+    pool:
+      name: Default
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '20.x'
+      displayName: 'Install Node.js 20'
+
+    - script: |
+        npm install
+      displayName: 'Install Dependencies'
+
+    # - script: |
+    #     npm run test -- --watch=false --browsers=ChromeHeadless
+    #   displayName: 'Run Unit Tests'
+
+    - script: |
+        echo "Installing Snyk CLI..."
+        npm install -g snyk
+      displayName: 'Install Snyk CLI'
+
+    - script: |
+        echo "Authenticating with Snyk..."
+        snyk auth $(SNYK_TOKEN)
+      env:
+        SNYK_TOKEN: $(SNYK_TOKEN)
+      displayName: 'Authenticate Snyk'
+
+    - script: |
+        snyk test --all-projects --severity-threshold=medium --json > snyk-report.json
+        cat snyk-report.json
+      displayName: 'Run Snyk Security Test'
+
+
 - stage: Build
   displayName: Build and push stage
   jobs:
