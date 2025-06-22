@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.capstone.carpool_service.models.TransactionPojo;
 
-@FeignClient(value="payment-service",url="http://localhost:9696/payment")
+@FeignClient(value="payment-service",url="http://payment-service:9696/payment")
 public interface PaymentClient {
 
 	@PostMapping("/create-order")
