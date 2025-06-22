@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.capstone.carpool_service.models.NotificationPojo;
 
 
-@FeignClient(value="notification-service",url="http://localhost:9092/notifications")
+@FeignClient(value="notification-service",url="http://notification-service:9092/notifications")
 public interface NotificationClient {
 	
 	@PostMapping("/user/{userId}")
