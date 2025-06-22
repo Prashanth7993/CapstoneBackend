@@ -8,7 +8,7 @@ import com.project.payment_service.models.UserPojo;
 
 
 
-@FeignClient(value = "users-service",url = "http://localhost:9000/users")
+@FeignClient(value = "users-service",url = "http://api-gateway:9000/users")
 public interface UserClient {
 	@GetMapping("/{id}")
 	public UserPojo getAUser(@PathVariable("id") long userID);
