@@ -55,6 +55,8 @@ stages:
                 $(imagePullSecret)
               containers: |
                 $(containerRegistry)/$(imageRepository):$(tag)
+            env:
+              KUBECONFIG: /home/Prashanth/.kube/config
 
 - stage: DeployOnaks2
   displayName: Deploy stage
