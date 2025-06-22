@@ -13,7 +13,7 @@ public class CorsConfig {
     @Bean
     public CorsWebFilter corsWebFilter() {
     	 CorsConfiguration corsConfig = new CorsConfiguration();
-         corsConfig.addAllowedOrigin("http://9.223.25.61"); 
+         corsConfig.addAllowedOrigin("http://my-global-aks.trafficmanager.net"); 
          corsConfig.addAllowedMethod("*"); 
          corsConfig.addAllowedHeader("*"); 
          corsConfig.setAllowCredentials(true); 
