@@ -11,7 +11,7 @@ variables:
   imageRepository: 'frontendangularimg'
   containerRegistry: 'mysharedacr1234.azurecr.io'
   tag: '1.0.3'
-  imagePullSecret: 'mysharedacr12341458b525-auth'
+  imagePullSecret: 'mysharedacr12347712769a-auth'
 
   # Agent VM image name
 
