@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.project.payment_service.models.BookingPojo;
 
-@FeignClient(value = "bookings-service",url = "http://localhost:9000/bookings")
+@FeignClient(value = "bookings-service",url = "http://api-gateway:9000/bookings")
 public interface BookingClient {
 	@GetMapping("/{id}")
 	public BookingPojo getABooking(@PathVariable("id") long bookingId);
