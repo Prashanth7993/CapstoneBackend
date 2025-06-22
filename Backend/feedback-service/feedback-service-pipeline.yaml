@@ -5,7 +5,7 @@ variables:
   imageRepository: 'feedback-service'
   containerRegistry: 'mysharedacr1234.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/Backend/feedback-service/Dockerfile'
-  tag: '1.0.0'
+  tag: '1.1.0'
   workingDirectory: '$(Build.SourcesDirectory)/Backend/feedback-service'
 
 stages:
