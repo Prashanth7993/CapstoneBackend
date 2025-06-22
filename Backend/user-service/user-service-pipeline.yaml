@@ -1,7 +1,7 @@
 trigger: none
 
 variables:
-  dockerRegistryServiceConnection: 'b0e254bb-b547-4604-a227-4bf606715cf8'
+  dockerRegistryServiceConnection: '33380ad7-f270-4c23-a0ba-269ed94a5ce5'
   sonarQubeServiceConnection: 'sonar'  # Change this to your actual service connection name
   imageRepository: 'user-service'
   containerRegistry: 'mysharedacr1234.azurecr.io'
