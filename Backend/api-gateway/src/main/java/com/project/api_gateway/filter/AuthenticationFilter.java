@@ -47,7 +47,7 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
 				try {
 					RestClient restClient = RestClient.create();
 					boolean isValidToken = restClient.get()
-							.uri("http://localhost:9099/auth/validate/token?token=" + authHeaderToken).retrieve()
+							.uri("http://4.177.12.81/auth/validate/token?token=" + authHeaderToken).retrieve()
 							.body(Boolean.class);
 				} catch (Exception e) {
 					exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
