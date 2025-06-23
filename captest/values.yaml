@@ -6,7 +6,7 @@ images:
     port: 9000
 
   - name: authentication-service
-    image: mysharedacr1234.azurecr.io/authentication-service:1.1.0
+    image: mysharedacr1234.azurecr.io/authentication-service:1.1.1
     port: 9089
     env:
       - name: SPRING_DATASOURCE_URL
