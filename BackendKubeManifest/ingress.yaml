@@ -9,11 +9,11 @@ spec:
   rules:
   - http:
       paths:
-          - path: /frontendangular
+          - path: /
             pathType: Prefix
             backend:
               service:
-                name: authentication-service
+                name: frontendangular
                 port:
                   number: 80
           # --- AUTHENTICATION SERVICE (PORT 9089)
