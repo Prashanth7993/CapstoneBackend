@@ -4,412 +4,533 @@ metadata:
   name: smarttransport-ingress
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/use-regex: "true"
 spec:
   ingressClassName: nginx
   rules:
   - http:
       paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: frontendangular
-                port:
-                  number: 80
-          # --- AUTHENTICATION SERVICE (PORT 9089)
-          - path: /auth/greet
-            pathType: Prefix
-            backend:
-              service:
-                name: authentication-service
-                port:
-                  number: 9089
-          - path: /auth/login
-            pathType: Prefix
-            backend:
-              service:
-                name: authentication-service
-                port:
-                  number: 9089
-          - path: /auth/user/register
-            pathType: Prefix
-            backend:
-              service:
-                name: authentication-service
-                port:
-                  number: 9089
-          - path: /auth/user/token/token
-            pathType: Prefix
-            backend:
-              service:
-                name: authentication-service
-                port:
-                  number: 9089
-          - path: /auth/forget-password
-            pathType: Prefix
-            backend:
-              service:
-                name: authentication-service
-                port:
-                  number: 9089
-          - path: /auth/verify/forgot-password
-            pathType: Prefix
-            backend:
-              service:
-                name: authentication-service
-                port:
-                  number: 9089
-          - path: /auth/reset/password
-            pathType: Prefix
-            backend:
-              service:
-                name: authentication-service
-                port:
-                  number: 9089
-          - path: /auth/validate/token
-            pathType: Prefix
-            backend:
-              service:
-                name: authentication-service
-                port:
-                  number: 9089
-          - path: /auth/admin/validate/token
-            pathType: Prefix
-            backend:
-              service:
-                name: authentication-service
-                port:
-                  number: 9089
-          - path: /auth/change-password/email
-            pathType: Prefix
-            backend:
-              service:
-                name: authentication-service
-                port:
-                  number: 9089
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: frontendangular
+              port:
+                number: 80
 
-          # --- BUS SERVICE (PORT 9095)
-          - path: /buses/id
-            pathType: Prefix
-            backend:
-              service:
-                name: bus-service
-                port:
-                  number: 9095
-          - path: /buses/id/status
-            pathType: Prefix
-            backend:
-              service:
-                name: bus-service
-                port:
-                  number: 9095
-          - path: /buses/busId/schedules
-            pathType: Prefix
-            backend:
-              service:
-                name: bus-service
-                port:
-                  number: 9095
-          - path: /buses/routeIds
-            pathType: Prefix
-            backend:
-              service:
-                name: bus-service
-                port:
-                  number: 9095
-          - path: /buses/busId
-            pathType: Prefix
-            backend:
-              service:
-                name: bus-service
-                port:
-                  number: 9095
-          - path: /buses/count
-            pathType: Prefix
-            backend:
-              service:
-                name: bus-service
-                port:
-                  number: 9095
+        - path: /auth(/|$)(.*)
+          pathType: ImplementationSpecific
+          backend:
+            service:
+              name: authentication-service
+              port:
+                number: 9089
 
-          - path: /busSchedules/bus/busId
-            pathType: Prefix
-            backend:
-              service:
-                name: bus-service
-                port:
-                  number: 9095
+        - path: /buses(/|$)(.*)
+          pathType: ImplementationSpecific
+          backend:
+            service:
+              name: bus-service
+              port:
+                number: 9095
+        - path: /busSchedules(/|$)(.*)
+          pathType: ImplementationSpecific
+          backend:
+            service:
+              name: bus-service
+              port:
+                number: 9095
+        - path: /api/passengers(/|$)(.*)
+          pathType: ImplementationSpecific
+          backend:
+            service:
+              name: bus-service
+              port:
+                number: 9095
+        - path: /realtime/bus(/|$)(.*)
+          pathType: ImplementationSpecific
+          backend:
+            service:
+              name: bus-service
+              port:
+                number: 9095
 
-          - path: /api/passengers/board
-            pathType: Prefix
-            backend:
-              service:
-                name: bus-service
-                port:
-                  number: 9095
-          - path: /api/passengers/deboard
-            pathType: Prefix
-            backend:
-              service:
-                name: bus-service
-                port:
-                  number: 9095
+        - path: /carpools(/|$)(.*)
+          pathType: ImplementationSpecific
+          backend:
+            service:
+              name: carpool-service
+              port:
+                number: 9096
 
-          - path: /realtime/bus/busId
-            pathType: Prefix
-            backend:
-              service:
-                name: bus-service
-                port:
-                  number: 9095
+        - path: /feedback(/|$)(.*)
+          pathType: ImplementationSpecific
+          backend:
+            service:
+              name: feedback-service
+              port:
+                number: 9099
 
-          # --- CARPOOL SERVICE (PORT 9096)
-          - path: /carpools/id-get
-            pathType: Prefix
-            backend:
-              service:
-                name: carpool-service
-                port:
-                  number: 9096
-          - path: /carpools/user/userId
-            pathType: Prefix
-            backend:
-              service:
-                name: carpool-service
-                port:
-                  number: 9096
-          - path: /carpools/carpoolId/users/userId
-            pathType: Prefix
-            backend:
-              service:
-                name: carpool-service
-                port:
-                  number: 9096
-          - path: /carpools/carpoolId/users
-            pathType: Prefix
-            backend:
-              service:
-                name: carpool-service
-                port:
-                  number: 9096
-          - path: /carpools/route/routeId
-            pathType: Prefix
-            backend:
-              service:
-                name: carpool-service
-                port:
-                  number: 9096
-          - path: /carpools/id
-            pathType: Prefix
-            backend:
-              service:
-                name: carpool-service
-                port:
-                  number: 9096
-          - path: /carpools/recent-bookings/userId
-            pathType: Prefix
-            backend:
-              service:
-                name: carpool-service
-                port:
-                  number: 9096
-          - path: /carpools/bookings-count
-            pathType: Prefix
-            backend:
-              service:
-                name: carpool-service
-                port:
-                  number: 9096
+        - path: /notifications(/|$)(.*)
+          pathType: ImplementationSpecific
+          backend:
+            service:
+              name: notification-service
+              port:
+                number: 9092
 
-          # --- FEEDBACK SERVICE (PORT 9099)
-          - path: /feedback/submit/serviceId/user/userId
-            pathType: Prefix
-            backend:
-              service:
-                name: feedback-service
-                port:
-                  number: 9099
-          - path: /feedback/id
-            pathType: Prefix
-            backend:
-              service:
-                name: feedback-service
-                port:
-                  number: 9099
+        - path: /payment(/|$)(.*)
+          pathType: ImplementationSpecific
+          backend:
+            service:
+              name: payment-service
+              port:
+                number: 9696
 
-          # --- NOTIFICATION SERVICE (PORT 9092)
-          - path: /notifications/user/userId
-            pathType: Prefix
-            backend:
-              service:
-                name: notification-service
-                port:
-                  number: 9092
-          - path: /notifications/id
-            pathType: Prefix
-            backend:
-              service:
-                name: notification-service
-                port:
-                  number: 9092
-          - path: /notifications/mark-as-read/id
-            pathType: Prefix
-            backend:
-              service:
-                name: notification-service
-                port:
-                  number: 9092
+        - path: /routes(/|$)(.*)
+          pathType: ImplementationSpecific
+          backend:
+            service:
+              name: route-service
+              port:
+                number: 9097
+        - path: /stops(/|$)(.*)
+          pathType: ImplementationSpecific
+          backend:
+            service:
+              name: route-service
+              port:
+                number: 9097
 
-          # --- PAYMENT SERVICE (PORT 9696)
-          - path: /payment/greet
-            pathType: Prefix
-            backend:
-              service:
-                name: payment-service
-                port:
-                  number: 9696
-          - path: /payment/create-order
-            pathType: Prefix
-            backend:
-              service:
-                name: payment-service
-                port:
-                  number: 9696
-          - path: /payment/transactions
-            pathType: Prefix
-            backend:
-              service:
-                name: payment-service
-                port:
-                  number: 9696
-          - path: /payment/transaction/id
-            pathType: Prefix
-            backend:
-              service:
-                name: payment-service
-                port:
-                  number: 9696
-          - path: /payment/verify-status
-            pathType: Prefix
-            backend:
-              service:
-                name: payment-service
-                port:
-                  number: 9696
+        - path: /users(/|$)(.*)
+          pathType: ImplementationSpecific
+          backend:
+            service:
+              name: user-service
+              port:
+                number: 9098
+        - path: /tickets(/|$)(.*)
+          pathType: ImplementationSpecific
+          backend:
+            service:
+              name: user-service
+              port:
+                number: 9098
 
-          # --- ROUTE SERVICE (PORT 9097)
-          - path: /routes/id
-            pathType: Prefix
-            backend:
-              service:
-                name: route-service
-                port:
-                  number: 9097
-          - path: /routes/routeId/stops
-            pathType: Prefix
-            backend:
-              service:
-                name: route-service
-                port:
-                  number: 9097
-          - path: /routes/routeId/stops/stopId
-            pathType: Prefix
-            backend:
-              service:
-                name: route-service
-                port:
-                  number: 9097
-          - path: /routes/find
-            pathType: Prefix
-            backend:
-              service:
-                name: route-service
-                port:
-                  number: 9097
-          - path: /routes/stations/routeId
-            pathType: Prefix
-            backend:
-              service:
-                name: route-service
-                port:
-                  number: 9097
-          - path: /routes/count
-            pathType: Prefix
-            backend:
-              service:
-                name: route-service
-                port:
-                  number: 9097
 
-          - path: /stops/id
-            pathType: Prefix
-            backend:
-              service:
-                name: route-service
-                port:
-                  number: 9097
-          - path: /stops/routeId
-            pathType: Prefix
-            backend:
-              service:
-                name: route-service
-                port:
-                  number: 9097
 
-          # --- USER SERVICE (PORT 9098)
-          - path: /tickets/userId
-            pathType: Prefix
-            backend:
-              service:
-                name: user-service
-                port:
-                  number: 9098
-          - path: /tickets/id
-            pathType: Prefix
-            backend:
-              service:
-                name: user-service
-                port:
-                  number: 9098
-          - path: /users/id
-            pathType: Prefix
-            backend:
-              service:
-                name: user-service
-                port:
-                  number: 9098
-          - path: /users/operators
-            pathType: Prefix
-            backend:
-              service:
-                name: user-service
-                port:
-                  number: 9098
-          - path: /users/user-count
-            pathType: Prefix
-            backend:
-              service:
-                name: user-service
-                port:
-                  number: 9098
-          - path: /users/operator-count
-            pathType: Prefix
-            backend:
-              service:
-                name: user-service
-                port:
-                  number: 9098
-          - path: /users/registrations/year
-            pathType: Prefix
-            backend:
-              service:
-                name: user-service
-                port:
-                  number: 9098
-          - path: /users/email/email
-            pathType: Prefix
-            backend:
-              service:
-                name: user-service
-                port:
-                  number: 9098
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: smarttransport-ingress
+#   annotations:
+#     nginx.ingress.kubernetes.io/ssl-redirect: "false"
+# spec:
+#   ingressClassName: nginx
+#   rules:
+#   - http:
+#       paths:
+#           - path: /
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: frontendangular
+#                 port:
+#                   number: 80
+#           # --- AUTHENTICATION SERVICE (PORT 9089)
+#           - path: /auth/greet
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: authentication-service
+#                 port:
+#                   number: 9089
+#           - path: /auth/login
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: authentication-service
+#                 port:
+#                   number: 9089
+#           - path: /auth/user/register
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: authentication-service
+#                 port:
+#                   number: 9089
+#           - path: /auth/user/token/token
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: authentication-service
+#                 port:
+#                   number: 9089
+#           - path: /auth/forget-password
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: authentication-service
+#                 port:
+#                   number: 9089
+#           - path: /auth/verify/forgot-password
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: authentication-service
+#                 port:
+#                   number: 9089
+#           - path: /auth/reset/password
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: authentication-service
+#                 port:
+#                   number: 9089
+#           - path: /auth/validate/token
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: authentication-service
+#                 port:
+#                   number: 9089
+#           - path: /auth/admin/validate/token
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: authentication-service
+#                 port:
+#                   number: 9089
+#           - path: /auth/change-password/email
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: authentication-service
+#                 port:
+#                   number: 9089
+
+#           # --- BUS SERVICE (PORT 9095)
+#           - path: /buses/id
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: bus-service
+#                 port:
+#                   number: 9095
+#           - path: /buses/id/status
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: bus-service
+#                 port:
+#                   number: 9095
+#           - path: /buses/busId/schedules
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: bus-service
+#                 port:
+#                   number: 9095
+#           - path: /buses/routeIds
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: bus-service
+#                 port:
+#                   number: 9095
+#           - path: /buses/busId
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: bus-service
+#                 port:
+#                   number: 9095
+#           - path: /buses/count
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: bus-service
+#                 port:
+#                   number: 9095
+
+#           - path: /busSchedules/bus/busId
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: bus-service
+#                 port:
+#                   number: 9095
+
+#           - path: /api/passengers/board
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: bus-service
+#                 port:
+#                   number: 9095
+#           - path: /api/passengers/deboard
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: bus-service
+#                 port:
+#                   number: 9095
+
+#           - path: /realtime/bus/busId
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: bus-service
+#                 port:
+#                   number: 9095
+
+#           # --- CARPOOL SERVICE (PORT 9096)
+#           - path: /carpools/id-get
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: carpool-service
+#                 port:
+#                   number: 9096
+#           - path: /carpools/user/userId
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: carpool-service
+#                 port:
+#                   number: 9096
+#           - path: /carpools/carpoolId/users/userId
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: carpool-service
+#                 port:
+#                   number: 9096
+#           - path: /carpools/carpoolId/users
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: carpool-service
+#                 port:
+#                   number: 9096
+#           - path: /carpools/route/routeId
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: carpool-service
+#                 port:
+#                   number: 9096
+#           - path: /carpools/id
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: carpool-service
+#                 port:
+#                   number: 9096
+#           - path: /carpools/recent-bookings/userId
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: carpool-service
+#                 port:
+#                   number: 9096
+#           - path: /carpools/bookings-count
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: carpool-service
+#                 port:
+#                   number: 9096
+
+#           # --- FEEDBACK SERVICE (PORT 9099)
+#           - path: /feedback/submit/serviceId/user/userId
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: feedback-service
+#                 port:
+#                   number: 9099
+#           - path: /feedback/id
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: feedback-service
+#                 port:
+#                   number: 9099
+
+#           # --- NOTIFICATION SERVICE (PORT 9092)
+#           - path: /notifications/user/userId
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: notification-service
+#                 port:
+#                   number: 9092
+#           - path: /notifications/id
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: notification-service
+#                 port:
+#                   number: 9092
+#           - path: /notifications/mark-as-read/id
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: notification-service
+#                 port:
+#                   number: 9092
+
+#           # --- PAYMENT SERVICE (PORT 9696)
+#           - path: /payment/greet
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: payment-service
+#                 port:
+#                   number: 9696
+#           - path: /payment/create-order
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: payment-service
+#                 port:
+#                   number: 9696
+#           - path: /payment/transactions
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: payment-service
+#                 port:
+#                   number: 9696
+#           - path: /payment/transaction/id
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: payment-service
+#                 port:
+#                   number: 9696
+#           - path: /payment/verify-status
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: payment-service
+#                 port:
+#                   number: 9696
+
+#           # --- ROUTE SERVICE (PORT 9097)
+#           - path: /routes/id
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: route-service
+#                 port:
+#                   number: 9097
+#           - path: /routes/routeId/stops
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: route-service
+#                 port:
+#                   number: 9097
+#           - path: /routes/routeId/stops/stopId
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: route-service
+#                 port:
+#                   number: 9097
+#           - path: /routes/find
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: route-service
+#                 port:
+#                   number: 9097
+#           - path: /routes/stations/routeId
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: route-service
+#                 port:
+#                   number: 9097
+#           - path: /routes/count
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: route-service
+#                 port:
+#                   number: 9097
+
+#           - path: /stops/id
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: route-service
+#                 port:
+#                   number: 9097
+#           - path: /stops/routeId
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: route-service
+#                 port:
+#                   number: 9097
+
+#           # --- USER SERVICE (PORT 9098)
+#           - path: /tickets/userId
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: user-service
+#                 port:
+#                   number: 9098
+#           - path: /tickets/id
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: user-service
+#                 port:
+#                   number: 9098
+#           - path: /users/id
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: user-service
+#                 port:
+#                   number: 9098
+#           - path: /users/operators
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: user-service
+#                 port:
+#                   number: 9098
+#           - path: /users/user-count
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: user-service
+#                 port:
+#                   number: 9098
+#           - path: /users/operator-count
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: user-service
+#                 port:
+#                   number: 9098
+#           - path: /users/registrations/year
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: user-service
+#                 port:
+#                   number: 9098
+#           - path: /users/email/email
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: user-service
+#                 port:
+#                   number: 9098
