@@ -2,7 +2,8 @@ trigger: none
 
 variables:
   dockerRegistryServiceConnection: '33380ad7-f270-4c23-a0ba-269ed94a5ce5'
-  sonarQubeServiceConnection: 'sonar'  # Change this to your actual service connection name
+  sonarQubeServiceConnection: 'sonar' 
+  azureServiceConnection: 'prashanthscn'
   imageRepository: 'notification-service'
   containerRegistry: 'mysharedacr1234.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/Backend/notification-service/Dockerfile'
@@ -97,3 +98,44 @@ stages:
         containerRegistry: '$(dockerRegistryServiceConnection)'
         tags: |
           $(tag)
+- stage: SecurityScan
+  displayName: Trivy Vulnerability Scan
+  dependsOn: Build         
+  condition: succeeded()
+
+  jobs:
+  - job: TrivyScan
+    displayName: Scan Docker image with Trivy
+    pool:
+      name: Default         
+    steps:
+    
+    - bash: |
+        set -e
+        echo "Installing Trivy CLI…"
+        curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -
+      displayName: "Install Trivy"
+
+   
+    - task: AzureCLI@2
+      displayName: "az acr login"
+      inputs:
+        azureSubscription: '$(azureServiceConnection)'
+        scriptType: bash
+        scriptLocation: inlineScript
+        inlineScript: |
+          # extract ACR name from the fully-qualified registry URL
+          ACR_NAME="$(echo $(containerRegistry) | cut -d'.' -f1)"
+          az acr login --name "$ACR_NAME"
+
+    - bash: |
+        set -e
+        IMAGE="$(containerRegistry)/$(imageRepository):$(tag)"
+        echo "Scanning $IMAGE …"
+        trivy image \
+          --cache-dir $(Pipeline.Workspace)/trivy-cache \
+          --severity HIGH,CRITICAL \          
+          --exit-code 1 \                     
+          --format sarif --output trivy-report.sarif \
+          "$IMAGE"
+      displayName: "Trivy image scan"
